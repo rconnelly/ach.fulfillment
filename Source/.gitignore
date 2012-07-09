@@ -5,9 +5,9 @@
 .sln.cache$
 _ReSharper.*
 StyleCop.Cache$
-/bin/
-/Bin/
-/obj/
+bin/
+Bin/
+obj/
 Build/Archive
 Build/Assembly
 Build/Metrics
