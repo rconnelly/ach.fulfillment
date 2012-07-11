@@ -17,7 +17,7 @@
     {
         #region Fields
 
-        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Shell));
 
         private static readonly object LockObject = new object();
 
@@ -40,7 +40,13 @@
 
         #region Methods
 
-        public static void Start()
+        public static void Start<T>() where T : UnityContainerExtension, new()
+        {
+            var initialization = new T();
+            Start(initialization);
+        }
+
+        public static void Start(UnityContainerExtension initialization = null)
         {
             if (!isInitialized)
             {
@@ -48,7 +54,7 @@
                 {
                     if (!isInitialized)
                     {
-                        ConfigureUnity();
+                        ConfigureUnity(initialization);
                         isInitialized = true;
                     }
                 }
@@ -76,16 +82,19 @@
             Start();
         }
 
-        private static void ConfigureUnity()
+        private static void ConfigureUnity(UnityContainerExtension initialization)
         {
-            Logger.InfoFormat(CultureInfo.InvariantCulture, "Starting the server [{0}]", typeof(Shell).Assembly.EffectiveVersion());
+            Logger.InfoFormat("Starting the server [{0}]", typeof(Shell).Assembly.EffectiveVersion());
             try
             {
                 var container = new UnityContainer()
                     .AddNewExtension<EnterpriseLibraryCoreExtension>();
-
                 var configurationSource = ConfigurationSourceFactory.Create();
                 container.RegisterInstance(configurationSource);
+                if (initialization != null)
+                {
+                    container.AddExtension(initialization);
+                }
 
                 var section = (UnityConfigurationSection)configurationSource.GetSection("unity");
                 if (section != null)
@@ -93,7 +102,7 @@
                     section.Configure(container);
                 }
 
-                var serviceLocator = new UnityServiceLocator(container);
+                IServiceLocator serviceLocator = new UnityServiceLocator(container);
                 Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => serviceLocator);
                 EnterpriseLibraryContainer.Current = serviceLocator;
             }
@@ -106,7 +115,7 @@
 
         private static void DestroyUnity()
         {
-            Logger.InfoFormat(CultureInfo.InvariantCulture, "Stopping the server [{0}]", typeof(Shell).Assembly.EffectiveVersion());
+            Logger.Info(string.Format(CultureInfo.InvariantCulture, "Stopping the server [{0}]", typeof(Shell).Assembly.EffectiveVersion()));
             try
             {
                 var container = EnterpriseLibraryContainer.Current.GetInstance<IUnityContainer>();

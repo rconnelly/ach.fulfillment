@@ -69,6 +69,16 @@
       <Link>Properties\Dictionary.xml</Link>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ach.Fulfillment.Business\Ach.Fulfillment.Business.csproj">
+      <Project>{280B33CA-07E1-40AA-A159-2080DD3529ED}</Project>
+      <Name>Ach.Fulfillment.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Persistence\Ach.Fulfillment.Persistence.csproj">
+      <Project>{5AB0AE05-BBCB-4337-8390-3A06E4776932}</Project>
+      <Name>Ach.Fulfillment.Persistence</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
