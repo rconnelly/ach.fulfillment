@@ -8,8 +8,8 @@
 
   **********************************************************************************************
 -->
-<ServiceDefinition name="Ach.Fulfillment.Web.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-05.1.7">
-  <WebRole name="Ach.Fulfillment.Web" vmsize="Small">
+<ServiceDefinition name="Ach.Fulfillment.Api.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-05.1.7">
+  <WebRole name="Ach.Fulfillment.Api" vmsize="ExtraSmall">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -25,6 +25,9 @@
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />
     </Imports>
+    <LocalResources>
+      <LocalStorage name="Ach.Fulfillment.Api.svclog" sizeInMB="1000" cleanOnRoleRecycle="false" />
+    </LocalResources>
     <Certificates></Certificates>
   </WebRole>
 </ServiceDefinition>

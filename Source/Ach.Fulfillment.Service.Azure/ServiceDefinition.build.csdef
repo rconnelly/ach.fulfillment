@@ -8,23 +8,12 @@
 
   **********************************************************************************************
 -->
-<ServiceDefinition name="Ach.Fulfillment.Web.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-05.1.7">
-  <WebRole name="Ach.Fulfillment.Web" vmsize="Small">
-    <Sites>
-      <Site name="Web">
-        <Bindings>
-          <Binding name="Endpoint1" endpointName="Endpoint1" />
-        </Bindings>
-      </Site>
-    </Sites>
-    <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
-    </Endpoints>
+<ServiceDefinition name="Ach.Fulfillment.Service.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2012-05.1.7">
+  <WorkerRole name="Ach.Fulfillment.Service" vmsize="ExtraSmall">
     <Imports>
       <Import moduleName="Diagnostics" />
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />
     </Imports>
-    <Certificates></Certificates>
-  </WebRole>
+  </WorkerRole>
 </ServiceDefinition>
