@@ -78,3 +78,14 @@ Desktop.ini
 #############
 
 .DS_Store
+
+
+#############
+## Personal
+#############
+
+/Build/Archive
+/Build/Assembly
+/Build/Metrics
+/Build/Publish
+/Build/Ach.Fulfillment.build.version
