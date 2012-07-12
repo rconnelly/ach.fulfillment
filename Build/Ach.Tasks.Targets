@@ -66,6 +66,22 @@
                 PropertyName="ProductInformationalVersion" />
         </CreateProperty>
 
+        <CreateItem 
+            Include="ProductVersion"
+            AdditionalMetadata="ReplacementValue=$(ProductVersion)">
+            <Output 
+                TaskParameter="Include" 
+                ItemName="Tokens"/>
+        </CreateItem>
+        
+        <CreateItem 
+            Include="ProductInformationalVersion"
+            AdditionalMetadata="ReplacementValue=$(ProductInformationalVersion)">
+            <Output 
+                TaskParameter="Include" 
+                ItemName="Tokens"/>
+        </CreateItem>
+        
         <!-- save to file current build version number -->
         <WriteLinesToFile Overwrite="true" File="$(BuildVersionFile)" Lines="$(ProductInformationalVersion)" />
 
@@ -384,7 +400,7 @@
             Condition="'@(SetupContentFiles)'!='' AND '%(SetupContentFiles.SubstitutionsFile)'!=''" />
             
         <ItemGroup Condition="'@(Tokens)' != ''" >
-            <TokenizedFiles Include="$(AssemblyRoot)\**\*.cmd;$(AssemblyRoot)\**\*.xml;$(AssemblyRoot)\**\*.config" />
+            <TokenizedFiles Include="$(AssemblyRoot)\**\*.ps1;$(AssemblyRoot)\**\*.cmd;$(AssemblyRoot)\**\*.xml;$(AssemblyRoot)\**\*.config" />
         </ItemGroup>
         <Message Text="Will be tokenized: %(TokenizedFiles.Identity)" />
         <TemplateFile Template="%(TokenizedFiles.FullPath)" OutputFilename="%(TokenizedFiles.FullPath).out" Tokens="@(Tokens)"	Condition="'@(TokenizedFiles)'!=''" />
