@@ -1,1 +1,0 @@
-ps_execute.cmd ps_ach_service_update.ps1
