@@ -3,7 +3,7 @@
   <Role name="Ach.Fulfillment.Service">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=portalvhdsxmg86s9pngrcg;AccountKey=s9/OS5oVjLaFDkMHdu+0WgDM/MEziSlgYMzgJjI2kZ2D0rFbe7nTsVDqK8VZPQBXEWGaFzeRmksu525i1m/eZw==" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="quad" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBmQYJKoZIhvcNAQcDoIIBijCCAYYCAQAxggFKMIIBRgIBADAuMBoxGDAWBgNVBAMTD2FjaC5mdWxmaWxsbWVudAIQMCnVy7ZTHZhGo1t6Co6PWTANBgkqhkiG9w0BAQEFAASCAQAPZTko2B3QOmPmR/PRToM7fNf8i2gKwnMWxsBzAK8A96r1iIYI2U6aW6D/1Go1C1vsrzMo30EvX069rXlCdmRRlEUGj3r1AmKaRQGgVFJRbrkkb801jRpewEdj9OOoLzfL/EhdWB7Mtpky32twJUiC1/Yfr1h9Tk68DDGmdkykH1lcBHBKLR+ctQLtJuyO/ke+0DBnBu39U+LulpopAqWAHiRg2JqZWGMnRf+eENXXPw1FMhoqmHrP2zLyqoUJVQm+VT6G2N6gcmmeduMJrgAbC984eFi8/+ET9IgcE1TT9t9mg173c6CDQYgIozxiiERL3lcQ4wusVnQckcNgm3SsMDMGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIwbaiU288U2eAEPRwMhETSONkaeY5CI+mwj0=" />

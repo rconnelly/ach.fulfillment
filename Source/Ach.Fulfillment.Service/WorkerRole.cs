@@ -1,9 +1,10 @@
 namespace Ach.Fulfillment.Service
 {
+    using System;
     using System.Diagnostics;
-    using System.Net;
     using System.Threading;
 
+    using Microsoft.WindowsAzure.Diagnostics;
     using Microsoft.WindowsAzure.ServiceRuntime;
 
     public class WorkerRole : RoleEntryPoint
@@ -12,12 +13,21 @@ namespace Ach.Fulfillment.Service
 
         public override bool OnStart()
         {
-            // Set the maximum number of concurrent connections 
-            ServicePointManager.DefaultConnectionLimit = 12;
+            var config = DiagnosticMonitor.GetDefaultInitialConfiguration();
 
-            // For information on handling configuration changes
-            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
-            return base.OnStart();
+           var tmp = new DiagnosticMonitorTraceListener();
+
+           Trace.Listeners.Add(tmp);
+
+           config.Logs.BufferQuotaInMB = 200;
+
+           config.Logs.ScheduledTransferPeriod = TimeSpan.FromMinutes(1.0);
+
+           DiagnosticMonitor.Start("Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString", config);
+
+           Trace.Write("Test");
+
+           return base.OnStart();
         }
 
         public override void Run()
