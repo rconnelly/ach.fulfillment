@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <ProductName>Ach.Fulfillment</ProductName>
+        <Platform>Any CPU</Platform>
+    </PropertyGroup>
+
+    <Import Project="Ach.Build.Targets" />
+
+    <ItemGroup>
+        <CompileProjectList
+            Include="$(SolutionRoot)\Ach.Fulfillment.sln" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectToPublish Include="Ach.Fulfillment.Web.Azure\Ach.Fulfillment.Web.Azure.ccproj">
+            <TargetProfile>Local</TargetProfile>
+            <Path>Web</Path>
+        </ProjectToPublish>
+        <FileToPublish Include="Database\crebas.sql">
+            <Path>Database</Path>
+        </FileToPublish>
+        <FileToPublish Include="Database\data\raw.sql">
+            <Path>Database</Path>
+        </FileToPublish>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <CommonCodeAnalysisRules Include="-Microsoft.Design#CA1014" /> <!-- Mark assemblies with CLSCompliant -->
+        <CommonCodeAnalysisRules Include="-Microsoft.Design#CA1020" /> <!-- Avoid namespaces with few types -->
+        <CommonCodeAnalysisRules Include="-Microsoft.Design#CA2210" /> <!-- Assemblies should have valid strong names -->
+        <CommonCodeAnalysisRules Include="-Microsoft.Naming#CA1703" /> <!-- Resource strings should be spelled correctly -->
+        <CommonCodeAnalysisRules Include="-Microsoft.Performance#CA1811" /> <!-- Avoid uncalled private code -->
+        <CommonCodeAnalysisRules Include="-Microsoft.Performance#CA1812" /> <!-- Avoid uninstantiated internal classes -->
+    </ItemGroup>
+
+    <!--///////////////////////////Target PrepareGroups///////////////////////////////////////////////////////////////////-->
+    <Target Name="PrepareGroups">
+        <GetSolutionProjects Solution="%(CompileProjectList.Fullpath)">
+            <Output ItemName="SolutionItems" TaskParameter="Output"/>
+        </GetSolutionProjects>
+        
+        <ItemGroup>
+            <SolutionProjects Include="@(SolutionItems)" Condition="%(Extension) == '.csproj'"/>  
+            
+            <CodeQualityProjectList
+                Include="@(SolutionProjects)"
+                Exclude="$(SolutionRoot)\**\*Test*.csproj;"/>
+            
+            <StyleCopCodeQualityProjectList
+                Include="@(CodeQualityProjectList)" />
+
+            <SimianCodeQualityProjectList
+                Include="@(CodeQualityProjectList)" />
+
+            <FxCopCodeQualityProjectList1
+                Include="@(CodeQualityProjectList)" />
+            
+            <FxCopCodeQualityProjectGroup Include="4.0">
+                <Items>@(FxCopCodeQualityProjectList1)</Items>
+            </FxCopCodeQualityProjectGroup>
+
+            <TestProjectList
+                Include="$(SolutionRoot)\**\*Test*.csproj" />
+                
+        </ItemGroup>
+
+    </Target>
+    <!--///////////////////////////End Target PrepareGroups///////////////////////////////////////////////////////////////////-->
+
+
+    <!--///////////////////////////Target Default///////////////////////////////////////////////////////////////////-->
+    <Target Name="Default" DependsOnTargets="PrepareGroups;Main" />
+    <!--///////////////////////////End Target Default///////////////////////////////////////////////////////////////-->
+
+    <!--///////////////////////////Targets CodeAnalysis///////////////////////////////////////////////////////////////////-->
+    <Target Name="FxCop" DependsOnTargets="PrepareGroups;RunFxCop" />
+    <Target Name="StyleCop" DependsOnTargets="PrepareGroups;RunStyleCop" />
+    <Target Name="Simian" DependsOnTargets="PrepareGroups;RunSimian" />
+    <!--///////////////////////////End Target CodeAnalysis///////////////////////////////////////////////////////////////-->
+
+    <!--///////////////////////////Target Test//////////////////////////////////////////////////////////////////////-->
+    <Target Name="Test">
+    </Target>
+    <!--///////////////////////////End Target Test//////////////////////////////////////////////////////////////////-->
+
+</Project>
