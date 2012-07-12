@@ -1,8 +1,8 @@
-namespace Ach.Fulfillment.Test.Persistence
+namespace Ach.Fulfillment.Tests.Persistence
 {
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Transactions;
-    using Ach.Fulfillment.Test.Common;
+    using Ach.Fulfillment.Tests.Common;
 
     using Microsoft.Practices.ServiceLocation;
 

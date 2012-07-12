@@ -25,5 +25,6 @@
       <Import moduleName="RemoteAccess" />
       <Import moduleName="RemoteForwarder" />
     </Imports>
+    <Certificates></Certificates>
   </WebRole>
 </ServiceDefinition>

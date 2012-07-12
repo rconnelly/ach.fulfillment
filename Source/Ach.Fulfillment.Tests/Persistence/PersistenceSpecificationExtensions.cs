@@ -1,4 +1,4 @@
-namespace Ach.Fulfillment.Test.Persistence
+namespace Ach.Fulfillment.Tests.Persistence
 {
     using System;
     using System.Collections;

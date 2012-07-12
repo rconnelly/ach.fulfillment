@@ -1,8 +1,8 @@
-namespace Ach.Fulfillment.Test.Business
+namespace Ach.Fulfillment.Tests.Business
 {
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Transactions;
-    using Ach.Fulfillment.Test.Common;
+    using Ach.Fulfillment.Tests.Common;
 
     using Microsoft.Practices.ServiceLocation;
 

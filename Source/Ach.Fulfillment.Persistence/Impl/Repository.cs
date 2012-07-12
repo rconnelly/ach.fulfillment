@@ -52,9 +52,6 @@
         public void Create<T>(T instance) where T : class, IEntity
         {
             this.Session.Save(instance);
-
-            /*// to allow save and load wihout transaction commit
-            this.Flush();*/
         }
 
         public T Get<T>(long id) where T : class, IEntity
@@ -77,9 +74,6 @@
         public void Update<T>(T instance) where T : class, IEntity
         {
             this.Session.Update(instance);
-
-            /*// to allow save and load wihout transaction commit
-            this.Flush();*/
         }
 
         public void Delete<T>(T instance) where T : class, IEntity

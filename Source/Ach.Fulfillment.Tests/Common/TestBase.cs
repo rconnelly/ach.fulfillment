@@ -1,4 +1,4 @@
-namespace Ach.Fulfillment.Test.Common
+namespace Ach.Fulfillment.Tests.Common
 {
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Initialization.Configuration;

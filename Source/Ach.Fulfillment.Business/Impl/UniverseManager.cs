@@ -23,10 +23,9 @@ namespace Ach.Fulfillment.Business.Impl
         {
             Contract.Assert(instance != null);
             Contract.Assert(newPassword != null);
-            var universe = this.Repository.Load<UniverseEntity>(instance.Id);
-            universe.PasswordHash = Cryptographer.CreateHash(HashInstance, newPassword);
-            this.DemandValid<UniverseValidator>(universe);
-            this.Repository.Update(universe);
+            instance.PasswordHash = Cryptographer.CreateHash(HashInstance, newPassword);
+            this.DemandValid<UniverseValidator>(instance);
+            this.Repository.Update(instance);
         }
 
         public UniverseEntity Create(string login, string password)

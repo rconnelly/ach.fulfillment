@@ -1,4 +1,4 @@
-namespace Ach.Fulfillment.Test.Common
+namespace Ach.Fulfillment.Tests.Common
 {
     using System.Diagnostics;
     using System.Linq;

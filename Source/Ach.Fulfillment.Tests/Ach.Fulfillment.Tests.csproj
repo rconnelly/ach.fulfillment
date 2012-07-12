@@ -8,8 +8,8 @@
     <ProjectGuid>{E2BABAE1-10D9-467D-B656-C4380D2BBF82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ach.Fulfillment.Test</RootNamespace>
-    <AssemblyName>Ach.Fulfillment.Test</AssemblyName>
+    <RootNamespace>Ach.Fulfillment.Tests</RootNamespace>
+    <AssemblyName>Ach.Fulfillment.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

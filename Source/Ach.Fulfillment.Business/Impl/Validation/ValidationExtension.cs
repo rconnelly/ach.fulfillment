@@ -9,15 +9,6 @@ namespace Ach.Fulfillment.Business.Impl.Validation
 
     internal static class ValidationExtension
     {
-        /*public static void DemandValid<T>(this IValidator<T> validator, T instance)
-        {
-            var result = validator.Validate(instance);
-            if (!result.IsValid)
-            {
-                throw new BusinessValidationException(result.Errors);
-            }
-        }*/
-
         public static void DemandValid<T>(this IValidator validator, T instance)
         {
             var result = validator.Validate(instance);
