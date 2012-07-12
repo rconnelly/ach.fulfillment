@@ -9,9 +9,8 @@ $slot = "Staging"
 $label = "Stagev2.6"
 
 #$cert = Get-Item cert:\\CurrentUser\My\$thumbprint 
-$cert = Get-AzureCertificate -ServiceName $service
-
 #Set-AzureSubscription –SubscriptionName $subName -SubscriptionId $subID -Certificate $cert -CurrentStorageAccount $storage
+
 Set-AzureSubscription –SubscriptionName $subName -SubscriptionId $subID -CurrentStorageAccount $storage
 
 Set-AzureDeployment -Upgrade -ServiceName $service –Package $package -Configuration $config -Slot $slot -Label $label
