@@ -9,11 +9,17 @@ $slot = "Staging"
 $label = "Stagev${ProductVersion}"
 
 #$cert = Get-Item cert:\\CurrentUser\My\$thumbprint 
-$cert = Get-AzureCertificate -ServiceName $service
-
 #Set-AzureSubscription -SubscriptionName $subName -SubscriptionId $subID -Certificate $cert -CurrentStorageAccount $storage
 Set-AzureSubscription -SubscriptionName $subName -SubscriptionId $subID -CurrentStorageAccount $storage
 
-Set-AzureDeployment -Upgrade -ServiceName $service –Package $package -Configuration $config -Slot $slot -Label $label
+$exist = Get-AzureDeployment -ServiceName $service -Slot $slot
+if($exist)
+{
+	Set-AzureDeployment -Upgrade -ServiceName $service -Package $package -Configuration $config -Slot $slot -Label $label
+}
+else
+{
+	New-AzureDeployment -ServiceName $service -Package $package -Configuration $config -Slot $slot -Label $label
+}
 
 exit
