@@ -3,36 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
 using Ach.Fulfillment.Web.Models;
 
 namespace Ach.Fulfillment.Web.Controllers
 {
+
+    [Authorize]
     public class AccountController : Controller
     {
 
         //
-        // GET: /Account/LogOn
+        // GET: /Account/Login
 
-        public ActionResult LogOn()
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         //
-        // POST: /Account/LogOn
+        // POST: /Account/Login
 
+        [AllowAnonymous]
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        public ActionResult Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 if (Membership.ValidateUser(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                        && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
@@ -64,6 +67,7 @@ namespace Ach.Fulfillment.Web.Controllers
         //
         // GET: /Account/Register
 
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -72,6 +76,7 @@ namespace Ach.Fulfillment.Web.Controllers
         //
         // POST: /Account/Register
 
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Register(RegisterModel model)
         {
@@ -79,11 +84,11 @@ namespace Ach.Fulfillment.Web.Controllers
             {
                 // Attempt to register the user
                 MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, null, out createStatus);
+                Membership.CreateUser(model.UserName, model.Password, model.Email, passwordQuestion: null, passwordAnswer: null, isApproved: true, providerUserKey: null, status: out createStatus);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                    FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -99,7 +104,6 @@ namespace Ach.Fulfillment.Web.Controllers
         //
         // GET: /Account/ChangePassword
 
-        [Authorize]
         public ActionResult ChangePassword()
         {
             return View();
@@ -108,7 +112,6 @@ namespace Ach.Fulfillment.Web.Controllers
         //
         // POST: /Account/ChangePassword
 
-        [Authorize]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
@@ -120,7 +123,7 @@ namespace Ach.Fulfillment.Web.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    MembershipUser currentUser = Membership.GetUser(User.Identity.Name, true /* userIsOnline */);
+                    MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
                     changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
                 }
                 catch (Exception)
@@ -148,6 +151,11 @@ namespace Ach.Fulfillment.Web.Controllers
         public ActionResult ChangePasswordSuccess()
         {
             return View();
+        }
+
+        private IEnumerable<string> GetErrorsFromModelState()
+        {
+            return ModelState.SelectMany(x => x.Value.Errors.Select(error => error.ErrorMessage));
         }
 
         #region Status Codes
