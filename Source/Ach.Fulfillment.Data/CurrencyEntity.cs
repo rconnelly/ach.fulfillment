@@ -1,5 +1,8 @@
 namespace Ach.Fulfillment.Data
 {
+    using System;
+
+    [Obsolete]
     public class CurrencyEntity : BaseEntity
     {
         public virtual string Name { get; set; }

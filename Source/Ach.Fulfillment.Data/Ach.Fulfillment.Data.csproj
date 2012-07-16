@@ -71,6 +71,7 @@
     <Compile Include="Specifications\UniverseByActiveLogin.cs" />
     <Compile Include="Specifications\UniverseUniqness.cs" />
     <Compile Include="UniverseEntity.cs" />
+    <Compile Include="UserPasswordCredentialEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">

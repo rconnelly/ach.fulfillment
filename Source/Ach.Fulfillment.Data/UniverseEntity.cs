@@ -1,7 +1,9 @@
 namespace Ach.Fulfillment.Data
 {
+    using System;
     using System.Collections.Generic;
 
+    [Obsolete]
     public class UniverseEntity : BaseEntity
     {
         public virtual string Login { get; set; }
