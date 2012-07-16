@@ -50,15 +50,19 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="CurrencyEntity.cs" />
+    <Compile Include="_CurrencyEntity.cs" />
     <Compile Include="IAuditable.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IIdentified.cs" />
     <Compile Include="MetaDataInfo.cs" />
+    <Compile Include="PartnerEntity.cs" />
+    <Compile Include="PermissionEntity.cs" />
+    <Compile Include="AccessRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryData\IQueryData.cs" />
     <Compile Include="QueryData\IQueryData.Generic.cs" />
     <Compile Include="QueryData\IQueryData.Instance.cs" />
+    <Compile Include="RoleEntity.cs" />
     <Compile Include="Specifications\CurrencyAll.cs" />
     <Compile Include="Specifications\CurrencyByName.cs" />
     <Compile Include="Specifications\CurrencyUniqness.cs" />
@@ -70,7 +74,8 @@
     <Compile Include="Specifications\UniverseAll.cs" />
     <Compile Include="Specifications\UniverseByActiveLogin.cs" />
     <Compile Include="Specifications\UniverseUniqness.cs" />
-    <Compile Include="UniverseEntity.cs" />
+    <Compile Include="_UniverseEntity.cs" />
+    <Compile Include="UserEntity.cs" />
     <Compile Include="UserPasswordCredentialEntity.cs" />
   </ItemGroup>
   <ItemGroup>

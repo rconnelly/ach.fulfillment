@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     2012.07.16 11:59:25                          */
+/* Created on:     2012.07.16 13:07:49                          */
 /*==============================================================*/
 
 
@@ -255,6 +255,7 @@ create table ach."User" (
    UserId               int                  identity,
    RoleId               int                  not null,
    Name                 nvarchar(255)        not null,
+   Email                nvarchar(255)        null,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_USER primary key (UserId)
