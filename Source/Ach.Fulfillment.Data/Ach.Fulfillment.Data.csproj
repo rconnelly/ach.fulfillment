@@ -50,6 +50,9 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Specifications\RoleAll.cs" />
+    <Compile Include="Specifications\RoleByName.cs" />
+    <Compile Include="Specifications\RoleUniqness.cs" />
     <Compile Include="_CurrencyEntity.cs" />
     <Compile Include="IAuditable.cs" />
     <Compile Include="IEntity.cs" />
