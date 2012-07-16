@@ -115,7 +115,7 @@
                     m => m
                         .AutoMappings.Add(
                         () => AutoMap
-                                  .AssemblyOf<UniverseEntity>(cfg)
+                                  .AssemblyOf<BaseEntity>(cfg)
                                   .UseOverridesFromAssemblyOf<TableNameConvention>()
                                   .Conventions
                                   .AddFromAssemblyOf<TableNameConvention>()))

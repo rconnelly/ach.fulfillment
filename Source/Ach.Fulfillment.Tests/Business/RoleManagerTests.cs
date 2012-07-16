@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Tests.Business
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Linq;
 
@@ -31,7 +32,12 @@ namespace Ach.Fulfillment.Tests.Business
 
             Assert.That(instance.Id, Is.GreaterThan(0));
             Assert.That(instance.Permissions, Is.Not.Null);
-            Assert.That(instance.Permissions.Count, Is.EqualTo(1));
+            Assert.That(instance.Permissions.Count, Is.GreaterThan(0));
+
+            foreach (var permission in instance.Permissions)
+            {
+                Trace.WriteLine("Permission: " + permission.Name);
+            }
         }
 
         [Test]
@@ -39,7 +45,9 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var manager = this.Locator.GetInstance<IRoleManager>();
             var instance = manager.Create(this.CreateTestRole());
-            this.Session.Flush();
+
+            this.ClearSession(instance);
+
             manager.Delete(instance);
         }
 
@@ -48,7 +56,9 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var manager = this.Locator.GetInstance<IRoleManager>();
 
-            manager.Create(this.CreateTestRole());
+            var instance = manager.Create(this.CreateTestRole());
+
+            this.ClearSession(instance);
 
             var roles = manager.FindAll();
             Assert.That(roles, Is.Not.Null);
@@ -63,6 +73,8 @@ namespace Ach.Fulfillment.Tests.Business
             var instance = manager.Create(this.CreateTestRole());
             Assert.That(instance, Is.Not.Null);
 
+            this.ClearSession(instance);
+
             var role = manager.Load(instance.Id);
             Assert.That(role, Is.Not.Null);
 
@@ -76,6 +88,8 @@ namespace Ach.Fulfillment.Tests.Business
 
             var instance = manager.Create(this.CreateTestRole());
             Assert.That(instance, Is.Not.Null);
+
+            this.ClearSession(instance);
 
             var role = manager.Load(instance.Name);
             Assert.That(role, Is.Not.Null);
@@ -103,11 +117,11 @@ namespace Ach.Fulfillment.Tests.Business
             var role = this.CreateTestRole();
             var instance = manager.Create(role);
 
+            this.ClearSession(instance);
+
             instance.Name = this.ShortStringGenerator.GetRandomValue();
 
             manager.Update(instance);
-
-            this.Session.Flush();
         }
 
         #endregion
@@ -119,19 +133,19 @@ namespace Ach.Fulfillment.Tests.Business
             var role = new RoleEntity
                 {
                     Name = this.ShortStringGenerator.GetRandomValue(), 
-                    Permissions = new List<PermissionEntity> { new PermissionEntity { Name = AccessRight.Authenticate } }
                 };
+            role.Permissions = new Collection<PermissionEntity>
+                {
+                    new PermissionEntity
+                        {
+                            Name = AccessRight.Authenticate,
+                            Role = role
+                        }
+                };
+
             return role;
         }
 
         #endregion
-
-        /*[Test]
-        public void IllegalDelete()
-        {
-            var manager = this.Locator.GetInstance<ICurrencyManager>();
-            var currency = manager.Load(1);
-            Assert.Throws<DeleteConstraintException>(() => manager.Delete(currency));
-        }*/
     }
 }

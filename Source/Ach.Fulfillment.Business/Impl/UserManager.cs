@@ -23,11 +23,7 @@ namespace Ach.Fulfillment.Business.Impl
             Contract.Assert(user != null);
             Contract.Assert(password != null);
 
-            var hash = Cryptographer.CreateHash(HashInstance, password);
-            var instance = new UniverseEntity { Login = login, PasswordHash = hash };
-            this.DemandValid<UniverseValidator>(instance);
-            this.Repository.Create(instance);
-            return instance;
+            throw new System.NotImplementedException();
         }
 
         public IList<UserEntity> FindByLogin(string login)

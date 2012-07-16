@@ -51,8 +51,19 @@ namespace Ach.Fulfillment.Tests.Business
         [TearDown]
         public virtual void TearDown()
         {
+//            this.transaction.Complete();
             this.transaction.Dispose();
             this.unitOfWork.Dispose();
+        }
+
+        protected void ClearSession(params object[] instances)
+        {
+            var session = this.Locator.GetInstance<ISession>();
+            session.Flush();
+            foreach (var instance in instances)
+            {
+                session.Evict(instance);
+            }
         }
 
         #endregion
