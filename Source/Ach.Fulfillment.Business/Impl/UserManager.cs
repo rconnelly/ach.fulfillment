@@ -12,13 +12,13 @@ namespace Ach.Fulfillment.Business.Impl
     {
         private const string HashInstance = "PasswordHashing";
 
-        public UserEntry Load(long id)
+        public UserEntity Load(long id)
         {
-            var instance = this.Repository.Load<UserEntry>(id);
+            var instance = this.Repository.Load<UserEntity>(id);
             return instance;
         }
 
-        public UserEntry Create(UserEntry user, string password)
+        public UserEntity Create(UserEntity user, string password)
         {
             Contract.Assert(user != null);
             Contract.Assert(password != null);
@@ -30,12 +30,12 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
-        public IList<UserEntry> FindByLogin(string login)
+        public IList<UserEntity> FindByLogin(string login)
         {
             throw new System.NotImplementedException();
         }
 
-        public IList<UserEntry> FindByEmail(string email)
+        public IList<UserEntity> FindByEmail(string email)
         {
             throw new System.NotImplementedException();
         }

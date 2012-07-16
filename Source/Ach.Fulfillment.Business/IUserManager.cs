@@ -6,12 +6,12 @@ namespace Ach.Fulfillment.Business
 
     public interface IUserManager
     {
-        UserEntry Load(long id);
+        UserEntity Load(long id);
 
-        UserEntry Create(UserEntry user, string password);
+        UserEntity Create(UserEntity user, string password);
 
-        IList<UserEntry> FindByLogin(string login);
+        IList<UserEntity> FindByLogin(string login);
 
-        IList<UserEntry> FindByEmail(string email);
+        IList<UserEntity> FindByEmail(string email);
     }
 }
