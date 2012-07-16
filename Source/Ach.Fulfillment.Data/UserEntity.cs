@@ -6,6 +6,8 @@ namespace Ach.Fulfillment.Data
     {
         public virtual string Name { get; set; }
 
+        public virtual string Email { get; set; }
+
         public virtual RoleEntity Role { get; set; }
 
         public virtual ICollection<UserPasswordCredentialEntity> UserPasswordCredentials { get; set; }

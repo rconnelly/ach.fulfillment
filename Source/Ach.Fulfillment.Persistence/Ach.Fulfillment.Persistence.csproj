@@ -85,6 +85,9 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Impl\Mappings\PartnerMapping.cs" />
+    <Compile Include="Impl\Mappings\RoleMapping.cs" />
+    <Compile Include="Impl\Mappings\UserMapping.cs" />
     <Compile Include="RepositoryExtension.cs" />
     <Compile Include="Impl\AuditInterceptor.cs" />
     <Compile Include="Impl\Commands\CommandBase.cs" />

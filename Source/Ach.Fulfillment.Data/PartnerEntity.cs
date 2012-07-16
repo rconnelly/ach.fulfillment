@@ -4,8 +4,8 @@ namespace Ach.Fulfillment.Data
 
     public class PartnerEntity : BaseEntity
     {
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
-        public ICollection<UserEntity> Users { get; set; } 
+        public virtual ICollection<UserEntity> Users { get; set; } 
     }
 }
