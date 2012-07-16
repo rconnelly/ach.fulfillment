@@ -10,7 +10,9 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         public void Override(AutoMapping<UserEntity> mapping)
         {
             mapping.Table("[User]");
-
+            /*mapping.References(i => i.UserPasswordCredentials)
+                .LazyLoad()
+                .Cascade.All();*/
             mapping.HasManyToMany(i => i.Partners)
                 .LazyLoad()
                 .Table("PartnerUser");

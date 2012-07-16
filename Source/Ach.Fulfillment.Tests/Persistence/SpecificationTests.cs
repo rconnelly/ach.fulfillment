@@ -22,8 +22,13 @@
         [Test]
         public void PermissionSpecification()
         {
+            var role = new PersistenceSpecification<RoleEntity>(this.Session)
+                .CheckProperty(c => c.Name, this.ShortStringGenerator.GetRandomValue())
+            .VerifyTheMappings();
+
             new PersistenceSpecification<PermissionEntity>(this.Session)
                 .CheckProperty(c => c.Name, AccessRight.Authenticate)
+                .CheckEntity(c => c.Role, role)
             .VerifyTheMappings();
         }
 
@@ -99,18 +104,16 @@
         [Test]
         public void PermissionRoleSpecification()
         {
-             var permission = new PersistenceSpecification<PermissionEntity>(this.Session)
-                .CheckProperty(c => c.Name, AccessRight.Authenticate)
-            .VerifyTheMappings();
-        
             var role = new PersistenceSpecification<RoleEntity>(this.Session)
                 .CheckProperty(c => c.Name, this.ShortStringGenerator.GetRandomValue())
             .VerifyTheMappings();
 
-            role.Permissions.Add(permission);
-            
-            this.Session.Flush();
-
+             var permission = new PersistenceSpecification<PermissionEntity>(this.Session)
+                .CheckProperty(c => c.Name, AccessRight.Authenticate)
+                .CheckEntity(c => c.Role, role)
+            .VerifyTheMappings();
+        
+            this.Session.Evict(permission);
             this.Session.Evict(role);
 
             role = this.Session.Load<RoleEntity>(role.Id);

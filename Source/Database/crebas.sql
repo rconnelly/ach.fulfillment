@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     2012.07.16 13:07:49                          */
+/* Created on:     2012.07.16 15:35:23                          */
 /*==============================================================*/
 
 
@@ -12,12 +12,8 @@ alter table ach.PartnerUser
    drop constraint FK_PARTNERUSER_PARTNER
 go
 
-alter table ach.PermissionRole
-   drop constraint FK_PERMISSIONROLE_ROLE
-go
-
-alter table ach.PermissionRole
-   drop constraint FK_PERMISSIONROLE_PERMISSION
+alter table ach.Permission
+   drop constraint FK_PERMISSION_ROLE
 go
 
 alter table ach."User"
@@ -53,24 +49,6 @@ if exists (select 1
             and   indid > 0
             and   indid < 255)
    drop index ach.Permission.UX_PERMISSION
-go
-
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('ach.PermissionRole')
-            and   name  = 'UX_PERMISSIONROLE'
-            and   indid > 0
-            and   indid < 255)
-   drop index ach.PermissionRole.UX_PERMISSIONROLE
-go
-
-if exists (select 1
-            from  sysindexes
-           where  id    = object_id('ach.Role')
-            and   name  = 'UX_ROLE'
-            and   indid > 0
-            and   indid < 255)
-   drop index ach.Role.UX_ROLE
 go
 
 if exists (select 1
@@ -114,13 +92,6 @@ go
 
 if exists (select 1
             from  sysobjects
-           where  id = object_id('ach.PermissionRole')
-            and   type = 'U')
-   drop table ach.PermissionRole
-go
-
-if exists (select 1
-            from  sysobjects
            where  id = object_id('ach.Role')
             and   type = 'U')
    drop table ach.Role
@@ -155,6 +126,7 @@ go
 create table ach.Partner (
    PartnerId            int                  identity,
    Name                 nvarchar(255)        not null,
+   Disabled             bit                  not null constraint DF_DISABLED_PARTNER default 0,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_PARTNER primary key (PartnerId)
@@ -193,6 +165,7 @@ go
 /*==============================================================*/
 create table ach.Permission (
    PermissionId         int                  identity,
+   RoleId               int                  not null,
    Name                 nvarchar(255)        not null,
    Created              datetime             not null,
    Modified             datetime             null,
@@ -204,27 +177,8 @@ go
 /* Index: UX_PERMISSION                                         */
 /*==============================================================*/
 create unique index UX_PERMISSION on ach.Permission (
-   Name ASC
-)
-go
-
-/*==============================================================*/
-/* Table: PermissionRole                                        */
-/*==============================================================*/
-create table ach.PermissionRole (
-   PermissionRoleId     int                  identity,
-   RoleId               int                  not null,
-   PermissionId         int                  not null,
-   constraint PK_PERMISSIONROLE primary key (PermissionRoleId)
-)
-go
-
-/*==============================================================*/
-/* Index: UX_PERMISSIONROLE                                     */
-/*==============================================================*/
-create unique index UX_PERMISSIONROLE on ach.PermissionRole (
-   RoleId ASC,
-   PermissionId ASC
+   Name ASC,
+   RoleId ASC
 )
 go
 
@@ -241,14 +195,6 @@ create table ach.Role (
 go
 
 /*==============================================================*/
-/* Index: UX_ROLE                                               */
-/*==============================================================*/
-create unique index UX_ROLE on ach.Role (
-   Name ASC
-)
-go
-
-/*==============================================================*/
 /* Table: "User"                                                */
 /*==============================================================*/
 create table ach."User" (
@@ -256,6 +202,7 @@ create table ach."User" (
    RoleId               int                  not null,
    Name                 nvarchar(255)        not null,
    Email                nvarchar(255)        null,
+   Deleted              bit                  not null constraint DF_DELETED_USER default 0,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_USER primary key (UserId)
@@ -303,14 +250,9 @@ alter table ach.PartnerUser
       references ach.Partner (PartnerId)
 go
 
-alter table ach.PermissionRole
-   add constraint FK_PERMISSIONROLE_ROLE foreign key (RoleId)
+alter table ach.Permission
+   add constraint FK_PERMISSION_ROLE foreign key (RoleId)
       references ach.Role (RoleId)
-go
-
-alter table ach.PermissionRole
-   add constraint FK_PERMISSIONROLE_PERMISSION foreign key (PermissionId)
-      references ach.Permission (PermissionId)
 go
 
 alter table ach."User"

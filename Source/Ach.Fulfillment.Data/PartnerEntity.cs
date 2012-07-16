@@ -6,6 +6,8 @@ namespace Ach.Fulfillment.Data
     {
         public virtual string Name { get; set; }
 
+        public virtual bool Disabled { get; set; }
+
         public virtual ICollection<UserEntity> Users { get; set; } 
     }
 }

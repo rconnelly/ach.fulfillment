@@ -76,6 +76,9 @@
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\RoleManager.cs" />
     <Compile Include="Impl\UniverseManager.cs" />
+    <Compile Include="Impl\UserManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Impl\Validation\CurrencyValidator.cs" />
     <Compile Include="Impl\Validation\RoleValidator.cs" />
     <Compile Include="Impl\Validation\UniquePropertyValidator.cs" />
@@ -83,6 +86,9 @@
     <Compile Include="Impl\Validation\ValidationExtension.cs" />
     <Compile Include="IRoleManager.cs" />
     <Compile Include="IUniverseManager.cs" />
+    <Compile Include="IUserManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

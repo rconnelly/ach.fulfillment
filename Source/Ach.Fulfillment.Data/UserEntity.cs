@@ -8,6 +8,8 @@ namespace Ach.Fulfillment.Data
 
         public virtual string Email { get; set; }
 
+        public virtual bool Deleted { get; set; }
+
         public virtual RoleEntity Role { get; set; }
 
         public virtual ICollection<UserPasswordCredentialEntity> UserPasswordCredentials { get; set; }
