@@ -1,12 +1,10 @@
 namespace Ach.Fulfillment.Business.Impl
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications;
 
     internal class PartnerManager : ManagerBase<PartnerEntity>, IPartnerManager
     {
@@ -44,6 +42,7 @@ namespace Ach.Fulfillment.Business.Impl
         public PartnerEntity AddUser(PartnerEntity partner, UserEntity user)
         {
             Contract.Assert(partner != null);
+            Contract.Assert(partner.Id > 0);
             Contract.Assert(user != null);
             Contract.Assert(user.Id > 0);
 
