@@ -9,9 +9,6 @@ namespace Ach.Fulfillment.Business
         // todo: cqrs
         IEnumerable<PartnerEntity> FindAll(bool withDisabled = false);
 
-        // todo: move to IManager
-        void Update(PartnerEntity partner);
-
         PartnerEntity AddUser(PartnerEntity partner, UserEntity user);
     }
 }

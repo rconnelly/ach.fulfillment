@@ -11,8 +11,5 @@ namespace Ach.Fulfillment.Business
 
         // todo: should not it be Find and cqrs?
         RoleEntity Load(string name);
-
-        // todo: move to IManager
-        void Update(RoleEntity currency);
     }
 }

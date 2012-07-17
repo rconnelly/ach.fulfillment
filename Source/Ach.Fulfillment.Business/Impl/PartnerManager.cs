@@ -33,11 +33,11 @@ namespace Ach.Fulfillment.Business.Impl
             this.Repository.Update(partner);
         }*/
 
-        public void Update(PartnerEntity partner)
+        public override void Update(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
             this.DemandValid<PartnerValidator>(partner);
-            this.Repository.Update(partner);
+            base.Update(partner);
         }
 
         public PartnerEntity AddUser(PartnerEntity partner, UserEntity user)

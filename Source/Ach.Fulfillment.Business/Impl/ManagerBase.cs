@@ -33,6 +33,11 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
+        public virtual void Update(T instance)
+        {
+            this.Repository.Update(instance);
+        }
+
         public virtual T Load(long id)
         {
             var instance = this.Repository.Load<T>(id);

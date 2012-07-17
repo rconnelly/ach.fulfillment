@@ -44,11 +44,11 @@ namespace Ach.Fulfillment.Business.Impl
             this.Repository.Delete(instance);
         }*/
 
-        public void Update(RoleEntity currency)
+        public override void Update(RoleEntity instance)
         {
-            Contract.Assert(currency != null);
-            this.DemandValid<RoleValidator>(currency);
-            this.Repository.Update(currency);
+            Contract.Assert(instance != null);
+            this.DemandValid<RoleValidator>(instance);
+            base.Update(instance);
         }
     }
 }
