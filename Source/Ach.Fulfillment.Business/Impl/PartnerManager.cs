@@ -42,6 +42,7 @@ namespace Ach.Fulfillment.Business.Impl
         public PartnerEntity AddUser(PartnerEntity partner, UserEntity user)
         {
             Contract.Assert(partner != null);
+            Contract.Assert(partner.Id > 0);
             Contract.Assert(user != null);
             Contract.Assert(user.Id > 0);
 

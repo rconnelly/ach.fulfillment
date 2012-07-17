@@ -1,9 +1,12 @@
 namespace Ach.Fulfillment.Tests.Business
 {
+    using System.Diagnostics;
     using System.Linq;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Common.Exceptions;
+    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
 
     using NUnit.Framework;
@@ -55,6 +58,18 @@ namespace Ach.Fulfillment.Tests.Business
             var i = manager.Load(instance.Id);
 
             Assert.That(i.Disabled, Is.True);
+        }
+
+        [Test]
+        public void NotUniquePartner()
+        {
+            var manager = this.Locator.GetInstance<IPartnerManager>();
+            var instance = manager.Create(this.CreateTestPartner());
+
+            var ex =
+                Assert.Throws<BusinessValidationException>(
+                    () => manager.Create(new PartnerEntity { Name = instance.Name }));
+            Trace.WriteLine(ex.Message);
         }
 
         [Test]
