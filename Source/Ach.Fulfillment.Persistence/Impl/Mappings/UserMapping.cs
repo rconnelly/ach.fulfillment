@@ -1,7 +1,10 @@
 namespace Ach.Fulfillment.Persistence.Impl.Mappings
 {
+    using System.Collections.Generic;
+
     using Ach.Fulfillment.Data;
 
+    using FluentNHibernate;
     using FluentNHibernate.Automapping;
     using FluentNHibernate.Automapping.Alterations;
 
@@ -10,8 +13,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         public void Override(AutoMapping<UserEntity> mapping)
         {
             mapping.Table("[User]");
-            mapping.HasMany(i => i.UserPasswordCredentials).LazyLoad().Cascade.AllDeleteOrphan().Inverse();
-            mapping.HasManyToMany(i => i.Partners).LazyLoad().Table("PartnerUser");
+            mapping.HasMany(Reveal.Member<UserEntity, IEnumerable<UserPasswordCredentialEntity>>("userPasswordCredentials"))
+                .LazyLoad().Cascade.AllDeleteOrphan().Inverse();
+            mapping.HasManyToMany(Reveal.Member<UserEntity, IEnumerable<PartnerEntity>>("partners"))
+                .LazyLoad().Table("PartnerUser");
+            mapping.IgnoreProperty(i => i.Partner);
+            mapping.IgnoreProperty(i => i.UserPasswordCredential);
         }
     }
 }

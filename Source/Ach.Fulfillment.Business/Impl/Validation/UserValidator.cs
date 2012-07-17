@@ -11,11 +11,9 @@ namespace Ach.Fulfillment.Business.Impl.Validation
             this.RuleFor(i => i.Name).Cascade(CascadeMode.StopOnFirstFailure).NotEmpty().Length(1, MetadataInfo.StringNormal);
             this.RuleFor(i => i.Email).Cascade(CascadeMode.StopOnFirstFailure).NotEmpty().Length(1, MetadataInfo.StringNormal);
             this.RuleFor(i => i.Role).NotNull();
-            this.RuleFor(i => i.UserPasswordCredentials)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+            this.RuleFor(i => i.UserPasswordCredential)
                 .NotNull()
-                .Must(c => c.Count > 0).WithMessage("Password credential should be specified")
-                .SetCollectionValidator(new UserPasswordCredentialValidator());
+                .SetValidator(new UserPasswordCredentialValidator());
         }        
     }
 }

@@ -24,14 +24,8 @@
         public Transaction()
         {
             this.transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            if (this.transactionManager.Transaction == null)
-            {
-                this.IsTransactionOwner = true;
-                this.transaction = this.transactionManager.BeginTransaction();
-            }
+            this.transaction = this.transactionManager.BeginTransaction();
         }
-
-        protected bool IsTransactionOwner { get; set; }
 
         #endregion
 
@@ -44,11 +38,7 @@
                 throw new ObjectDisposedException("Transaction");
             }
 
-            if (this.IsTransactionOwner)
-            {
-                this.transactionManager.CommitTransaction(this.transaction);
-            }
-
+            this.transactionManager.CommitTransaction(this.transaction);
             this.isCompleted = true;
         }
 
@@ -59,16 +49,12 @@
                 return;
             }
 
-            if (this.IsTransactionOwner)
+            if (!this.isCompleted)
             {
-                Contract.Assert(this.transaction != null);
-                if (!this.isCompleted)
-                {
-                    this.transactionManager.RollbackTransaction(this.transaction);
-                }
-
-                this.transaction.Dispose();
+                this.transactionManager.RollbackTransaction(this.transaction);
             }
+
+            this.transaction.Dispose();
 
             this.transaction = null;
             this.transactionManager = null;
