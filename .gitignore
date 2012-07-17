@@ -13,6 +13,8 @@
 # Build results
 [Dd]ebug/
 [Rr]elease/
+[Ll]og/
+[Ll]ogs/
 *_i.c
 *_p.c
 *.ilk
