@@ -4,6 +4,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System.Diagnostics.Contracts;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class CurrencyByName : SpecificationBase<CurrencyEntity>
     {
         private readonly UniverseEntity universe;

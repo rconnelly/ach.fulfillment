@@ -3,6 +3,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class UniverseUniqness : SpecificationInstanceBase<UniverseEntity>
     {
         public override Expression<Func<UniverseEntity, bool>> IsSatisfiedBy()

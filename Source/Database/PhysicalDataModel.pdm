@@ -9329,10 +9329,10 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:Code>PasswordHash</a:Code>
 <a:CreationDate>1342427319</a:CreationDate>
 <a:Creator>Liquid</a:Creator>
-<a:ModificationDate>1342427319</a:ModificationDate>
+<a:ModificationDate>1342448203</a:ModificationDate>
 <a:Modifier>Liquid</a:Modifier>
-<a:DataType>nvarchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>nvarchar(100)</a:DataType>
+<a:Length>100</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o533">
@@ -9341,10 +9341,10 @@ TableComment 0 Microsoft Sans Serif,8,N</a:FontList>
 <a:Code>PasswordSalt</a:Code>
 <a:CreationDate>1342427319</a:CreationDate>
 <a:Creator>Liquid</a:Creator>
-<a:ModificationDate>1342427319</a:ModificationDate>
+<a:ModificationDate>1342448203</a:ModificationDate>
 <a:Modifier>Liquid</a:Modifier>
-<a:DataType>nvarchar(32)</a:DataType>
-<a:Length>32</a:Length>
+<a:DataType>nvarchar(100)</a:DataType>
+<a:Length>100</a:Length>
 <a:Mandatory>1</a:Mandatory>
 </o:Column>
 <o:Column Id="o534">

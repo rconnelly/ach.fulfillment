@@ -7,7 +7,7 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
 
-    internal class CurrencyManager : ManagerBase, ICurrencyManager
+    internal class CurrencyManager : ManagerBase<CurrencyEntity>, ICurrencyManager
     {
         public CurrencyEntity Create(UniverseEntity universe, CurrencyEntity currency)
         {

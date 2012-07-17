@@ -50,6 +50,7 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />
     <Compile Include="_CurrencyEntity.cs" />
     <Compile Include="IAuditable.cs" />
     <Compile Include="IEntity.cs" />
@@ -59,18 +60,18 @@
     <Compile Include="PermissionEntity.cs" />
     <Compile Include="AccessRight.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryData\IQueryData.cs" />
-    <Compile Include="QueryData\IQueryData.Generic.cs" />
-    <Compile Include="QueryData\IQueryData.Instance.cs" />
+    <Compile Include="Common\IQueryData.cs" />
+    <Compile Include="Common\IQueryData.Generic.cs" />
+    <Compile Include="Common\IQueryData.Instance.cs" />
     <Compile Include="RoleEntity.cs" />
     <Compile Include="Specifications\CurrencyAll.cs" />
     <Compile Include="Specifications\CurrencyByName.cs" />
     <Compile Include="Specifications\CurrencyUniqness.cs" />
-    <Compile Include="Specifications\ISpecification.cs" />
-    <Compile Include="Specifications\ISpecification.Generic.cs" />
-    <Compile Include="Specifications\ISpecification.Ordered.cs" />
-    <Compile Include="Specifications\SpecificationBase.cs" />
-    <Compile Include="Specifications\SpecificationInstanceBase.cs" />
+    <Compile Include="Common\ISpecification.cs" />
+    <Compile Include="Common\ISpecification.Generic.cs" />
+    <Compile Include="Common\ISpecification.Ordered.cs" />
+    <Compile Include="Common\SpecificationBase.cs" />
+    <Compile Include="Common\SpecificationInstanceBase.cs" />
     <Compile Include="Specifications\UniverseAll.cs" />
     <Compile Include="Specifications\UniverseByActiveLogin.cs" />
     <Compile Include="Specifications\UniverseUniqness.cs" />

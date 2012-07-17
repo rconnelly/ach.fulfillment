@@ -2,6 +2,7 @@ namespace Ach.Fulfillment.Tests.Business
 {
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Transactions;
+    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Tests.Common;
 
     using Microsoft.Practices.ServiceLocation;
@@ -16,7 +17,9 @@ namespace Ach.Fulfillment.Tests.Business
     {
         #region Constants and Fields
 
-        protected readonly StringGenerator ShortStringGenerator = new StringGenerator(5, 20);
+        protected readonly StringGenerator ShortStringGenerator = new StringGenerator(5, MetadataInfo.StringShort);
+
+        protected readonly StringGenerator NormalStringGenerator = new StringGenerator(5, MetadataInfo.StringNormal);
 
         private Transaction transaction;
 

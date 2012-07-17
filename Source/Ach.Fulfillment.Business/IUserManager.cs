@@ -1,17 +1,13 @@
 namespace Ach.Fulfillment.Business
 {
-    using System.Collections.Generic;
-
     using Ach.Fulfillment.Data;
 
-    public interface IUserManager
+    public interface IUserManager : IManager<UserEntity>
     {
-        UserEntity Load(long id);
+        void Create(UserEntity instance, string login, string password);
 
-        UserEntity Create(UserEntity user, string password);
+        void ChangePassword(UserEntity instance, string newPassword);
 
-        IList<UserEntity> FindByLogin(string login);
-
-        IList<UserEntity> FindByEmail(string email);
+        UserEntity FindByPasswordCredential(string login, string password);
     }
 }

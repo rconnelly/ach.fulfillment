@@ -25,6 +25,19 @@
 
         #endregion
 
+        #region Properties
+
+        public IDisposable Transaction
+        {
+            get
+            {
+                var transaction = this.sessionProducer().Transaction;
+                return transaction != null && transaction.IsActive ? transaction : null;
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         public IDisposable BeginTransaction()
@@ -37,6 +50,7 @@
             Contract.Assert(transactionToken != null);
             var transaction = transactionToken as ITransaction;
             Contract.Assert(transaction != null);
+            this.sessionProducer().Flush();
             transaction.Commit();
         }
 
@@ -45,6 +59,7 @@
             Contract.Assert(transactionToken != null);
             var transaction = transactionToken as ITransaction;
             Contract.Assert(transaction != null);
+            this.sessionProducer().Flush();
             transaction.Rollback();
         }
 

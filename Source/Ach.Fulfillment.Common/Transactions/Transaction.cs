@@ -1,6 +1,7 @@
 ﻿namespace Ach.Fulfillment.Common.Transactions
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     using Microsoft.Practices.ServiceLocation;
 
@@ -23,8 +24,14 @@
         public Transaction()
         {
             this.transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            this.transaction = this.transactionManager.BeginTransaction();
+            if (this.transactionManager.Transaction == null)
+            {
+                this.IsTransactionOwner = true;
+                this.transaction = this.transactionManager.BeginTransaction();
+            }
         }
+
+        protected bool IsTransactionOwner { get; set; }
 
         #endregion
 
@@ -37,7 +44,11 @@
                 throw new ObjectDisposedException("Transaction");
             }
 
-            this.transactionManager.CommitTransaction(this.transaction);
+            if (this.IsTransactionOwner)
+            {
+                this.transactionManager.CommitTransaction(this.transaction);
+            }
+
             this.isCompleted = true;
         }
 
@@ -48,12 +59,17 @@
                 return;
             }
 
-            if (!this.isCompleted)
+            if (this.IsTransactionOwner)
             {
-                this.transactionManager.RollbackTransaction(this.transaction);
+                Contract.Assert(this.transaction != null);
+                if (!this.isCompleted)
+                {
+                    this.transactionManager.RollbackTransaction(this.transaction);
+                }
+
+                this.transaction.Dispose();
             }
 
-            this.transaction.Dispose();
             this.transaction = null;
             this.transactionManager = null;
             this.disposed = true;

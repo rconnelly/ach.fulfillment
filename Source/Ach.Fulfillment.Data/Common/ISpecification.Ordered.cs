@@ -1,4 +1,4 @@
-namespace Ach.Fulfillment.Data.Specifications
+namespace Ach.Fulfillment.Data.Common
 {
     using System.Linq;
 

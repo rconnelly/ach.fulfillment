@@ -7,7 +7,7 @@ namespace Ach.Fulfillment.Data
     using System.Globalization;
 
     using Ach.Fulfillment.Common.Exceptions;
-    using Ach.Fulfillment.Data.QueryData;
+    using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence;
 
     public static class RepositoryExtension

@@ -1,11 +1,14 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Validation
 {
+    using System;
+
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Persistence;
 
     using FluentValidation;
 
+    [Obsolete]
     internal class UniverseValidator : AbstractValidator<UniverseEntity>
     {
         public UniverseValidator(IRepository repository)

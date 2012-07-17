@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.QueryData;
+    using Ach.Fulfillment.Data.Common;
 
     public interface IRepository
     {

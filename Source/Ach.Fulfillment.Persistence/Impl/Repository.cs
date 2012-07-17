@@ -5,7 +5,7 @@
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.QueryData;
+    using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence.Impl.Commands;
 
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;

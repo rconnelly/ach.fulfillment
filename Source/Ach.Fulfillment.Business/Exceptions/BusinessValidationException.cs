@@ -12,6 +12,18 @@ namespace Ach.Fulfillment.Business.Exceptions
     {
         #region Constructors and Destructors
 
+        // TODO: use failure state instead of "error". localization should be performed in client code
+        public BusinessValidationException(string propertyName, string error)
+            : this(new ValidationFailure(propertyName, error))
+        {
+        }
+
+        public BusinessValidationException(params ValidationFailure[] errors)
+            : base(BuildErrorMesage(errors))
+        {
+            this.Errors = errors;
+        }
+
         public BusinessValidationException(IList<ValidationFailure> errors)
             : base(BuildErrorMesage(errors))
         {

@@ -4,6 +4,8 @@
     using System.Linq;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class UniverseAll : SpecificationBase<UniverseEntity>, IOrderedSpecification<UniverseEntity>
     {
         private readonly bool withDeleted;

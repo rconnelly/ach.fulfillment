@@ -2,7 +2,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 {
     using System.Collections.Generic;
 
-    using Ach.Fulfillment.Data.QueryData;
+    using Ach.Fulfillment.Data.Common;
 
     internal interface IQueryRepositoryCommand<out TResult>
     {

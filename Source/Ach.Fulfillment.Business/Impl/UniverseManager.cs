@@ -9,7 +9,7 @@ namespace Ach.Fulfillment.Business.Impl
 
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
 
-    internal class UniverseManager : ManagerBase, IUniverseManager
+    internal class UniverseManager : ManagerBase<UniverseEntity>, IUniverseManager
     {
         #region Constants and Fields
 

@@ -3,8 +3,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
     using System.Collections.Generic;
     using System.Linq;
 
-    using Ach.Fulfillment.Data.Specifications;
-
+    using Ach.Fulfillment.Data.Common;
     using NHibernate.Linq;
 
     internal class SpecificationCommand<TResult> : CommandBase<ISpecification<TResult>, TResult>

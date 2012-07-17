@@ -3,6 +3,9 @@ namespace Ach.Fulfillment.Data.Specifications
     using System;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
+    [Obsolete]
     public class UniverseByActiveLogin : SpecificationBase<UniverseEntity>
     {
         private readonly string login;

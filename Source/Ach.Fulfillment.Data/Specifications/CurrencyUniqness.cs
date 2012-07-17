@@ -3,6 +3,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class CurrencyUniqness : SpecificationInstanceBase<CurrencyEntity>
     {
         public override Expression<Func<CurrencyEntity, bool>> IsSatisfiedBy()

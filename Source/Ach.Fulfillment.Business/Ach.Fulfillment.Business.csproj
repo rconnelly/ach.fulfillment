@@ -60,6 +60,9 @@
     <Reference Include="Unity.AutoRegistration">
       <HintPath>..\..\_libBinary\UnityAutoRegistration.1.0.0.1\lib\net35\Unity.AutoRegistration.dll</HintPath>
     </Reference>
+    <Reference Include="Zetetic.Security">
+      <HintPath>..\..\_libBinary\Zetetic.Security.1.0.0.0\lib\Zetetic.Security.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Common\GlobalAssemblyInfo.cs">
@@ -71,6 +74,7 @@
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="ICurrencyManager.cs" />
+    <Compile Include="IManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\CurrencyManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
@@ -79,8 +83,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Impl\Validation\CurrencyValidator.cs" />
+    <Compile Include="Impl\Validation\PasswordValidator.cs" />
     <Compile Include="Impl\Validation\UniquePropertyValidator.cs" />
     <Compile Include="Impl\Validation\UniverseValidator.cs" />
+    <Compile Include="Impl\Validation\UserPasswordCredentialValidator.cs" />
+    <Compile Include="Impl\Validation\UserValidator.cs" />
     <Compile Include="Impl\Validation\ValidationExtension.cs" />
     <Compile Include="IUniverseManager.cs" />
     <Compile Include="IUserManager.cs">
@@ -106,6 +113,9 @@
       <Project>{5AB0AE05-BBCB-4337-8390-3A06E4776932}</Project>
       <Name>Ach.Fulfillment.Persistence</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,6 +8,7 @@
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Common.Unity;
+    using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Persistence.Impl.Commands;
 

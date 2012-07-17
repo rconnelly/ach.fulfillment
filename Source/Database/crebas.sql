@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      Microsoft SQL Server 2005                    */
-/* Created on:     2012.07.16 15:35:23                          */
+/* Created on:     2012.07.16 17:17:23                          */
 /*==============================================================*/
 
 
@@ -216,8 +216,8 @@ create table ach.UserPasswordCredential (
    UserPasswordCredentialId int                  identity,
    UserId               int                  not null,
    Login                nvarchar(255)        not null,
-   PasswordHash         nvarchar(32)         not null,
-   PasswordSalt         nvarchar(32)         not null,
+   PasswordHash         nvarchar(100)        not null,
+   PasswordSalt         nvarchar(100)        not null,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_USERPASSWORDCREDENTIAL primary key (UserPasswordCredentialId)

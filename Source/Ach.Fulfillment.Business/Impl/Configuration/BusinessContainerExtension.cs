@@ -1,7 +1,5 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Configuration
 {
-    using System.Security.Cryptography;
-
     using Ach.Fulfillment.Common.Unity;
 
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
@@ -20,10 +18,10 @@
 
             var builder = new ConfigurationSourceBuilder();
             builder.ConfigureCryptography()
-                .EncryptUsingHashAlgorithmProviderNamed("PasswordHashing")
+                .EncryptUsingHashAlgorithmProviderNamed(UserManager.HashInstance)
                 .WithOptions
-                    .UsingHashAlgorithm<SHA384Managed>()
-                    .SetAsDefault();
+                    .UsingHashAlgorithm<Zetetic.Security.Pbkdf2Hash>()
+                /*.SetAsDefault()*/; // do not want Pbkdf2Hash (low speed algorithm) to be default
             builder.UpdateConfigurationWithReplace(configurationSource);
             var configurator = new UnityContainerConfigurator(this.Container);
             EnterpriseLibraryContainer.ConfigureContainer(configurator, configurationSource);
