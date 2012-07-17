@@ -10,8 +10,10 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         public void Override(AutoMapping<PartnerEntity> mapping)
         {
             mapping.HasManyToMany(i => i.Users)
-                .LazyLoad()
                 .Table("PartnerUser")
+                .ChildKeyColumn("UserId")
+                .ParentKeyColumn("PartnerId")
+                .LazyLoad()
                 .Cascade.SaveUpdate();
         }
     }

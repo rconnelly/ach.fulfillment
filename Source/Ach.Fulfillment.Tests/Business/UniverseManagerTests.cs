@@ -6,8 +6,6 @@ namespace Ach.Fulfillment.Tests.Business
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Business.Exceptions;
 
-    using NHibernate;
-
     using NUnit.Framework;
 
     [TestFixture]
@@ -132,20 +130,6 @@ namespace Ach.Fulfillment.Tests.Business
 
             instances = manager.LoadAll(true);
             Assert.That(instances.Any(i => i.Deleted), Is.True);
-        }
-
-        #endregion
-
-        #region Methods
-
-        private void ClearSession(params object[] instances)
-        {
-            var session = this.Locator.GetInstance<ISession>();
-            session.Flush();
-            foreach (var instance in instances)
-            {
-                session.Evict(instance);
-            }
         }
 
         #endregion
