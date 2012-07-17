@@ -24,14 +24,21 @@ namespace Ach.Fulfillment.Business.Impl
             return base.Create(partner);
         }
 
-        /*public override void Delete(PartnerEntity partner)
+        public override void Delete(PartnerEntity partner)
+        {
+            Contract.Assert(partner != null);
+            this.Repository.Delete(partner);
+        }
+
+        public void Disable(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
             Contract.Assert(!partner.Disabled);
 
             partner.Disabled = true;
+
             this.Repository.Update(partner);
-        }*/
+        }
 
         public void Update(PartnerEntity partner)
         {

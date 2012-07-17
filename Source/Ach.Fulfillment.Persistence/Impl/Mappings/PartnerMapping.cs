@@ -13,8 +13,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
                 .Table("PartnerUser")
                 .ChildKeyColumn("UserId")
                 .ParentKeyColumn("PartnerId")
-                .LazyLoad()
-                .Cascade.SaveUpdate();
+                .LazyLoad();
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Ach.Fulfillment.Business
         PartnerEntity Create(PartnerEntity partner);
 
         void Delete(PartnerEntity partner);
+
+        void Disable(PartnerEntity partner);
         
         void Update(PartnerEntity partner);
 

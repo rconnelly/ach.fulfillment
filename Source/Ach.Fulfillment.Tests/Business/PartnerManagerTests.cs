@@ -3,6 +3,7 @@ namespace Ach.Fulfillment.Tests.Business
     using System.Linq;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Common.Exceptions;
 
     using NUnit.Framework;
 
@@ -33,9 +34,26 @@ namespace Ach.Fulfillment.Tests.Business
             var manager = this.Locator.GetInstance<IPartnerManager>();
             var instance = manager.Create(this.CreateTestPartner());
 
+            manager.Delete(instance);
+
+            Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
+        }
+
+        [Test]
+        public void Disable()
+        {
+            var manager = this.Locator.GetInstance<IPartnerManager>();
+            var instance = manager.Create(this.CreateTestPartner());
+
             this.ClearSession(instance);
 
-            manager.Delete(instance);
+            manager.Disable(instance);
+
+            this.ClearSession(instance);
+
+            var i = manager.Load(instance.Id);
+
+            Assert.That(i.Disabled, Is.True);
         }
 
         [Test]
@@ -93,8 +111,11 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var manager = this.Locator.GetInstance<IPartnerManager>();
             var userManager = this.Locator.GetInstance<IUserManager>();
+            var roleManager = this.Locator.GetInstance<IRoleManager>();
             var partner = this.CreateTestPartner();
             var user = this.CreateTestUser();
+
+            roleManager.Create(user.Role);
             var partnerInstance = manager.Create(partner);
             var userInstance = userManager.Create(user, this.ShortStringGenerator.GetRandomValue(), this.ShortStringGenerator.GetRandomValue());
 
