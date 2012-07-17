@@ -94,6 +94,8 @@
   <ItemGroup>
     <Compile Include="Business\BusinessIntegrationTestBase.cs" />
     <Compile Include="Business\CurrencyManagerTests.cs" />
+    <Compile Include="Business\EntityHelper.cs" />
+    <Compile Include="Business\PartnerManagerTests.cs" />
     <Compile Include="Business\RoleManagerTests.cs" />
     <Compile Include="Business\UniverseManagerTests.cs" />
     <Compile Include="Common\NoCategoryTraceListener.cs" />

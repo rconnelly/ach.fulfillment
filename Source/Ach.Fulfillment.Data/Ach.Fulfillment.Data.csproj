@@ -50,6 +50,8 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="Specifications\PartnerAll.cs" />
+    <Compile Include="Specifications\PartnerUniqness.cs" />
     <Compile Include="Specifications\RoleAll.cs" />
     <Compile Include="Specifications\RoleByName.cs" />
     <Compile Include="Specifications\RoleUniqness.cs" />

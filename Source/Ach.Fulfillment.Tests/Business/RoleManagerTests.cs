@@ -125,27 +125,5 @@ namespace Ach.Fulfillment.Tests.Business
         }
 
         #endregion
-
-        #region Methods
-
-        private RoleEntity CreateTestRole()
-        {
-            var role = new RoleEntity
-                {
-                    Name = this.ShortStringGenerator.GetRandomValue(), 
-                };
-            role.Permissions = new Collection<PermissionEntity>
-                {
-                    new PermissionEntity
-                        {
-                            Name = AccessRight.Authenticate,
-                            Role = role
-                        }
-                };
-
-            return role;
-        }
-
-        #endregion
     }
 }

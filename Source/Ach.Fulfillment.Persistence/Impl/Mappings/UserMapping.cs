@@ -13,9 +13,15 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
             /*mapping.References(i => i.UserPasswordCredentials)
                 .LazyLoad()
                 .Cascade.All();*/
-            mapping.HasManyToMany(i => i.Partners)
+
+           mapping.HasManyToMany(i => i.Partners)
                 .LazyLoad()
                 .Table("PartnerUser");
+
+            /* mapping.HasOne(i => i.Partner)
+                .ForeignKey("PartnerId")
+                .LazyLoad()
+                .Cascade.All();*/
         }
     }
 }
