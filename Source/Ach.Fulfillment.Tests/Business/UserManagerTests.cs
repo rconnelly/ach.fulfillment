@@ -84,7 +84,7 @@ namespace Ach.Fulfillment.Tests.Business
             var manager = this.Locator.GetInstance<IUserManager>();
             var user = this.CreateUser();
             Assert.That(user.Deleted, Is.False);
-            Assert.That(user.UserPasswordCredentials.Count, Is.EqualTo(1));
+            Assert.That(user.UserPasswordCredential, Is.Not.Null);
             this.Session.Flush();
 
             manager.Delete(user);
@@ -92,7 +92,7 @@ namespace Ach.Fulfillment.Tests.Business
             user = manager.Load(user.Id);
             this.Session.Flush();
             Assert.That(user.Deleted, Is.True);
-            Assert.That(user.UserPasswordCredentials.Count, Is.EqualTo(0));
+            Assert.That(user.UserPasswordCredential, Is.Null);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace Ach.Fulfillment.Tests.Business
             // ReSharper disable ConvertToConstant.Local
             var newPassword = "newPassword";
             // ReSharper restore ConvertToConstant.Local
-            var login = user.UserPasswordCredentials.First().Login;
+            var login = user.UserPasswordCredential.Login;
             manager.ChangePassword(user, newPassword);
             this.Session.Flush();
             this.Session.Evict(user);

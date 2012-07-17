@@ -1,9 +1,7 @@
 namespace Ach.Fulfillment.Business.Impl
 {
     using System;
-    using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Security.Cryptography;
 
     using Ach.Fulfillment.Business.Exceptions;
@@ -45,12 +43,8 @@ namespace Ach.Fulfillment.Business.Impl
                     PasswordSalt = salt,
                     User = instance
                 };
-            if (instance.UserPasswordCredentials == null)
-            {
-                instance.UserPasswordCredentials = new Collection<UserPasswordCredentialEntity>();
-            }
-
-            instance.UserPasswordCredentials.Add(credential);
+            
+            instance.UserPasswordCredential = credential;
 
             this.DemandValid<UserValidator>(instance);
             this.Repository.Create(instance);
@@ -63,7 +57,7 @@ namespace Ach.Fulfillment.Business.Impl
             Contract.Assert(instance != null);
             Contract.Assert(newPassword != null);
 
-            var credential = instance.UserPasswordCredentials.FirstOrDefault();
+            var credential = instance.UserPasswordCredential;
             if (credential == null)
             {
                 throw new BusinessValidationException("Password", "User does not have asssociated password credential");
@@ -101,7 +95,8 @@ namespace Ach.Fulfillment.Business.Impl
             using (var transaction = new Transaction())
             {
                 instance.Deleted = true;
-                instance.UserPasswordCredentials.Clear();
+
+                instance.UserPasswordCredential = null;
                 this.Repository.Update(instance);
                 this.Repository.Flush(true);
 

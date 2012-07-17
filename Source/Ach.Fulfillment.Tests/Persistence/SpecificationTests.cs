@@ -74,7 +74,7 @@
                 .CheckEntity(c => c.User, user)
             .VerifyTheMappings();
 
-            Assert.That(credential.User.UserPasswordCredentials.Count, Is.EqualTo(1));
+            Assert.That(credential.User.UserPasswordCredential, Is.Not.Null);
         }
 
         [Test]
@@ -97,8 +97,11 @@
             partner.Users.Add(user);
 
             this.Session.Flush();
+            this.Session.Clear();
 
-            Assert.That(user.Partners.Count, Is.EqualTo(1));
+            user = this.Session.Load<UserEntity>(user.Id);
+
+            Assert.That(user.Partner, Is.Not.Null);
         }
 
         [Test]
