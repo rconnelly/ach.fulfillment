@@ -4,6 +4,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System.Linq;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class PartnerAll : SpecificationBase<PartnerEntity>
     {
         private readonly bool withDisabled;

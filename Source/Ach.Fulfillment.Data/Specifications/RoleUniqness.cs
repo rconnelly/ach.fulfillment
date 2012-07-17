@@ -3,6 +3,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class RoleUniqness : SpecificationInstanceBase<RoleEntity>
     {
         public override Expression<Func<RoleEntity, bool>> IsSatisfiedBy()

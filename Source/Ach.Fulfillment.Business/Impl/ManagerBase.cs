@@ -35,17 +35,20 @@ namespace Ach.Fulfillment.Business.Impl
 
         public virtual T Load(long id)
         {
-            return this.Repository.Load<T>(id);
+            var instance = this.Repository.Load<T>(id);
+            return instance;
         }
 
         public virtual IEnumerable<T> FindAll(IQueryData<T> queryData)
         {
-            return this.Repository.FindAll<T>(queryData);
+            var result = this.Repository.FindAll<T>(queryData);
+            return result;
         }
 
         public virtual T FindOne(IQueryData<T> queryData)
         {
-            return this.Repository.FindOne<T>(queryData);
+            var instance = this.Repository.FindOne<T>(queryData);
+            return instance;
         }
 
         public virtual void Delete(T instance)

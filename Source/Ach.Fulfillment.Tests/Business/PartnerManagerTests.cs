@@ -96,7 +96,7 @@ namespace Ach.Fulfillment.Tests.Business
             var partner = this.CreateTestPartner();
             var user = this.CreateTestUser();
             var partnerInstance = manager.Create(partner);
-            var userInstance = userManager.Create(user, this.ShortStringGenerator.GetRandomValue());
+            var userInstance = userManager.Create(user, this.ShortStringGenerator.GetRandomValue(), this.ShortStringGenerator.GetRandomValue());
 
             Assert.That(partnerInstance, Is.Not.Null);
             Assert.That(userInstance, Is.Not.Null);

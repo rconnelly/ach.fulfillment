@@ -4,6 +4,8 @@ namespace Ach.Fulfillment.Data.Specifications
     using System.Linq;
     using System.Linq.Expressions;
 
+    using Ach.Fulfillment.Data.Common;
+
     public class RoleAll : SpecificationBase<RoleEntity>, IOrderedSpecification<RoleEntity>
     {
         public override Expression<Func<RoleEntity, bool>> IsSatisfiedBy()

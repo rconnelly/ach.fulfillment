@@ -8,38 +8,30 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
 
-    internal class PartnerManager : ManagerBase, IPartnerManager
+    internal class PartnerManager : ManagerBase<PartnerEntity>, IPartnerManager
     {
-        public PartnerEntity Load(long id)
-        {
-            var instance = this.Repository.Load<PartnerEntity>(id);
-            return instance;
-        }
-
         public IEnumerable<PartnerEntity> FindAll(bool withDisabled = false)
         {
             var partners = this.Repository.FindAll(new PartnerAll(withDisabled));
             return partners;
         }
 
-        public PartnerEntity Create(PartnerEntity partner)
+        public override PartnerEntity Create(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
 
             this.DemandValid<PartnerValidator>(partner);
-            this.Repository.Create(partner);
-
-            return partner;
+            return base.Create(partner);
         }
 
-        public void Delete(PartnerEntity partner)
+        /*public override void Delete(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
             Contract.Assert(!partner.Disabled);
 
             partner.Disabled = true;
             this.Repository.Update(partner);
-        }
+        }*/
 
         public void Update(PartnerEntity partner)
         {

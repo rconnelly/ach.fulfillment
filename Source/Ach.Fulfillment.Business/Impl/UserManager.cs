@@ -29,7 +29,7 @@ namespace Ach.Fulfillment.Business.Impl
             throw new NotSupportedException("Try to use Create(instance,login,password) overload");
         } 
 
-        public void Create(UserEntity instance, string login, string password)
+        public UserEntity Create(UserEntity instance, string login, string password)
         {
             Contract.Assert(instance != null);
             Contract.Assert(login != null);
@@ -54,6 +54,8 @@ namespace Ach.Fulfillment.Business.Impl
 
             this.DemandValid<UserValidator>(instance);
             this.Repository.Create(instance);
+
+            return instance;
         }
 
         public void ChangePassword(UserEntity instance, string newPassword)

@@ -4,7 +4,7 @@ namespace Ach.Fulfillment.Business
 
     public interface IUserManager : IManager<UserEntity>
     {
-        void Create(UserEntity instance, string login, string password);
+        UserEntity Create(UserEntity instance, string login, string password);
 
         void ChangePassword(UserEntity instance, string newPassword);
 

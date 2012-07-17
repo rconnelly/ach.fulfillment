@@ -9,26 +9,19 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
 
-    internal class RoleManager : ManagerBase, IRoleManager
+    internal class RoleManager : ManagerBase<RoleEntity>, IRoleManager
     {
-        public RoleEntity Create(RoleEntity instance)
+        public override RoleEntity Create(RoleEntity instance)
         {
             Contract.Assert(instance != null);
             this.DemandValid<RoleValidator>(instance);
-            this.Repository.Create(instance);
-            return instance;
+            return base.Create(instance);
         }
 
         public IEnumerable<RoleEntity> FindAll()
         {
             var result = this.Repository.FindAll(new RoleAll());
             return result;
-        }
-
-        public RoleEntity Load(long id)
-        {
-            var instance = this.Repository.Load<RoleEntity>(id);
-            return instance;
         }
 
         public RoleEntity Load(string name)
@@ -43,13 +36,13 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
-        public void Delete(RoleEntity instance)
+        /*public void Delete(RoleEntity instance)
         {
             Contract.Assert(instance != null);
 
             // TODO do we want to delete record?
             this.Repository.Delete(instance);
-        }
+        }*/
 
         public void Update(RoleEntity currency)
         {
