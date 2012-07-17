@@ -54,7 +54,6 @@ namespace Ach.Fulfillment.Tests.Business
         [TearDown]
         public virtual void TearDown()
         {
-//            this.transaction.Complete();
             this.transaction.Dispose();
             this.unitOfWork.Dispose();
         }

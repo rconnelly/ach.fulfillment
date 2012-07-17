@@ -9,6 +9,7 @@ namespace Ach.Fulfillment.Tests.Business
     using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Specifications;
 
     using NUnit.Framework;
 
@@ -60,7 +61,7 @@ namespace Ach.Fulfillment.Tests.Business
 
             this.ClearSession(instance);
 
-            var roles = manager.FindAll();
+            var roles = manager.FindAll(new RoleAll());
             Assert.That(roles, Is.Not.Null);
             Assert.That(roles.Count(), Is.GreaterThan(0));
         }

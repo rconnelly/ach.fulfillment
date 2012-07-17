@@ -103,7 +103,6 @@
     <Compile Include="Impl\Configuration\DatabaseConfigurator.cs" />
     <Compile Include="Impl\Configuration\MsSql2005DatabaseConfigurator.cs" />
     <Compile Include="Impl\Configuration\PersistenceContainerExtension.cs" />
-    <Compile Include="Impl\Mappings\UniverseMapping.cs" />
     <Compile Include="Impl\Repository.cs" />
     <Compile Include="Impl\TransactionManager.cs" />
     <Compile Include="Impl\Utilities\Linq\ExpressionExtender.cs" />

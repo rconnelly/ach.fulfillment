@@ -56,7 +56,6 @@
     <Compile Include="Specifications\RoleAll.cs" />
     <Compile Include="Specifications\RoleByName.cs" />
     <Compile Include="Specifications\RoleUniqness.cs" />
-    <Compile Include="_CurrencyEntity.cs" />
     <Compile Include="IAuditable.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IIdentified.cs" />
@@ -69,18 +68,11 @@
     <Compile Include="Common\IQueryData.Generic.cs" />
     <Compile Include="Common\IQueryData.Instance.cs" />
     <Compile Include="RoleEntity.cs" />
-    <Compile Include="Specifications\CurrencyAll.cs" />
-    <Compile Include="Specifications\CurrencyByName.cs" />
-    <Compile Include="Specifications\CurrencyUniqness.cs" />
     <Compile Include="Common\ISpecification.cs" />
     <Compile Include="Common\ISpecification.Generic.cs" />
     <Compile Include="Common\ISpecification.Ordered.cs" />
     <Compile Include="Common\SpecificationBase.cs" />
     <Compile Include="Common\SpecificationInstanceBase.cs" />
-    <Compile Include="Specifications\UniverseAll.cs" />
-    <Compile Include="Specifications\UniverseByActiveLogin.cs" />
-    <Compile Include="Specifications\UniverseUniqness.cs" />
-    <Compile Include="_UniverseEntity.cs" />
     <Compile Include="UserEntity.cs" />
     <Compile Include="UserPasswordCredentialEntity.cs" />
   </ItemGroup>

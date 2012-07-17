@@ -18,12 +18,6 @@ namespace Ach.Fulfillment.Business.Impl
             return base.Create(instance);
         }
 
-        public IEnumerable<RoleEntity> FindAll()
-        {
-            var result = this.Repository.FindAll(new RoleAll());
-            return result;
-        }
-
         public RoleEntity Load(string name)
         {
             Contract.Assert(name != null);
@@ -36,19 +30,11 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
-        /*public void Delete(RoleEntity instance)
+        public override void Update(RoleEntity instance)
         {
             Contract.Assert(instance != null);
-
-            // TODO do we want to delete record?
-            this.Repository.Delete(instance);
-        }*/
-
-        public void Update(RoleEntity currency)
-        {
-            Contract.Assert(currency != null);
-            this.DemandValid<RoleValidator>(currency);
-            this.Repository.Update(currency);
+            this.DemandValid<RoleValidator>(instance);
+            base.Update(instance);
         }
     }
 }

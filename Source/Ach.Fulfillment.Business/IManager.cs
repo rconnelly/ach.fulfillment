@@ -8,6 +8,8 @@ namespace Ach.Fulfillment.Business
     {
         T Create(T instance);
 
+        void Update(T instance);
+
         T Load(long id);
 
         IEnumerable<T> FindAll(IQueryData<T> queryData);
