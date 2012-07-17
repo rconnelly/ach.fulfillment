@@ -4,16 +4,12 @@ namespace Ach.Fulfillment.Business
 
     using Ach.Fulfillment.Data;
 
-    public interface IPartnerManager
+    public interface IPartnerManager : IManager<PartnerEntity>
     {
-        PartnerEntity Load(long id);
-
+        // todo: cqrs
         IEnumerable<PartnerEntity> FindAll(bool withDisabled = false);
 
-        PartnerEntity Create(PartnerEntity partner);
-
-        void Delete(PartnerEntity partner);
-        
+        // todo: move to IManager
         void Update(PartnerEntity partner);
 
         PartnerEntity AddUser(PartnerEntity partner, UserEntity user);

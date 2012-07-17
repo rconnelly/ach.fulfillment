@@ -4,18 +4,15 @@ namespace Ach.Fulfillment.Business
 
     using Ach.Fulfillment.Data;
 
-    public interface IRoleManager
+    public interface IRoleManager : IManager<RoleEntity>
     {
-        RoleEntity Create(RoleEntity role);
-
+        // todo: use cqrs
         IEnumerable<RoleEntity> FindAll();
 
-        RoleEntity Load(long id);
-
+        // todo: should not it be Find and cqrs?
         RoleEntity Load(string name);
 
-        void Delete(RoleEntity role);
-
+        // todo: move to IManager
         void Update(RoleEntity currency);
     }
 }
