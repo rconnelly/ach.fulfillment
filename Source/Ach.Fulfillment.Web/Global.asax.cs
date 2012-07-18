@@ -57,6 +57,7 @@
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            // TODO: феерично :)))))
             if (this.unitOfWork == null)
             {
                 this.unitOfWork = new UnitOfWork();
