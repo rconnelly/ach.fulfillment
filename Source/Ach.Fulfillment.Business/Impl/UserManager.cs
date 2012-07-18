@@ -89,6 +89,19 @@ namespace Ach.Fulfillment.Business.Impl
             return user;
         }
 
+        public UserEntity FindByLogin(string login)
+        {
+            Contract.Assert(login != null);
+            UserEntity user = null;
+            var credential = this.Repository.FindOne<UserPasswordCredentialEntity>(new UserPasswordCredentialByLogin(login));
+            if (credential != null)
+            {
+                user = credential.User;
+            }
+
+            return user;
+        }
+
         public override void Delete(UserEntity instance)
         {
             Contract.Assert(instance != null);

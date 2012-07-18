@@ -1,86 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using Ach.Fulfillment.Web.Models;
-
-namespace Ach.Fulfillment.Web.Controllers
+﻿namespace Ach.Fulfillment.Web.Areas.Common.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.Security;
 
-    [Authorize]
-    public class AccountController : Controller
+    using Ach.Fulfillment.Web.Areas.Common.Managers;
+    using Ach.Fulfillment.Web.Areas.Common.Models;
+    using Ach.Fulfillment.Web.Common.Controllers;
+
+    public class AccountController : Controller<AccountManager>
     {
-
-        //
-        // GET: /Account/Login
-
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
+            this.ViewBag.ReturnUrl = returnUrl;
 
-        //
-        // POST: /Account/Login
+            return this.View();
+        }
 
         [AllowAnonymous]
         [HttpPost]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, model.Password))
+                if (this.Manager.Login(model))
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl))
+                    if (this.Url.IsLocalUrl(returnUrl))
                     {
-                        return Redirect(returnUrl);
+                        return this.Redirect(returnUrl);
                     }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+
+                    return this.RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
+                
+                this.ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View(model);
         }
-
-        //
-        // GET: /Account/LogOff
 
         public ActionResult LogOff()
         {
-            FormsAuthentication.SignOut();
+            this.Manager.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Index", "Home");
         }
-
-        //
-        // GET: /Account/Register
 
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return this.View();
         }
-
-        //
-        // POST: /Account/Register
 
         [AllowAnonymous]
         [HttpPost]
         public ActionResult Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 // Attempt to register the user
                 MembershipCreateStatus createStatus;
@@ -89,33 +69,27 @@ namespace Ach.Fulfillment.Web.Controllers
                 if (createStatus == MembershipCreateStatus.Success)
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
-                    return RedirectToAction("Index", "Home");
+                    return this.RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
+                    this.ModelState.AddModelError("", ErrorCodeToString(createStatus));
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View(model);
         }
-
-        //
-        // GET: /Account/ChangePassword
 
         public ActionResult ChangePassword()
         {
-            return View();
+            return this.View();
         }
-
-        //
-        // POST: /Account/ChangePassword
 
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
 
                 // ChangePassword will throw an exception rather
@@ -123,7 +97,7 @@ namespace Ach.Fulfillment.Web.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    MembershipUser currentUser = Membership.GetUser(User.Identity.Name, userIsOnline: true);
+                    MembershipUser currentUser = Membership.GetUser(this.User.Identity.Name, userIsOnline: true);
                     changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
                 }
                 catch (Exception)
@@ -133,29 +107,26 @@ namespace Ach.Fulfillment.Web.Controllers
 
                 if (changePasswordSucceeded)
                 {
-                    return RedirectToAction("ChangePasswordSuccess");
+                    return this.RedirectToAction("ChangePasswordSuccess");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
+                    this.ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View(model);
         }
-
-        //
-        // GET: /Account/ChangePasswordSuccess
 
         public ActionResult ChangePasswordSuccess()
         {
-            return View();
+            return this.View();
         }
 
         private IEnumerable<string> GetErrorsFromModelState()
         {
-            return ModelState.SelectMany(x => x.Value.Errors.Select(error => error.ErrorMessage));
+            return this.ModelState.SelectMany(x => x.Value.Errors.Select(error => error.ErrorMessage));
         }
 
         #region Status Codes

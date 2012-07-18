@@ -25,6 +25,12 @@ namespace Ach.Fulfillment.Web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                "Account_default",
+                "Account/{controller}/{action}/{id}",
+                new { action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }

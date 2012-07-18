@@ -9,5 +9,7 @@ namespace Ach.Fulfillment.Business
         void ChangePassword(UserEntity instance, string newPassword);
 
         UserEntity FindByPasswordCredential(string login, string password);
+
+        UserEntity FindByLogin(string login);
     }
 }
