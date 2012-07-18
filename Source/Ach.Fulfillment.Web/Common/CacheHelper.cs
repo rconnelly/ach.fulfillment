@@ -5,6 +5,8 @@ namespace Ach.Fulfillment.Web.Common
     using System.Diagnostics.Contracts;
     using System.Runtime.Caching;
 
+    using Ach.Fulfillment.Web.Properties;
+
     public static class CacheHelper
     {
         private static readonly ObjectCache Cache = MemoryCache.Default;
@@ -33,7 +35,7 @@ namespace Ach.Fulfillment.Web.Common
             if(item == null)
             {
                 item = get();
-                Cache.AddOrGetExisting(key, item, DateTime.Now.AddDays(1));
+                Cache.AddOrGetExisting(key, item, DateTime.Now.Add(Settings.Default.CacheExpiration));
             }
 
             return item;

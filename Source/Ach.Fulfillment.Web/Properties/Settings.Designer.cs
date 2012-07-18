@@ -31,5 +31,14 @@ namespace Ach.Fulfillment.Web.Properties {
                 return ((string)(this["SkipPrincipalPattern"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24.00:00:00")]
+        public global::System.TimeSpan CacheExpiration {
+            get {
+                return ((global::System.TimeSpan)(this["CacheExpiration"]));
+            }
+        }
     }
 }
