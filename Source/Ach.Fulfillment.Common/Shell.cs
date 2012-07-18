@@ -87,10 +87,15 @@
             Logger.InfoFormat("Starting the server [{0}]", typeof(Shell).Assembly.EffectiveVersion());
             try
             {
-                var container = new UnityContainer()
-                    .AddNewExtension<EnterpriseLibraryCoreExtension>();
                 var configurationSource = ConfigurationSourceFactory.Create();
-                container.RegisterInstance(configurationSource);
+                var container = new UnityContainer()
+                    .AddExtension(new EnterpriseLibraryCoreExtension(configurationSource))
+                    .RegisterInstance(configurationSource);
+
+                var serviceLocator = new UnityServiceLocator(container);
+                Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => serviceLocator);
+                EnterpriseLibraryContainer.Current = serviceLocator;
+
                 if (initialization != null)
                 {
                     container.AddExtension(initialization);
@@ -101,10 +106,6 @@
                 {
                     section.Configure(container);
                 }
-
-                IServiceLocator serviceLocator = new UnityServiceLocator(container);
-                Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => serviceLocator);
-                EnterpriseLibraryContainer.Current = serviceLocator;
             }
             catch (Exception ex)
             {

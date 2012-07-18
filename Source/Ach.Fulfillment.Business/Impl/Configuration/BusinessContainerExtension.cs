@@ -15,6 +15,13 @@
         {
             this.WellKnownITypeNameAutoRegistration<ContainerControlledLifetimeManager>(WellKnownAppParts.Manager);
 
+            var configurationSource = new DictionaryConfigurationSource();
+
+
+
+
+
+
             this.Container.RegisterType<IApplicationPrincipal, ThreadApplicationPrincipal>(new ContainerControlledLifetimeManager());
 
             var configurationSource = this.Container.Resolve<IConfigurationSource>();
@@ -26,6 +33,7 @@
                     .UsingHashAlgorithm<Zetetic.Security.Pbkdf2Hash>()
                 /*.SetAsDefault()*/; // do not want Pbkdf2Hash (low speed algorithm) to be default
             builder.UpdateConfigurationWithReplace(configurationSource);
+
             var configurator = new UnityContainerConfigurator(this.Container);
             EnterpriseLibraryContainer.ConfigureContainer(configurator, configurationSource);
         }

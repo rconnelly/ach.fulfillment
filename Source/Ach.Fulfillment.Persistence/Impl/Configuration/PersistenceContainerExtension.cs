@@ -9,7 +9,6 @@
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Common.Unity;
     using Ach.Fulfillment.Data.Common;
-    using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Persistence.Impl.Commands;
 
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
@@ -158,9 +157,9 @@
 
         private void ConfigureExceptionHandling()
         {
-            var configurationSource = this.Container.Resolve<IConfigurationSource>();
-            var builder = new ConfigurationSourceBuilder();
+            var configurationSource = new DictionaryConfigurationSource(); 
 
+            var builder = new ConfigurationSourceBuilder();
             builder.ConfigureExceptionHandling()
                    .GivenPolicyWithName("Persistence.Delete")
                    .ForExceptionType<Exception>()
@@ -170,6 +169,7 @@
                         .UsingMessage("Cannot delete object.")
                         .ThenThrowNewException();
             builder.UpdateConfigurationWithReplace(configurationSource);
+
             var configurator = new UnityContainerConfigurator(this.Container);
             EnterpriseLibraryContainer.ConfigureContainer(configurator, configurationSource);
         }
