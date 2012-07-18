@@ -94,12 +94,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\ApplicationIdentity.cs" />
-    <Compile Include="Security\ApplicationPrincipal.cs" />
-    <Compile Include="Security\IApplicationIdentity.cs" />
-    <Compile Include="Security\IApplicationPrincipal.cs" />
-    <Compile Include="Security\PrincipalRole.cs" />
-    <Compile Include="Security\ThreadApplicationPrincipal.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">

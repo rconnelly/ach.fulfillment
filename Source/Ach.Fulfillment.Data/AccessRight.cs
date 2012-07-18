@@ -1,8 +1,15 @@
-namespace Ach.Fulfillment.Data
+﻿namespace Ach.Fulfillment.Data
 {
     public enum AccessRight
     {
         Admin,
         SuperAdmin,
+    }
+
+    public static class AccessRightRegistry
+    {
+        public const string Admin = "Admin";
+
+        public const string SuperAdmin = "SuperAdmin";
     }
 }

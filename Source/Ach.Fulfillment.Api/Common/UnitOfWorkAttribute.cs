@@ -4,6 +4,7 @@ namespace Ach.Fulfillment.Api.Common
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Common.Transactions;
 
     using ServiceStack.Common;
@@ -47,10 +48,6 @@ namespace Ach.Fulfillment.Api.Common
             Contract.Assert(req != null);
             Contract.Assert(req.Items != null);
             new RequestState(req).Start();
-
-            // todo: read session and create applicationprincipal, which should be set to current thread
-            var session = req.GetSession();
-            throw new Exception(session.UserName);
         }
 
         public void ResponseFilter(IHttpRequest req, IHttpResponse res, object response)
@@ -152,6 +149,27 @@ namespace Ach.Fulfillment.Api.Common
                 {
                     this.Transaction = new Transaction();
                 }
+
+                IApplicationPrincipal principal = null;
+                var session = this.req.GetSession();
+                if (session != null && session.IsAuthenticated)
+                {
+                    var identity = new Fulfillment.Common.Security.ApplicationIdentity(
+                        long.Parse(session.UserAuthId),
+                        session.UserName, 
+                        session.DisplayName,
+                        session.Email);
+                    principal = new ApplicationPrincipal(
+                        identity, 
+                        session.Roles.ToArray(), 
+                        session.Permissions.ToArray());
+                }
+                else
+                {
+                    principal = ApplicationPrincipal.Anonymous;
+                }
+
+                System.Threading.Thread.CurrentPrincipal = principal;
             }
 
             public void End(object response)

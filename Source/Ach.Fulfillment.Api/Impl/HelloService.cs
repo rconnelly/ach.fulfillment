@@ -3,6 +3,8 @@ namespace Ach.Fulfillment.Api.Impl
     using Ach.Fulfillment.Api.Common;
     using Ach.Fulfillment.Api.Data;
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Common.Security;
+    using Ach.Fulfillment.Data;
 
     using Microsoft.Practices.Unity;
 
@@ -10,24 +12,25 @@ namespace Ach.Fulfillment.Api.Impl
     using ServiceStack.ServiceInterface;
 
     [Authenticate]
-    [RequiredPermission("Admin")]
+    [RequiredPermission(AccessRightRegistry.Admin)]
     [UnitOfWork]
     public class HelloService : RestServiceBase<Hello>
     {
         [Dependency]
         public IUserManager UerManager { get; set; }
 
+        [Dependency]
+        public IApplicationPrincipal Principal { get; set; }
+
         // Get
         public override object OnGet(Hello request) 
         {
-            var session = this.GetSession();
-            
-            var user = this.UerManager.Load(long.Parse(session.UserAuthId));
+            var user = this.UerManager.Load(this.Principal.Identity.UserId);
 
-            var name = session.DisplayName + " " + user.Email;
+            var name = this.Principal.Identity.DisplayName + " " + user.Email;
             if (string.IsNullOrEmpty(request.Name))
             {
-                return new HelloResponse { Result = "Hello from " + name};
+                return new HelloResponse { Result = "Hello from " + name };
             }
 
             return new HelloResponse { Result = "Hello, " + request.Name + " from " + name };

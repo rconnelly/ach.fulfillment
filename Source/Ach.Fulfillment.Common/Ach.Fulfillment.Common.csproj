@@ -73,6 +73,11 @@
     <Compile Include="Exceptions\DeleteConstraintException.cs" />
     <Compile Include="Exceptions\ObjectNotFoundException.cs" />
     <Compile Include="Exceptions\RootException.cs" />
+    <Compile Include="Security\ApplicationIdentity.cs" />
+    <Compile Include="Security\ApplicationPrincipal.cs" />
+    <Compile Include="Security\IApplicationIdentity.cs" />
+    <Compile Include="Security\IApplicationPrincipal.cs" />
+    <Compile Include="Security\ThreadApplicationPrincipal.cs" />
     <Compile Include="Shell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\StringUtils.cs" />

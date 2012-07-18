@@ -1,6 +1,6 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Configuration
 {
-    using Ach.Fulfillment.Business.Security;
+    using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Common.Unity;
 
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
@@ -14,18 +14,9 @@
         protected override void Initialize()
         {
             this.WellKnownITypeNameAutoRegistration<ContainerControlledLifetimeManager>(WellKnownAppParts.Manager);
-
-            var configurationSource = new DictionaryConfigurationSource();
-
-
-
-
-
-
             this.Container.RegisterType<IApplicationPrincipal, ThreadApplicationPrincipal>(new ContainerControlledLifetimeManager());
 
-            var configurationSource = this.Container.Resolve<IConfigurationSource>();
-
+            var configurationSource = new DictionaryConfigurationSource();
             var builder = new ConfigurationSourceBuilder();
             builder.ConfigureCryptography()
                 .EncryptUsingHashAlgorithmProviderNamed(UserManager.HashInstance)

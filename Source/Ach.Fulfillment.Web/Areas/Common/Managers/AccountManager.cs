@@ -3,11 +3,10 @@
     using System.Web.Security;
 
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Business.Security;
+    using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Web.Areas.Common.Models;
     using Ach.Fulfillment.Web.Common;
 
-    using Microsoft.Practices.ServiceLocation;
     using Microsoft.Practices.Unity;
 
     public class AccountManager
@@ -24,7 +23,7 @@
 
             var succeed = user != null;
 
-            if(succeed)
+            if (succeed)
             {
                 FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
             }
@@ -34,7 +33,7 @@
 
         public void Logout()
         {
-            CacheHelper.Remove(this.Principal.Login);
+            CacheHelper.Remove(this.Principal.Identity.Name);
 
             FormsAuthentication.SignOut();
         }

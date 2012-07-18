@@ -1,6 +1,6 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Common.Managers
 {
-    using Ach.Fulfillment.Business.Security;
+    using Ach.Fulfillment.Common.Security;
 
     using Microsoft.Practices.Unity;
 

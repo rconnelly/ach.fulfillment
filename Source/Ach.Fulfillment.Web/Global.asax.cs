@@ -5,6 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
+    using System.Security.Principal;
     using System.Text.RegularExpressions;
     using System.Web;
     using System.Web.Mvc;
@@ -13,14 +14,16 @@
     using System.Web.Security;
 
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Business.Security;
     using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Initialization.Configuration;
     using Ach.Fulfillment.Web.Common;
 
     using Microsoft.Practices.ServiceLocation;
 
     using global::Common.Logging;
+
+    using ApplicationIdentity = Ach.Fulfillment.Common.Security.ApplicationIdentity;
 
     public class MvcApplication : HttpApplication
     {
@@ -133,29 +136,37 @@
         {
             var cookieName = FormsAuthentication.FormsCookieName;
             var authCookie = HttpContext.Current.Request.Cookies[cookieName];
-
+            IPrincipal principal = null;
             if (authCookie == null)
             {
-                return;
+                var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                var login = authTicket.Name;
+
+                var user = CacheHelper.GetOrAdd(
+                    login,
+                    () =>
+                        {
+                            var manager = ServiceLocator.Current.GetInstance<IUserManager>();
+                            return manager.FindByLogin(login);
+                        });
+
+                Contract.Assert(user != null);
+                Contract.Assert(user.UserPasswordCredential != null);
+
+                var identity = new ApplicationIdentity(
+                    user.Id,
+                    user.UserPasswordCredential.Login, 
+                    user.Name, 
+                    user.Email);
+                principal = new ApplicationPrincipal(
+                    identity, 
+                    new[] { user.Role.Name },
+                    user.Role.Permissions.Select(p => p.Name.ToString("G")).ToArray());
             }
-
-            var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-            var login = authTicket.Name;
-
-            var user = CacheHelper.GetOrAdd(
-                login,
-                () =>
-                    {
-                        var manager = ServiceLocator.Current.GetInstance<IUserManager>();
-                        return manager.FindByLogin(login);
-                    });
-
-            Contract.Assert(user != null);
-            Contract.Assert(user.UserPasswordCredential != null);
-
-            var identity = new Business.Security.ApplicationIdentity(user.UserPasswordCredential.Login, user.Name, user.Email);
-            var role = new PrincipalRole(user.Role.Name, user.Role.Permissions.Select(p => p.Name).ToArray());
-            var principal = new ApplicationPrincipal(identity, role);
+            else
+            {
+                principal = ApplicationPrincipal.Anonymous;
+            }
 
             this.Context.User = principal;
         }
