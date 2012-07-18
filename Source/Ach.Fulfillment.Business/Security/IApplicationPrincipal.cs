@@ -10,6 +10,8 @@ namespace Ach.Fulfillment.Business.Security
 
         string RoleName { get; }
 
+        string Login { get; }
+
         bool HasRight(AccessRight right);
     }
 }

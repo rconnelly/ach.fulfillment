@@ -3,14 +3,20 @@
     using System.Web.Security;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Security;
     using Ach.Fulfillment.Web.Areas.Common.Models;
+    using Ach.Fulfillment.Web.Common;
 
+    using Microsoft.Practices.ServiceLocation;
     using Microsoft.Practices.Unity;
 
     public class AccountManager
     {
         [Dependency]
         public IUserManager UserManager { get; set; }
+
+        [Dependency]
+        public IApplicationPrincipal Principal { get; set; }
 
         public bool Login(LoginModel model)
         {
@@ -28,6 +34,8 @@
 
         public void Logout()
         {
+            CacheHelper.Remove(this.Principal.Login);
+
             FormsAuthentication.SignOut();
         }
     }

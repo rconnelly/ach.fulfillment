@@ -11,7 +11,7 @@ namespace Ach.Fulfillment.Business.Security
     {
         #region Constructors and Destructors
 
-        public ApplicationPrincipal(IIdentity identity, PrincipalRole role)
+        public ApplicationPrincipal(IApplicationIdentity identity, PrincipalRole role)
         {
             Contract.Assert(identity != null);
             Contract.Assert(role != null);
@@ -32,13 +32,29 @@ namespace Ach.Fulfillment.Business.Security
             }
         }
 
-        public IIdentity Identity { get; private set; }
+        IIdentity IPrincipal.Identity
+        {
+            get
+            {
+                return this.Identity;
+            }
+        }
+
+        public IApplicationIdentity Identity { get; private set; }
 
         public string RoleName
         {
             get
             {
                 return this.Role.Name;
+            }
+        }
+
+        public string Login
+        {
+            get
+            {
+                return this.Identity.Login;
             }
         }
 

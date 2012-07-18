@@ -51,6 +51,14 @@ namespace Ach.Fulfillment.Business.Security
             }
         }
 
+        public string Login
+        {
+            get
+            {
+                return ParentPrincipal.Login;
+            }
+        }
+
         public bool HasRight(AccessRight right)
         {
             return ParentPrincipal.HasRight(right);
