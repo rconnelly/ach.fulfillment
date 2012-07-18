@@ -27,7 +27,7 @@
             .VerifyTheMappings();
 
             new PersistenceSpecification<PermissionEntity>(this.Session)
-                .CheckProperty(c => c.Name, AccessRight.Authenticate)
+                .CheckProperty(c => c.Name, AccessRight.Admin)
                 .CheckEntity(c => c.Role, role)
             .VerifyTheMappings();
         }
@@ -112,7 +112,7 @@
             .VerifyTheMappings();
 
              var permission = new PersistenceSpecification<PermissionEntity>(this.Session)
-                .CheckProperty(c => c.Name, AccessRight.Authenticate)
+                .CheckProperty(c => c.Name, AccessRight.Admin)
                 .CheckEntity(c => c.Role, role)
             .VerifyTheMappings();
         

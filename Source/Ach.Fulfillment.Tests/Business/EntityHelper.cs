@@ -17,7 +17,7 @@ namespace Ach.Fulfillment.Tests.Business
                 {
                     new PermissionEntity
                         {
-                            Name = AccessRight.Authenticate,
+                            Name = AccessRight.Admin,
                             Role = role
                         }
                 };
