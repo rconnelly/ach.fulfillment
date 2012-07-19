@@ -6,7 +6,7 @@
         <title>@ViewBag.Title - ACH Fulfllment</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/themes/base/css", "~/Content/css")
+        @Styles.Render("~/Content/themes/base/css", "~/Content/bootstrap/css", "~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -51,7 +51,7 @@
             </div>
         </footer>
 
-        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
     </body>
 </html>
