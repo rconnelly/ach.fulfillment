@@ -17,7 +17,10 @@
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Initialization.Configuration;
+    using Ach.Fulfillment.Web.App_Start;
+    using Ach.Fulfillment.Web.Areas.Common.Controllers;
     using Ach.Fulfillment.Web.Common;
+    using Ach.Fulfillment.Web.Common.Controllers;
 
     using Microsoft.Practices.ServiceLocation;
 
@@ -41,6 +44,8 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
 
             // RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
 
@@ -96,13 +101,11 @@
                 Trace.TraceError(ex.Message);
             }
 
-            // TODO consider handling http errors - code below doesn't work on post
-            //this.HandleNotFound(error);
+            this.HandleCustomErrors(error);
         }
 
-        /* private void HandleNotFound(Exception exception)
+        private void HandleCustomErrors(Exception exception)
         {
-
             var httpException = exception as HttpException;
 
             if (httpException != null)
@@ -112,12 +115,9 @@
                 if (status == 404 || status == 403)
                 {
                     var routeData = new RouteData();
-                    routeData.Values.Add("controller", "Common");
                     routeData.Values.Add("area", "Common");
+                    routeData.Values.Add("controller", "Error");
                     routeData.Values.Add("action", "Error" + status);
-
-                    // Pass exception details to the target error View.
-                    routeData.Values.Add("error", exception);
 
                     // Clear the error on server.
                     Server.ClearError();
@@ -126,19 +126,19 @@
                     Response.StatusCode = status;
                     Response.TrySkipIisCustomErrors = true;
 
-                    // Call target Controller and pass the routeData.
-                    IController errorController = new CommonController();
+                    // idially we should get controller throught servicelocator
+                    IController errorController = new ErrorController();
                     errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
                 }
             }
-        }*/
+        }
 
         private void InitializePrincipal ()
         {
             var cookieName = FormsAuthentication.FormsCookieName;
             var authCookie = HttpContext.Current.Request.Cookies[cookieName];
-            IPrincipal principal = null;
-            if (authCookie == null)
+            IPrincipal principal;
+            if (authCookie != null)
             {
                 var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 var login = authTicket.Name;

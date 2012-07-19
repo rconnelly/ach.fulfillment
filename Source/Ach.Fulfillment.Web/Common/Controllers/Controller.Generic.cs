@@ -2,20 +2,17 @@
 {
     using System.Web.Mvc;
 
-    using Microsoft.Practices.ServiceLocation;
+    using Microsoft.Practices.Unity;
 
     public class Controller<TManager> : Controller
-        where TManager : class, new ()
+        where TManager : class
     {
-        private TManager manager;
+        [Dependency]
+        public TManager Manager { get; set; }
 
-        public TManager Manager
+        protected override void OnException(ExceptionContext filterContext)
         {
-            get
-            {
-//                return this.manager ?? (this.manager = new TManager());
-                return this.manager ?? (this.manager = ServiceLocator.Current.GetInstance<TManager>());
-            }
-        }
+            base.OnException(filterContext);
+        } 
     }
 }

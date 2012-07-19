@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
 
@@ -39,7 +40,6 @@
                 this.ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
 
-            // If we got this far, something failed, redisplay form
             return this.View(model);
         }
 
