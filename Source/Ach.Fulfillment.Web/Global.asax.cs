@@ -22,28 +22,34 @@
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Configuration;
 
-    using Microsoft.Practices.ServiceLocation;
-
     using global::Common.Logging;
+
+    using Microsoft.Practices.ServiceLocation;
 
     using ApplicationIdentity = Ach.Fulfillment.Common.Security.ApplicationIdentity;
 
     public class MvcApplication : HttpApplication
     {
+        #region Fields
+
+        private const string UnitOfWorkKey = "uow";
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private UnitOfWork unitOfWork;
+        #endregion
+
+        #region Methods
 
         protected void Application_Start()
         {
-            Log.Debug("Starting application");
+            Shell.Start<InitializationContainerExtension>();
 
+            DependencyResolver.SetResolver(ServiceLocator.Current);
             AreaRegistration.RegisterAllAreas();
-
-            // config
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+<<<<<<< HEAD
 
             ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
 
@@ -58,34 +64,34 @@
             Log.Debug("Ending application");
 
             Shell.Shutdown();
+=======
+>>>>>>> refactored Global.asax.cs
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             // TODO: феерично :))))) - каждый имеет право на ошибку...даже такую! )
             if (this.unitOfWork == null)
             {
                 this.unitOfWork = new UnitOfWork();
             }
+=======
+            this.Context.Items.Add(UnitOfWorkKey, new UnitOfWork());
+>>>>>>> refactored Global.asax.cs
         }
 
-        protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-            if (!PrincipalRequired())
-            {
-                return;
-            }
-
-            this.InitializePrincipal();
+            this.Context.User = this.GetPrincipal();
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)
         {
-            if (this.unitOfWork != null)
-            {
-                this.unitOfWork.Dispose();
-                this.unitOfWork = null;
-            }
+            var uow = (UnitOfWork)this.Context.Items[UnitOfWorkKey];
+            Contract.Assert(uow != null);
+            uow.Dispose();
+            this.Context.Items.Remove(UnitOfWorkKey);
         }
 
         protected void Application_Error()
@@ -104,7 +110,65 @@
             this.HandleCustomErrors(error);
         }
 
+<<<<<<< HEAD
         private void HandleCustomErrors(Exception exception)
+=======
+        protected void Application_End()
+        {
+            Shell.Shutdown();
+        }
+
+        private IPrincipal GetPrincipal()
+        {
+            IPrincipal principal = ApplicationPrincipal.Anonymous;
+            if (this.IsPrincipalRequired())
+            {
+                var cookieName = FormsAuthentication.FormsCookieName;
+                var authCookie = HttpContext.Current.Request.Cookies[cookieName];
+                if (authCookie != null)
+                {
+                    var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                    var login = authTicket.Name;
+
+                    var user = CacheHelper.GetOrAdd(
+                        login,
+                        () =>
+                            {
+                                var manager = ServiceLocator.Current.GetInstance<IUserManager>();
+                                return manager.FindByLogin(login);
+                            });
+
+                    if (user != null)
+                    {
+                        var name = user.UserPasswordCredential != null ? user.UserPasswordCredential.Login : login;
+
+                        var identity = new ApplicationIdentity(
+                            user.Id, 
+                            name, 
+                            user.Name, 
+                            user.Email);
+                        var roles = user.Role != null ? new[] { user.Role.Name } : new string[0];
+                        var permissions = user.Role != null && user.Role.Permissions != null ? user.Role.Permissions.Select(p => p.Name.ToString("G")).ToArray() : new string[0];
+                        principal = new ApplicationPrincipal(
+                            identity,
+                            roles,
+                            permissions);
+                    }
+                }
+            }
+
+            return principal;
+        }
+
+        private bool IsPrincipalRequired()
+        {
+            var regEx = new Regex(Properties.Settings.Default.SkipPrincipalPattern);
+            var path = this.Context.Request.Url.AbsolutePath;
+            return !regEx.IsMatch(path);
+        }
+
+        /* private void HandleNotFound(Exception exception)
+>>>>>>> refactored Global.asax.cs
         {
             var httpException = exception as HttpException;
 
@@ -133,6 +197,7 @@
             }
         }
 
+<<<<<<< HEAD
         private void InitializePrincipal ()
         {
             var cookieName = FormsAuthentication.FormsCookieName;
@@ -180,5 +245,8 @@
 
             return !regEx.IsMatch(path);
         }
+=======
+        #endregion
+>>>>>>> refactored Global.asax.cs
     }
 }
