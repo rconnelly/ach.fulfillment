@@ -173,6 +173,7 @@
             var configurator = new UnityContainerConfigurator(this.Container);
             EnterpriseLibraryContainer.ConfigureContainer(configurator, configurationSource);
         }
+
         #endregion
     }
 }

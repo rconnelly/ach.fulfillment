@@ -5,43 +5,42 @@ namespace Ach.Fulfillment.Business.Exceptions
     using System.Linq;
     using System.Runtime.Serialization;
 
-    using FluentValidation.Results;
-
     [Serializable]
     public class BusinessValidationException : BusinessException
     {
         #region Constructors and Destructors
 
-        // TODO: use failure state instead of "error". localization should be performed in client code
-        public BusinessValidationException(string propertyName, string error)
-            : this(new ValidationFailure(propertyName, error))
-        {
-        }
-
-        public BusinessValidationException(params ValidationFailure[] errors)
-            : base(BuildErrorMesage(errors))
-        {
-            this.Errors = errors;
-        }
-
-        public BusinessValidationException(IList<ValidationFailure> errors)
-            : base(BuildErrorMesage(errors))
-        {
-            this.Errors = errors;
-        }
-
         public BusinessValidationException()
+            : this(string.Empty, "Unspecified validation failure.")
         {
         }
 
         public BusinessValidationException(string message)
-            : base(message)
+            : this(string.Empty, message)
         {
         }
 
         public BusinessValidationException(string message, Exception inner)
-            : base(message, inner)
+            : this(string.Empty, message, null, inner)
         {
+        }
+
+        public BusinessValidationException(string propertyName, string error, string errorCode = null, Exception innerException = null)
+            : this(new[] { new ValidationFailureInfo(propertyName, error, errorCode) }, innerException)
+        {
+        }
+
+        public BusinessValidationException(params ValidationFailureInfo[] errors)
+            : this((IList<ValidationFailureInfo>)errors)
+        {
+        }
+
+        public BusinessValidationException(IList<ValidationFailureInfo> errors, Exception innerException = null)
+            // ReSharper disable PossibleMultipleEnumeration
+            : base(BuildErrorMesage(errors), innerException)
+        {
+            this.Errors = errors;
+            // ReSharper restore PossibleMultipleEnumeration
         }
 
         protected BusinessValidationException(SerializationInfo info, StreamingContext context)
@@ -53,15 +52,15 @@ namespace Ach.Fulfillment.Business.Exceptions
 
         #region Public Properties
 
-        public IEnumerable<ValidationFailure> Errors { get; private set; }
+        public IEnumerable<ValidationFailureInfo> Errors { get; private set; }
 
         #endregion
 
         #region Methods
 
-        private static string BuildErrorMesage(IEnumerable<ValidationFailure> errors)
+        private static string BuildErrorMesage(IEnumerable<ValidationFailureInfo> errors)
         {
-            var arr = (from x in errors select "\r\n -- " + x.ErrorMessage).ToArray<string>();
+            var arr = (from x in errors where x != null && x.ErrorMessage != null select "\r\n -- " + x.ErrorMessage).ToArray<string>();
             return "Validation failed: " + string.Join(string.Empty, arr);
         }
 

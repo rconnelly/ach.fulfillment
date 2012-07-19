@@ -1,5 +1,7 @@
 namespace Ach.Fulfillment.Business.Impl.Validation
 {
+    using System.Linq;
+
     using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
@@ -14,7 +16,16 @@ namespace Ach.Fulfillment.Business.Impl.Validation
             var result = validator.Validate(instance);
             if (!result.IsValid)
             {
-                throw new BusinessValidationException(result.Errors);
+                var failures = from error in result.Errors
+                               where error != null
+                               select
+                                   new ValidationFailureInfo(
+                                       error.PropertyName,
+                                       error.ErrorMessage,
+                                       error.CustomState as string,
+                                       error.AttemptedValue,
+                                       error.CustomState);
+                throw new BusinessValidationException(failures.ToList());
             }
         }
 

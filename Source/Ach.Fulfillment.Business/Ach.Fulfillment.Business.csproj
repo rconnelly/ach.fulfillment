@@ -40,6 +40,10 @@
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
       <HintPath>..\..\_libBinary\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_libBinary\EnterpriseLibrary.ExceptionHandling.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography">
       <HintPath>..\..\_libBinary\EnterpriseLibrary.Security.Cryptography.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll</HintPath>
     </Reference>
@@ -73,6 +77,7 @@
     </Compile>
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
+    <Compile Include="Exceptions\ValidationFailureInfo.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
