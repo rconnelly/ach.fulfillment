@@ -42,43 +42,20 @@
 
         protected void Application_Start()
         {
-            Shell.Start<InitializationContainerExtension>();
+            Shell.Start<WebContainerExtension>();
 
-            DependencyResolver.SetResolver(ServiceLocator.Current);
+            //DependencyResolver.SetResolver(ServiceLocator.Current);
+            ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-<<<<<<< HEAD
-
-            ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
-
-            // RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
-
-            // shell
-            Shell.Start<WebContainerExtension>();
-        }
-
-        protected void Application_End()
-        {
-            Log.Debug("Ending application");
-
-            Shell.Shutdown();
-=======
->>>>>>> refactored Global.asax.cs
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            // TODO: феерично :))))) - каждый имеет право на ошибку...даже такую! )
-            if (this.unitOfWork == null)
-            {
-                this.unitOfWork = new UnitOfWork();
-            }
-=======
             this.Context.Items.Add(UnitOfWorkKey, new UnitOfWork());
->>>>>>> refactored Global.asax.cs
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
@@ -99,8 +76,11 @@
             var error = Server.GetLastError();
             try
             {
-                var message = string.Format(CultureInfo.InvariantCulture, "Server error has been occured while processing page: {0} ", HttpContext.Current != null ? HttpContext.Current.Request.Url.ToString() : "unknown");
-                Log.Error(message, error);
+                Log.ErrorFormat(
+                    CultureInfo.InvariantCulture, 
+                    "Server error has been occured while processing page: {0} ", 
+                    error,
+                    HttpContext.Current != null ? HttpContext.Current.Request.Url.ToString() : "unknown");
             }
             catch (Exception ex)
             {
@@ -110,9 +90,6 @@
             this.HandleCustomErrors(error);
         }
 
-<<<<<<< HEAD
-        private void HandleCustomErrors(Exception exception)
-=======
         protected void Application_End()
         {
             Shell.Shutdown();
@@ -130,7 +107,8 @@
                     var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                     var login = authTicket.Name;
 
-                    var user = CacheHelper.GetOrAdd(
+                    var cache = ServiceLocator.Current.GetInstance<ICacheClient>();
+                    var user = cache.GetOrAdd(
                         login,
                         () =>
                             {
@@ -167,8 +145,7 @@
             return !regEx.IsMatch(path);
         }
 
-        /* private void HandleNotFound(Exception exception)
->>>>>>> refactored Global.asax.cs
+        private void HandleCustomErrors(Exception exception)
         {
             var httpException = exception as HttpException;
 
@@ -197,56 +174,6 @@
             }
         }
 
-<<<<<<< HEAD
-        private void InitializePrincipal ()
-        {
-            var cookieName = FormsAuthentication.FormsCookieName;
-            var authCookie = HttpContext.Current.Request.Cookies[cookieName];
-            IPrincipal principal;
-            if (authCookie != null)
-            {
-                var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-                var login = authTicket.Name;
-
-                var cache = ServiceLocator.Current.GetInstance<ICacheClient>();
-                var user = cache.GetOrAdd(
-                    login,
-                    () =>
-                        {
-                            var manager = ServiceLocator.Current.GetInstance<IUserManager>();
-                            return manager.FindByLogin(login);
-                        });
-
-                Contract.Assert(user != null);
-                Contract.Assert(user.UserPasswordCredential != null);
-
-                var identity = new ApplicationIdentity(
-                    user.Id,
-                    user.UserPasswordCredential.Login, 
-                    user.Name, 
-                    user.Email);
-                principal = new ApplicationPrincipal(
-                    identity, 
-                    new[] { user.Role.Name },
-                    user.Role.Permissions.Select(p => p.Name.ToString("G")).ToArray());
-            }
-            else
-            {
-                principal = ApplicationPrincipal.Anonymous;
-            }
-
-            this.Context.User = principal;
-        }
-
-        private static bool PrincipalRequired()
-        {
-            var regEx = new Regex(Properties.Settings.Default.SkipPrincipalPattern);
-            var path = HttpContext.Current.Request.Url.AbsolutePath;
-
-            return !regEx.IsMatch(path);
-        }
-=======
         #endregion
->>>>>>> refactored Global.asax.cs
     }
 }
