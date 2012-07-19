@@ -10,6 +10,6 @@ namespace Ach.Fulfillment.Business
 
         UserEntity FindByPasswordCredential(string login, string password);
 
-        UserEntity FindByLogin(string login);
+        UserEntity FindByLogin(string login, bool fetchDeleted = false);
     }
 }
