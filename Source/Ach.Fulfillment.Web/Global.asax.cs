@@ -5,6 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
+    using System.Runtime.Caching;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
     using System.Web;
@@ -18,7 +19,7 @@
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Web.App_Start;
     using Ach.Fulfillment.Web.Areas.Common.Controllers;
-    using Ach.Fulfillment.Web.Common.Cache;
+    using Ach.Fulfillment.Web.Common;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Configuration;
 
@@ -44,8 +45,8 @@
         {
             Shell.Start<WebContainerExtension>();
 
-            //DependencyResolver.SetResolver(ServiceLocator.Current);
-            ControllerBuilder.Current.SetControllerFactory(typeof(UnityControllerFactory));
+            DependencyResolver.SetResolver(ServiceLocator.Current);
+            ControllerBuilder.Current.SetControllerFactory(typeof(CustomControllerFactory));
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -107,7 +108,7 @@
                     var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                     var login = authTicket.Name;
 
-                    var cache = ServiceLocator.Current.GetInstance<ICacheClient>();
+                    var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
                     var user = cache.GetOrAdd(
                         login,
                         () =>

@@ -1,6 +1,4 @@
-﻿// ReSharper disable CheckNamespace
-namespace Ach.Fulfillment.Web
-// ReSharper restore CheckNamespace
+﻿namespace Ach.Fulfillment.Web.App_Start
 {
     using System.Web.Mvc;
 

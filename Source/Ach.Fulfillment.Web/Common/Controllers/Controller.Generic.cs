@@ -9,10 +9,5 @@
     {
         [Dependency]
         public TManager Manager { get; set; }
-
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            base.OnException(filterContext);
-        } 
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Ach.Fulfillment.Web.Common.Security
+﻿namespace Ach.Fulfillment.Web.Common.Filters
 {
     using System;
     using System.Web;
@@ -9,10 +9,11 @@
     using Ach.Fulfillment.Common.Utils;
     using Ach.Fulfillment.Data;
 
-    using Microsoft.Practices.ServiceLocation;
-
     using global::Common.Logging;
 
+    using Microsoft.Practices.ServiceLocation;
+
+    // TODO: why not authorization attribute
     public class PrincipalRightPermissionAttribute : ActionFilterAttribute
     {
         #region Constants and Fields
@@ -23,6 +24,7 @@
 
         #region Constructors and Destructors
 
+        // TODO: we do not need add. add it is just several attributes
         public PrincipalRightPermissionAttribute(params AccessRight[] allowRightOr)
         {
             this.AllowRightsOr = allowRightOr;
@@ -62,7 +64,8 @@
 
                 var allowAccess = false;
 
-                if (this.AllowRightsOr != null) // check OR rights
+                // check OR rights
+                if (this.AllowRightsOr != null) 
                 {
                     foreach (var systemRight in this.AllowRightsOr)
                     {
@@ -74,7 +77,9 @@
                         }
                     }
                 }
-                else if (this.AllowRightsAnd != null) // check AND rights
+
+                // check AND rights
+                else if (this.AllowRightsAnd != null) 
                 {
                     foreach (var systemRight in this.AllowRightsAnd)
                     {

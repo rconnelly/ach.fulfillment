@@ -1,7 +1,8 @@
 ﻿namespace Ach.Fulfillment.Web.Configuration
 {
+    using System.Runtime.Caching;
+
     using Ach.Fulfillment.Initialization.Configuration;
-    using Ach.Fulfillment.Web.Common.Cache;
 
     using Microsoft.Practices.Unity;
 
@@ -13,7 +14,7 @@
         {
             base.Initialize();
 
-            this.Container.RegisterInstance<ICacheClient>(new MemoryCacheClient());
+            this.Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
         }
 
         #endregion
