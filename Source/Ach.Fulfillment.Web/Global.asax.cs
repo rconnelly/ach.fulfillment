@@ -16,11 +16,11 @@
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Security;
-    using Ach.Fulfillment.Initialization.Configuration;
     using Ach.Fulfillment.Web.App_Start;
     using Ach.Fulfillment.Web.Areas.Common.Controllers;
-    using Ach.Fulfillment.Web.Common;
+    using Ach.Fulfillment.Web.Common.Cache;
     using Ach.Fulfillment.Web.Common.Controllers;
+    using Ach.Fulfillment.Web.Configuration;
 
     using Microsoft.Practices.ServiceLocation;
 
@@ -50,7 +50,7 @@
             // RouteDebugger.RewriteRoutesForTesting(RouteTable.Routes);
 
             // shell
-            Shell.Start<InitializationContainerExtension>();
+            Shell.Start<WebContainerExtension>();
         }
 
         protected void Application_End()
@@ -62,7 +62,7 @@
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            // TODO: феерично :)))))
+            // TODO: феерично :))))) - каждый имеет право на ошибку...даже такую! )
             if (this.unitOfWork == null)
             {
                 this.unitOfWork = new UnitOfWork();
@@ -143,7 +143,8 @@
                 var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                 var login = authTicket.Name;
 
-                var user = CacheHelper.GetOrAdd(
+                var cache = ServiceLocator.Current.GetInstance<ICacheClient>();
+                var user = cache.GetOrAdd(
                     login,
                     () =>
                         {

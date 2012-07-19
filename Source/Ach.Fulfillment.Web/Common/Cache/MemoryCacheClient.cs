@@ -1,25 +1,29 @@
-﻿using System;
-
-namespace Ach.Fulfillment.Web.Common
+namespace Ach.Fulfillment.Web.Common.Cache
 {
-    using System.Diagnostics.Contracts;
+    using System;
     using System.Runtime.Caching;
 
     using Ach.Fulfillment.Web.Properties;
 
-    public static class CacheHelper
+    public class MemoryCacheClient : ICacheClient
     {
         private static readonly ObjectCache Cache = MemoryCache.Default;
 
         private static readonly object Lock = new object();
 
-        public static T GetOrAdd<T>(string key, Func<T> get)
-            where T : class
+        public T Get<T>(string key)
         {
-            Contract.Assert(key != null);
-            Contract.Assert(get != null);
+            T item;
 
-            var item = default (T);
+            this.TryGet(key, out item);
+
+            return item;
+        }
+
+        private bool TryGet<T>(string key, out T t)
+        {
+            var found = false;
+            t = default(T);
 
             if (Cache.Contains(key))
             {
@@ -27,12 +31,22 @@ namespace Ach.Fulfillment.Web.Common
                 {
                     if (Cache.Contains(key))
                     {
-                        item = Cache[key] as T;
+                        t = (T)Cache[key];
+                        found = true;
                     }
                 }
             }
 
-            if(item == null)
+            return found;
+        }
+
+        public T GetOrAdd<T>(string key, Func<T> get)
+        {
+            T item;
+
+            var found = this.TryGet(key, out item);
+
+            if (!found)
             {
                 item = get();
                 Cache.AddOrGetExisting(key, item, DateTime.Now.Add(Settings.Default.CacheExpiration));
@@ -41,7 +55,7 @@ namespace Ach.Fulfillment.Web.Common
             return item;
         }
 
-        public static void Remove(string key)
+        public void Remove(string key)
         {
             if (Cache.Contains(key))
             {

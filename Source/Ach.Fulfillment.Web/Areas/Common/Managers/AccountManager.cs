@@ -6,6 +6,7 @@
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Web.Areas.Common.Models;
     using Ach.Fulfillment.Web.Common;
+    using Ach.Fulfillment.Web.Common.Cache;
 
     using Microsoft.Practices.Unity;
 
@@ -16,6 +17,9 @@
 
         [Dependency]
         public IApplicationPrincipal Principal { get; set; }
+
+        [Dependency]
+        public ICacheClient Cache { get; set; }
 
         public bool Login(LoginModel model)
         {
@@ -33,7 +37,7 @@
 
         public void Logout()
         {
-            CacheHelper.Remove(this.Principal.Identity.Name);
+            this.Cache.Remove(this.Principal.Identity.Name);
 
             FormsAuthentication.SignOut();
         }

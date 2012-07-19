@@ -160,7 +160,7 @@
     <Compile Include="Areas\Common\Models\LoginModel.cs" />
     <Compile Include="Areas\Common\Models\RegisterModel.cs" />
     <Compile Include="Areas\Common\CommonAreaRegistration.cs" />
-    <Compile Include="Common\CacheHelper.cs" />
+    <Compile Include="Common\Cache\MemoryCacheClient.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
     <Compile Include="Areas\Common\Controllers\AccountController.cs" />
     <Compile Include="Areas\Common\Managers\AccountManager.cs" />
@@ -169,8 +169,10 @@
     <Compile Include="Common\Controllers\UnityControllerFactory.cs" />
     <Compile Include="Common\Filters\NoCacheAttribute.cs" />
     <Compile Include="Common\HtmlHelper.cs" />
+    <Compile Include="Common\Cache\ICacheClient.cs" />
     <Compile Include="Common\RouteHelper.cs" />
     <Compile Include="Common\Filters\PrincipalRightPermissionAttribute.cs" />
+    <Compile Include="Configuration\WebContainerExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
