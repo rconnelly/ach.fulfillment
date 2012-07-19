@@ -9,8 +9,6 @@ namespace Ach.Fulfillment.Web.Common.Cache
     {
         private static readonly ObjectCache Cache = MemoryCache.Default;
 
-        private static readonly object Lock = new object();
-
         public T Get<T>(string key)
         {
             T item;
@@ -24,17 +22,11 @@ namespace Ach.Fulfillment.Web.Common.Cache
         {
             var found = false;
             t = default(T);
-
+            
             if (Cache.Contains(key))
             {
-                lock (Lock)
-                {
-                    if (Cache.Contains(key))
-                    {
-                        t = (T)Cache[key];
-                        found = true;
-                    }
-                }
+                t = (T)Cache[key];
+                found = true;
             }
 
             return found;
