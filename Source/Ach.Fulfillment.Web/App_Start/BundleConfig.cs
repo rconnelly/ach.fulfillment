@@ -1,8 +1,9 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
+﻿// ReSharper disable CheckNamespace
 namespace Ach.Fulfillment.Web
+// ReSharper restore CheckNamespace
 {
+    using System.Web.Optimization;
+
     public class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
