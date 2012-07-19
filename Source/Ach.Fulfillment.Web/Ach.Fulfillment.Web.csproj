@@ -167,7 +167,10 @@
     <Compile Include="Areas\Common\Controllers\HomeController.cs" />
     <Compile Include="Areas\Common\Managers\HomeManager.cs" />
     <Compile Include="Common\Controllers\UnityControllerFactory.cs" />
+    <Compile Include="Common\Filters\NoCacheAttribute.cs" />
+    <Compile Include="Common\HtmlHelper.cs" />
     <Compile Include="Common\RouteHelper.cs" />
+    <Compile Include="Common\Filters\PrincipalRightPermissionAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,6 +218,7 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\header_logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.6.2-vsdoc.js" />

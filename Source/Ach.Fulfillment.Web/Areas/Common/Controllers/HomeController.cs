@@ -1,14 +1,11 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Common.Controllers
 {
-    using System.Linq;
     using System.Web.Mvc;
 
-    using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Web.Areas.Common.Managers;
     using Ach.Fulfillment.Web.Common.Controllers;
-
-    using Microsoft.Practices.ServiceLocation;
+    using Ach.Fulfillment.Web.Common.Security;
 
     public class HomeController : Controller<HomeManager>
     {
@@ -16,13 +13,10 @@
         {
             this.ViewBag.Message = "Modify this template to kick-start your ASP.NET MVC application.";
 
-            var m = ServiceLocator.Current.GetInstance<IPartnerManager>().FindAll(new PartnerAll());
-
-            this.ViewBag.Message = "TODO: " + m.Count();
-
             return this.View();
         }
 
+        [PrincipalRightPermission(AccessRight.Admin, AccessRight.SuperAdmin)]
         public ActionResult About()
         {
             this.ViewBag.Message = "Your app description page.";
@@ -30,6 +24,7 @@
             return this.View();
         }
 
+        [PrincipalRightPermission(AccessRight.SuperAdmin)]
         public ActionResult Contact()
         {
             this.ViewBag.Message = "Your contact page.";
