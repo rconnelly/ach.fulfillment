@@ -1,15 +1,15 @@
-﻿namespace Ach.Fulfillment.Web.Areas.Common.Managers
+﻿namespace Ach.Fulfillment.Web.Areas.Main.Controllers
 {
     using System.Runtime.Caching;
     using System.Web.Security;
 
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common.Security;
-    using Ach.Fulfillment.Web.Areas.Common.Models;
+    using Ach.Fulfillment.Web.Areas.Main.Models;
 
     using Microsoft.Practices.Unity;
 
-    public class AccountManager
+    public class HomeManager
     {
         [Dependency]
         public IUserManager UserManager { get; set; }

@@ -222,17 +222,21 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Common\Controllers\ErrorController.cs" />
-    <Compile Include="Areas\Common\Models\ErrorNotFoundModel.cs" />
-    <Compile Include="Areas\Common\Models\LoginModel.cs" />
-    <Compile Include="Areas\Common\Models\RegisterModel.cs" />
-    <Compile Include="Areas\Common\CommonAreaRegistration.cs" />
+    <Compile Include="Areas\Main\Controllers\ErrorController.cs" />
+    <Compile Include="Areas\Main\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Main\Controllers\HomeManager.cs" />
+    <Compile Include="Areas\Main\MainAreaRegistration.cs" />
+    <Compile Include="Areas\Main\Models\ChangePasswordModel.cs" />
+    <Compile Include="Areas\Main\Models\LoginModel.cs" />
+    <Compile Include="Areas\Manage\Controllers\PartnerController.cs" />
+    <Compile Include="Areas\Manage\Controllers\PartnerManager.cs" />
+    <Compile Include="Areas\Manage\Controllers\UserController.cs" />
+    <Compile Include="Areas\Manage\Controllers\UserManager.cs" />
+    <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
+    <Compile Include="Areas\Manage\Models\UserModel.cs" />
     <Compile Include="Common\ObjectCacheHelper.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
-    <Compile Include="Areas\Common\Controllers\AccountController.cs" />
-    <Compile Include="Areas\Common\Managers\AccountManager.cs" />
-    <Compile Include="Areas\Common\Controllers\HomeController.cs" />
-    <Compile Include="Areas\Common\Managers\HomeManager.cs" />
     <Compile Include="Common\Controllers\CustomControllerFactory.cs" />
     <Compile Include="Common\Filters\NoCacheAttribute.cs" />
     <Compile Include="Common\HtmlHelper.cs" />
@@ -242,7 +246,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Common\Models\ChangePasswordModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -333,13 +336,6 @@
     <Content Include="Images\twitter.png" />
     <Content Include="Images\windowsLive.png" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Common\Views\Account\ChangePassword.cshtml" />
-    <Content Include="Areas\Common\Views\Account\ChangePasswordSuccess.cshtml" />
-    <Content Include="Areas\Common\Views\Account\Login.cshtml" />
-    <Content Include="Areas\Common\Views\Account\Register.cshtml" />
-    <Content Include="Areas\Common\Views\Home\About.cshtml" />
-    <Content Include="Areas\Common\Views\Home\Contact.cshtml" />
-    <Content Include="Areas\Common\Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -347,7 +343,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Common\Views\Shared\" />
+    <Folder Include="Areas\Main\Views\Shared\" />
+    <Folder Include="Areas\Manage\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -371,12 +368,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Common\Views\_ViewStart.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Common\Views\Web.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Areas\Main\Views\Home\About.cshtml" />
+    <Content Include="Areas\Main\Views\Home\Contact.cshtml" />
+    <Content Include="Areas\Main\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Main\Views\Home\Login.cshtml" />
+    <Content Include="Areas\Main\Views\Web.config" />
+    <Content Include="Areas\Main\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Manage\Views\User\ChangePassword.cshtml" />
+    <Content Include="Areas\Manage\Views\User\ChangePasswordSuccess.cshtml" />
+    <Content Include="Areas\Manage\Views\User\UserCreate.cshtml" />
+    <Content Include="Areas\Manage\Views\Web.config" />
+    <Content Include="Areas\Manage\Views\_ViewStart.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

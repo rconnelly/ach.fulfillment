@@ -18,7 +18,7 @@
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Web.App_Start;
-    using Ach.Fulfillment.Web.Areas.Common.Controllers;
+    using Ach.Fulfillment.Web.Areas.Main.Controllers;
     using Ach.Fulfillment.Web.Common;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Configuration;
@@ -157,9 +157,8 @@
                 if (status == 404 || status == 403)
                 {
                     var routeData = new RouteData();
-                    routeData.Values.Add("area", "Common");
-                    routeData.Values.Add("controller", "Error");
-                    routeData.Values.Add("action", "Error" + status);
+
+                    RouteHelper.InitErrorRoute(status, routeData);
 
                     // Clear the error on server.
                     Server.ClearError();

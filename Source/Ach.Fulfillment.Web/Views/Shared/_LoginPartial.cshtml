@@ -1,11 +1,11 @@
 ﻿@if (Request.IsAuthenticated) {
     <p>
-        Hello, @Html.ActionLink(User.Identity.Name, "ChangePassword", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Change password" })!
-        @Html.ActionLink("Log off", "LogOff", "Account")
+        Hello, @User.Identity.Name ! @*@Html.ActionLink(User.Identity.Name, "ChangePassword", "Home", new { area = "Main" }, new { @class = "username", title = "Change password" })!*@
+        @Html.ActionLink("Log off", "LogOff", "Home", new { area = "Main" }, null)
     </p>
 } else {
     <ul>
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        @*<li>@Html.ActionLink("Register", "Create", "User", new {area = "Manage"}, new { id = "registerLink" })</li>*@
+        <li>@Html.ActionLink("Log in", "Login", "Home", new {area = "Main"}, new { id = "loginLink" })</li>
     </ul>
 }

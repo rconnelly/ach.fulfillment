@@ -1,4 +1,4 @@
-﻿namespace Ach.Fulfillment.Web.Areas.Common.Models
+﻿namespace Ach.Fulfillment.Web.Areas.Main.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;

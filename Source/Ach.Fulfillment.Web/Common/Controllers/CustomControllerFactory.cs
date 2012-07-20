@@ -5,7 +5,7 @@ namespace Ach.Fulfillment.Web.Common.Controllers
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using Ach.Fulfillment.Web.Areas.Common.Controllers;
+    using Ach.Fulfillment.Web.Areas.Main.Controllers;
 
     using global::Common.Logging;
 
@@ -28,15 +28,17 @@ namespace Ach.Fulfillment.Web.Common.Controllers
             }
             catch (HttpException exc)
             {
-                if (exc.GetHttpCode() == 404)
+                var httpCode = exc.GetHttpCode();
+                if (httpCode == 404)
                 {
                     Log.Error(exc.Message, exc);
 
                     controller = base.GetControllerInstance(requestContext, typeof(ErrorController));
 
                     requestContext.RouteData.Values.Clear();
-                    requestContext.RouteData.Values.Add("controller", "Error");
-                    requestContext.RouteData.Values.Add("action", "Error404");
+
+                    RouteHelper.InitErrorRoute(httpCode, requestContext.RouteData);
+
                 }
                 else
                 {
