@@ -10,7 +10,7 @@
         {
             <fieldset>
                 <legend>Log In</legend>
-                @Html.ValidationSummary(true, "Log in was unsuccessful. Please correct the errors and try again.", new { @class="alert alert-error" })
+                @Html.ValidationSummary(true, "Log in was unsuccessful. Please correct the errors and try again.", new { @class = "alert alert-block alert-error" })
                 
                 <div class="control-group">
                     @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
