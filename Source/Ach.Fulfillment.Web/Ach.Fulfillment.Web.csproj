@@ -235,6 +235,8 @@
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
+    <Compile Include="Common\Data\PrincipalSession.cs" />
+    <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
     <Compile Include="Common\ObjectCacheHelper.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
     <Compile Include="Common\Controllers\CustomControllerFactory.cs" />

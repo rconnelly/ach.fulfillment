@@ -4,7 +4,6 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
     using System.Runtime.Caching;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
@@ -21,13 +20,12 @@
     using Ach.Fulfillment.Web.Areas.Main.Controllers;
     using Ach.Fulfillment.Web.Common;
     using Ach.Fulfillment.Web.Common.Controllers;
+    using Ach.Fulfillment.Web.Common.Data;
     using Ach.Fulfillment.Web.Configuration;
 
     using global::Common.Logging;
 
     using Microsoft.Practices.ServiceLocation;
-
-    using ApplicationIdentity = Ach.Fulfillment.Common.Security.ApplicationIdentity;
 
     public class MvcApplication : HttpApplication
     {
@@ -107,31 +105,23 @@
                 {
                     var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                     var login = authTicket.Name;
-
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
-                    var user = cache.GetOrAdd(
-                        login,
-                        () =>
-                            {
-                                var manager = ServiceLocator.Current.GetInstance<IUserManager>();
-                                return manager.FindByLogin(login);
-                            });
+                    var session = cache.Get(login) as PrincipalSession;
 
-                    if (user != null)
+                    if(session == null)
                     {
-                        var name = user.UserPasswordCredential != null ? user.UserPasswordCredential.Login : login;
+                        var manager = ServiceLocator.Current.GetInstance<IUserManager>();
+                        var user = manager.FindByLogin(login);
 
-                        var identity = new ApplicationIdentity(
-                            user.Id, 
-                            name, 
-                            user.Name, 
-                            user.Email);
-                        var roles = user.Role != null ? new[] { user.Role.Name } : new string[0];
-                        var permissions = user.Role != null && user.Role.Permissions != null ? user.Role.Permissions.Select(p => p.Name.ToString("G")).ToArray() : new string[0];
-                        principal = new ApplicationPrincipal(
-                            identity,
-                            roles,
-                            permissions);
+                        if(user != null && user.UserPasswordCredential != null)
+                        {
+                            session = user.Convert();
+                        }
+                    }
+
+                    if(session != null)
+                    {
+                        principal = session.Convert();
                     }
                 }
             }
