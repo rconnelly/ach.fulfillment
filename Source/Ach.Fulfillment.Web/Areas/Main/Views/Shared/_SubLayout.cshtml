@@ -8,3 +8,7 @@
 <section class="content-wrapper main-content">
 @RenderBody()
 </section>
+@section scripts
+{
+    @RenderSection("scripts", required: false)
+}
