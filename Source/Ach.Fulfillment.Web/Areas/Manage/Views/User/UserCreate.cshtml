@@ -7,8 +7,6 @@
 <h2>UserCreate</h2>
 
 @using (Html.BeginForm("Create", "User", new {area = "Manage"})) {
-    @Html.ValidationSummary(true)
-
     <fieldset>
         <legend>UserModel</legend>
 
@@ -51,6 +49,8 @@
             @Html.EditorFor(model => model.PartnerId)
             @Html.ValidationMessageFor(model => model.PartnerId)
         </div>
+        
+       @Html.Partial("_errorSummary")
 
         <p>
             <input type="submit" value="Create" />
@@ -62,6 +62,6 @@
     @Html.ActionLink("Back to List", "Index", "Home")
 </div>
 
-@section Scripts {
+@section scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
