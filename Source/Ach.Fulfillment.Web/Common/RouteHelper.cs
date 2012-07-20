@@ -12,7 +12,7 @@
         public const string About = "About";
         public const string Contact = "Contact";
 
-        public static void InitErrorRoute (int httpCode, RouteData routeData)
+        public static void InitErrorRoute(int httpCode, RouteData routeData)
         {
             Contract.Assert(routeData != null);
 

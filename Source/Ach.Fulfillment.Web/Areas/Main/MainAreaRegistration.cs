@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace Ach.Fulfillment.Web.Areas.Main
+﻿namespace Ach.Fulfillment.Web.Areas.Main
 {
+    using System.Web.Mvc;
+
     using Ach.Fulfillment.Web.Common;
 
     public class MainAreaRegistration : AreaRegistration
@@ -21,8 +21,7 @@ namespace Ach.Fulfillment.Web.Areas.Main
             context.MapRoute(
                 "Main_default",
                 "Main/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+                new { action = "Index", id = UrlParameter.Optional });
         }
     }
 }

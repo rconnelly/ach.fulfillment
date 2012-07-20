@@ -354,8 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Main\Views\Shared\" />
-    <Folder Include="Areas\Manage\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -390,6 +388,9 @@
     <Content Include="Areas\Manage\Views\User\UserCreate.cshtml" />
     <Content Include="Areas\Manage\Views\Web.config" />
     <Content Include="Areas\Manage\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Manage\Views\User\Index.cshtml" />
+    <Content Include="Areas\Manage\Views\Shared\_SubLayout.cshtml" />
+    <Content Include="Areas\Main\Views\Shared\_SubLayout.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

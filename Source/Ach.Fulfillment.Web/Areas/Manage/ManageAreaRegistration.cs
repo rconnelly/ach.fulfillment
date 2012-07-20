@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace Ach.Fulfillment.Web.Areas.Manage
+﻿namespace Ach.Fulfillment.Web.Areas.Manage
 {
+    using System.Web.Mvc;
+
     public class ManageAreaRegistration : AreaRegistration
     {
         public override string AreaName
@@ -17,8 +17,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage
             context.MapRoute(
                 "Manage_default",
                 "Manage/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+                new { action = "Index", id = UrlParameter.Optional });
         }
     }
 }

@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Web.Common
 {
     using System;
+    using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
@@ -13,6 +14,17 @@ namespace Ach.Fulfillment.Web.Common
             var required = label.ToHtmlString().Replace("<label", @"<label class=""required""");
 
             return MvcHtmlString.Create(required);
+        }
+
+        public static IHtmlString ActiveItem<TModel>(
+            this HtmlHelper<TModel> html, 
+            string controller,
+            string action)
+        {
+            var currentAction = html.ViewContext.RouteData.GetRequiredString("action");
+            var currentController = html.ViewContext.RouteData.GetRequiredString("controller");
+            var result = controller == currentController && action == currentAction ? "class=\"active\"" : string.Empty;
+            return html.Raw(result);
         }
 
         public static MvcHtmlString ActionImage(this HtmlHelper html, string controller, string action, object routeValues, string imagePath, string alt)

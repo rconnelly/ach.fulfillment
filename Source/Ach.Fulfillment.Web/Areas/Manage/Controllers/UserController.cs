@@ -7,6 +7,11 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
     public class UserController : Controller<UserManager>
     {
+        public ActionResult Index()
+        {
+            return this.View();
+        }
+
         public ActionResult Create()
         {
             var model = this.Manager.GetCreateModel();

@@ -18,52 +18,26 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="@Url.RouteUrl(new { area = "Common", controller = "Home", action = "Index" })">ACH Fulfillment</a>
-                    
+                    <a class="brand" href="@Url.RouteUrl(new { area = "Main", controller = "Home", action = "Index" })">ACH Fulfillment</a>
                     @Html.Partial("_LoginPartial")
-                    
-                    @{ 
-                        var currentAction = this.ViewContext.RouteData.GetRequiredString("action");
-                        // var currentController = this.ViewContext.RouteData.GetRequiredString("controller");
-                        Func<string, string> checkCurrentMenuItem = s => s == currentAction ? "class=\"active\"" : string.Empty;
-                    }
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li @Html.Raw(checkCurrentMenuItem("Index"))>@Html.ActionLink("Home", "Index", "Home", new { area = "Common" }, null)</li>
-                            <li @Html.Raw(checkCurrentMenuItem("About"))>@Html.ActionLink("About", "About", "Home", new { area = "Common" }, null)</li>
-                            <li @Html.Raw(checkCurrentMenuItem("Contact"))>@Html.ActionLink("Contact", "Contact", "Home", new { area = "Common" }, null)</li>
+                            @if (Request.IsAuthenticated){
+                            <li @Html.ActiveItem("Home", "Index")>@Html.ActionLink("Home", "Index", "Home", new { area = "Main" }, null)</li>
+                            <li @Html.ActiveItem("User", "Index")>@Html.ActionLink("Manage", "Index", "User", new { area = "Manage" }, null)</li>
+                            <li @Html.ActiveItem("Home", "About")>@Html.ActionLink("About", "About", "Home", new { area = "Main" }, null)</li>
+                            <li @Html.ActiveItem("Home", "Contact")>@Html.ActionLink("Contact", "Contact", "Home", new { area = "Main" }, null)</li>
+                            }
                         </ul>
                     </div><!--/.nav-collapse -->
-
                 </div>
             </div>
         </div>
         
         <div class="container">
-        
-            <div class="row">
-                <div class="span3">
-                    <div class="well sidebar-nav">
-                        <ul class="nav nav-list">
-                            <li class="nav-header">Security</li>
-                            <li class="active"><a href="#">Users</a></li>
-                            <li><a href="#">Roles</a></li>
-                            <li><a href="#">Permissions</a></li>
-                            <li class="nav-header">Partner management</li>
-                            <li><a href="#">Partners</a></li>
-                        </ul>
-                    </div><!--/.well -->
-                </div><!--/span-->
-                <div class="span9" id="body">
-                    @RenderSection("featured", required: false)
-                    <section class="content-wrapper main-content">
-                    @RenderBody()
-                    </section>
-                </div><!--/span-->
-            </div><!--/row-->
-            
+            @RenderSection("featured", required: false)
+            @RenderBody()
             <hr>
-
             <footer>
                 <div class="pull-right">
                     <a class="brand" href="http://quad.io">
@@ -72,7 +46,6 @@
                 </div>
                 <p>&copy; Copyright 2012, Quad IO, Inc.</p>
             </footer>
-
         </div><!--/.container-->        
        
         @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")

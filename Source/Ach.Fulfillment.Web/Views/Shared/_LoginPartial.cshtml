@@ -6,15 +6,9 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <li>@Html.ActionLink("Profile", "ChangePassword", "Account")</li>
+            <li><a href="#">Profile</a></li>
             <li class="divider"></li>
-            <li>@Html.ActionLink("Sign Out", "LogOff", "Account")</li>
+            <li>@Html.ActionLink("Sign Out", "LogOff", "Home", new { area = "Main" }, null)</li>
         </ul>
-    </div>
-}
-else
-{
-    <div class="pull-right">
-        @Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { @class="btn", id = "loginLink" })
     </div>
 }
