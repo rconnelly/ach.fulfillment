@@ -108,18 +108,18 @@
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
                     var session = cache.Get(login) as PrincipalSession;
 
-                    if(session == null)
+                    if (session == null)
                     {
                         var manager = ServiceLocator.Current.GetInstance<IUserManager>();
                         var user = manager.FindByLogin(login);
 
-                        if(user != null && user.UserPasswordCredential != null)
+                        if (user != null && user.UserPasswordCredential != null)
                         {
                             session = user.Convert();
                         }
                     }
 
-                    if(session != null)
+                    if (session != null)
                     {
                         principal = session.Convert();
                     }
