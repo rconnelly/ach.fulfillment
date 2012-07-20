@@ -1,11 +1,20 @@
-﻿@if (Request.IsAuthenticated) {
-    <p>
-        Hello, @User.Identity.Name ! @*@Html.ActionLink(User.Identity.Name, "ChangePassword", "Home", new { area = "Main" }, new { @class = "username", title = "Change password" })!*@
-        @Html.ActionLink("Log off", "LogOff", "Home", new { area = "Main" }, null)
-    </p>
-} else {
-    <ul>
-        @*<li>@Html.ActionLink("Register", "Create", "User", new {area = "Manage"}, new { id = "registerLink" })</li>*@
-        <li>@Html.ActionLink("Log in", "Login", "Home", new {area = "Main"}, new { id = "loginLink" })</li>
-    </ul>
+﻿@using Ach.Fulfillment.Common.Security
+@if (Request.IsAuthenticated) {
+    <div class="btn-group pull-right">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="icon-user"></i> @(((IApplicationIdentity)User.Identity).DisplayName)
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("Profile", "ChangePassword", "Account")</li>
+            <li class="divider"></li>
+            <li>@Html.ActionLink("Sign Out", "LogOff", "Account")</li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="pull-right">
+        @Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { @class="btn", id = "loginLink" })
+    </div>
 }
