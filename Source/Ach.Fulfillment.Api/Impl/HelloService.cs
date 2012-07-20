@@ -14,18 +14,24 @@ namespace Ach.Fulfillment.Api.Impl
     [Authenticate]
     [RequiredPermission(AccessRightRegistry.Admin)]
     [UnitOfWork]
-    public class HelloService : RestServiceBase<Hello>
+    internal class HelloService : AppRestServiceBase<Hello>
     {
+        #region Properties
+
         [Dependency]
-        public IUserManager UerManager { get; set; }
+        public IUserManager UserManager { get; set; }
 
         [Dependency]
         public IApplicationPrincipal Principal { get; set; }
 
+        #endregion
+
+        #region Methods
+
         // Get
-        public override object OnGet(Hello request) 
+        public override object OnGet(Hello request)
         {
-            var user = this.UerManager.Load(this.Principal.Identity.UserId);
+            var user = this.UserManager.Load(this.Principal.Identity.UserId);
 
             var name = this.Principal.Identity.DisplayName + " " + user.Email;
             if (string.IsNullOrEmpty(request.Name))
@@ -53,5 +59,7 @@ namespace Ach.Fulfillment.Api.Impl
         {
             throw new HttpError(System.Net.HttpStatusCode.Conflict, "SomeDeleteErrorCode");
         }
+
+        #endregion
     }
 }

@@ -19,8 +19,7 @@
             context.MapRoute(
                 "Common_default",
                 "Common/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+                new { action = "Index", id = UrlParameter.Optional });
         }
     }
 }

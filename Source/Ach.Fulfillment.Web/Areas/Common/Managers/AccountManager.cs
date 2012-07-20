@@ -1,12 +1,11 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Common.Managers
 {
+    using System.Runtime.Caching;
     using System.Web.Security;
 
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Web.Areas.Common.Models;
-    using Ach.Fulfillment.Web.Common;
-    using Ach.Fulfillment.Web.Common.Cache;
 
     using Microsoft.Practices.Unity;
 
@@ -19,7 +18,7 @@
         public IApplicationPrincipal Principal { get; set; }
 
         [Dependency]
-        public ICacheClient Cache { get; set; }
+        public ObjectCache Cache { get; set; }
 
         public bool Login(LoginModel model)
         {

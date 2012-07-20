@@ -9,7 +9,10 @@ namespace Ach.Fulfillment.Business.Impl.Validation
         public UserValidator()
         {
             this.RuleFor(i => i.Name).Cascade(CascadeMode.StopOnFirstFailure).NotEmpty().Length(1, MetadataInfo.StringNormal);
-            this.RuleFor(i => i.Email).Cascade(CascadeMode.StopOnFirstFailure).NotEmpty().Length(1, MetadataInfo.StringNormal);
+            this.RuleFor(i => i.Email).Cascade(CascadeMode.StopOnFirstFailure)
+                .NotEmpty()
+                .Length(1, MetadataInfo.StringNormal)
+                .SetValidator(new FluentValidation.Validators.EmailValidator());
             this.RuleFor(i => i.Role).NotNull();
             this.RuleFor(i => i.UserPasswordCredential)
                 .NotNull()

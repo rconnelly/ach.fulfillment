@@ -1,8 +1,7 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
-namespace Ach.Fulfillment.Web
+﻿namespace Ach.Fulfillment.Web.App_Start
 {
+    using System.Web.Optimization;
+
     public class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)

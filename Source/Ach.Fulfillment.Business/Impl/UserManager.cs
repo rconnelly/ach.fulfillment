@@ -82,23 +82,26 @@ namespace Ach.Fulfillment.Business.Impl
                 var saltedPassword = GetSaltedPassword(password, credential.PasswordSalt);
                 if (Cryptographer.CompareHash(HashInstance, saltedPassword, credential.PasswordHash))
                 {
-                    user = credential.User;
+                    if (credential.User != null && !credential.User.Deleted)
+                    {
+                        user = credential.User;
+                    }
                 }
             }
 
             return user;
         }
 
-        public UserEntity FindByLogin(string login)
+        public UserEntity FindByLogin(string login, bool fetchDeleted = false)
         {
             Contract.Assert(login != null);
             UserEntity user = null;
             var credential = this.Repository.FindOne<UserPasswordCredentialEntity>(new UserPasswordCredentialByLogin(login));
-            if (credential != null)
+            if (credential != null && credential.User != null && (fetchDeleted || !credential.User.Deleted))
             {
                 user = credential.User;
             }
-
+            
             return user;
         }
 

@@ -33,6 +33,5 @@ namespace Ach.Fulfillment.Web.Common
 
             return MvcHtmlString.Create(anchorHtml);
         }
-
     }
 }
