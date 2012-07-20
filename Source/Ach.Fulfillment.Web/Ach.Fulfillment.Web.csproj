@@ -237,6 +237,7 @@
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
     <Compile Include="Common\Data\PrincipalSession.cs" />
     <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
+    <Compile Include="Common\Filters\BusinessValidationFilterAttribute.cs" />
     <Compile Include="Common\ObjectCacheHelper.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
     <Compile Include="Common\Controllers\CustomControllerFactory.cs" />
@@ -387,6 +388,7 @@
     </None>
     <Content Include="Views\Shared\Error404.cshtml" />
     <Content Include="Views\Shared\Error403.cshtml" />
+    <Content Include="Views\Shared\_errorSummary.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

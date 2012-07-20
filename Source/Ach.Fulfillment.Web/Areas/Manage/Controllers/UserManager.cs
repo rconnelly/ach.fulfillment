@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
 
     using Microsoft.Practices.Unity;
@@ -20,9 +21,24 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return model;
         }
 
-        public void CreateUser(UserModel model)
+        public long CreateUser(UserModel model)
         {
-            throw new System.NotImplementedException();
+            PartnerEntity partner = null;
+            if(model.PartnerId.HasValue)
+            {
+                partner = this.PartnerManager.Load(model.PartnerId.Value);
+            }
+
+            var user = new UserEntity
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Partner = partner
+                };
+
+            this.Manager.Create(user, model.Login, model.Password);
+
+            return user.Id;
         }
     }
 }

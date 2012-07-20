@@ -4,6 +4,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
     using Ach.Fulfillment.Web.Areas.Manage.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
+    using Ach.Fulfillment.Web.Common.Filters;
 
     public class UserController : Controller<UserManager>
     {
@@ -14,6 +15,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return this.View("UserCreate", model);
         }
 
+        [BusinessValidationFilter("UserCreate")]
         [HttpPost]
         public ActionResult Create(UserModel model)
         {
