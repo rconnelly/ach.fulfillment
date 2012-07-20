@@ -7,6 +7,7 @@
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence.Impl.Commands;
+    using Ach.Fulfillment.Persistence.Impl.Configuration;
 
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.ServiceLocation;
@@ -125,7 +126,7 @@
             }
             catch (Exception ex)
             {
-                var rethrow = ExceptionPolicy.HandleException(ex, "Persistence.Delete");
+                var rethrow = ExceptionPolicy.HandleException(ex, PersistenceContainerExtension.DeletePolicy);
                 if (rethrow)
                 {
                     throw;

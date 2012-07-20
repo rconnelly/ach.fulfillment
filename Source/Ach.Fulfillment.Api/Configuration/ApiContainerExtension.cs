@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.Globalization;
     using System.Linq;
     using System.Net;
 
@@ -22,6 +24,12 @@
 
     public class ApiContainerExtension : InitializationContainerExtension
     {
+        #region Fields
+
+        public const string DefaultPolicy = "Communication.SsApi";
+
+        #endregion
+
         #region Methods
 
         protected override void Initialize()
@@ -36,17 +44,31 @@
         private void ConfigureExceptionHandling()
         {
             var configurationSource = new DictionaryConfigurationSource();
-
             var builder = new ConfigurationSourceBuilder();
-            builder.ConfigureExceptionHandling()
-                   .GivenPolicyWithName("Communication.Api")
-                   .ForExceptionType<Exception>()
-                        .ThenNotifyRethrow()
-                   .ForExceptionType<BusinessValidationException>()
+            builder
+                .ConfigureExceptionHandling()
+                .GivenPolicyWithName(DefaultPolicy)
+                    .ForExceptionType<DeleteConstraintException>()
+                        .HandleCustom<HttpErrorExceptionHandler>()
+                        .ThenThrowNewException()
+                    .ForExceptionType<BusinessValidationException>()
                         .HandleCustom<BusinessValidationExceptionHandler>()
                         .ThenThrowNewException()
-                   .ForExceptionType<DeleteConstraintException>()
+                    .ForExceptionType<BusinessException>()
                         .HandleCustom<HttpErrorExceptionHandler>()
+                        .ThenThrowNewException()
+                    .ForExceptionType<Exception>()
+                        .LogToCategory("General")
+                            .WithSeverity(TraceEventType.Critical)
+                            .UsingExceptionFormatter<TextExceptionFormatter>()
+                        .HandleCustom(
+                            typeof(HttpErrorExceptionHandler),
+                            new NameValueCollection
+                                {
+                                    { HttpErrorExceptionHandler.StatusCodeKey, HttpStatusCode.InternalServerError.ToString("G") },
+                                    { HttpErrorExceptionHandler.MessageKey, "An error has occurred while consuming this service. Please contact your administrator for more information." },
+                                    { HttpErrorExceptionHandler.AppendHandlingIdKey, bool.TrueString }
+                                })
                         .ThenThrowNewException();
             builder.UpdateConfigurationWithReplace(configurationSource);
 
@@ -86,9 +108,23 @@
 
         private class HttpErrorExceptionHandler : IExceptionHandler
         {
-            private const string StatusCodeKey = "StatusCode";
+            // ReSharper disable MemberCanBePrivate.Local
+            protected internal const string StatusCodeKey = "StatusCode";
 
+            protected internal const string MessageKey = "Message";
+
+            protected internal const string ErrorCodeKey = "ErrorCode";
+
+            protected internal const string AppendHandlingIdKey = "AppendHandlingId";
+            
+            // ReSharper restore MemberCanBePrivate.Local
             private readonly HttpStatusCode statusCode = HttpStatusCode.Conflict;
+
+            private readonly string message;
+
+            private readonly string errorCode;
+
+            private readonly bool appendHandlingId;
             
             public HttpErrorExceptionHandler(NameValueCollection collection)
             {
@@ -97,12 +133,53 @@
                 {
                     this.statusCode = (HttpStatusCode)Enum.Parse(typeof(HttpStatusCode), collection[StatusCodeKey]);
                 }
+
+                if (collection.AllKeys.Contains(MessageKey))
+                {
+                    this.message = collection[MessageKey];
+                }
+
+                if (collection.AllKeys.Contains(ErrorCodeKey))
+                {
+                    this.errorCode = collection[ErrorCodeKey];
+                }
+
+                if (collection.AllKeys.Contains(AppendHandlingIdKey))
+                {
+                    this.appendHandlingId = bool.Parse(collection[AppendHandlingIdKey]);
+                }
             }
 
             public Exception HandleException(Exception exception, Guid handlingInstanceId)
             {
-                var result = new HttpError(this.statusCode, exception);
+                var error = this.FormatErrorMessage(exception, handlingInstanceId);
+
+                var result = new HttpError(error, exception)
+                    {
+                        StatusCode = this.statusCode
+                    };
+                if (!string.IsNullOrEmpty(this.errorCode))
+                {
+                    result.ErrorCode = this.errorCode;
+                }
+
                 return result;
+            }
+
+            private string FormatErrorMessage(Exception exception, Guid handlingInstanceId)
+            {
+                var pattern = this.message ?? exception.Message;
+
+                if (this.appendHandlingId)
+                {
+                    pattern = string.Format(
+                        CultureInfo.InvariantCulture,
+                        "{0}. [Error ID: {{handlingInstanceID}}]",
+                        pattern.Trim(' ', '.'));
+                }
+
+                var error = ExceptionUtility.FormatExceptionMessage(pattern, handlingInstanceId);
+                return error;
             }
         }
 

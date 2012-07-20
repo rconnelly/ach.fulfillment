@@ -101,10 +101,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=2.1.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
-      <HintPath>../../_libBinary/Common.Logging.2.1.1/lib/net40/Common.Logging.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_libBinary\Common.Logging.2.1.1\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.EntLib">
-      <HintPath>..\..\_libBinary\Common.Logging.EntLib.2.0.0\lib\2.0\Common.Logging.EntLib.dll</HintPath>
+    <Reference Include="Common.Logging.EntLib50">
+      <HintPath>..\..\_libBinary\Common.Logging.EntLib50.2.1.1\lib\net40\Common.Logging.EntLib50.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\_libBinary\Common.Logging.Log4Net1211.2.1.1\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
@@ -127,6 +128,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging">
+      <HintPath>..\..\_libBinary\EnterpriseLibrary.ExceptionHandling.Logging.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging">
+      <HintPath>..\..\_libBinary\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\_libBinary\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -190,6 +197,7 @@
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">
       <Link>Properties\Dictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -210,6 +218,7 @@
     <Compile Include="Common\Adapters\ServiceStackCredentialsAuthAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\UnitOfWorkAttribute.cs" />
     <Compile Include="Common\Adapters\ServiceStackContainerAdapter.cs" />
     <Compile Include="Configuration\ApiContainerExtension.cs" />

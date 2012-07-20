@@ -24,6 +24,8 @@
     {
         #region Fields
 
+        public const string DeletePolicy = "Persistence.Delete";
+
         private readonly FlushMode flushMode;
 
         private readonly string connectionName;
@@ -161,7 +163,7 @@
 
             var builder = new ConfigurationSourceBuilder();
             builder.ConfigureExceptionHandling()
-                   .GivenPolicyWithName("Persistence.Delete")
+                   .GivenPolicyWithName(DeletePolicy)
                    .ForExceptionType<Exception>()
                         .ThenNotifyRethrow()
                    .ForExceptionType<NHibernate.Exceptions.ConstraintViolationException>()

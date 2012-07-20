@@ -34,7 +34,7 @@
                 }
 
                 filterContext.ExceptionHandled = true;
-
+                
                 filterContext.Result = new ViewResult
                     {
                         // if view is not defined - use action name by default
