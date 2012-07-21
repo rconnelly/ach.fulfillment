@@ -31,14 +31,13 @@ namespace Ach.Fulfillment.Web.Common.Controllers
                 var httpCode = exc.GetHttpCode();
                 if (httpCode == 404)
                 {
-                    Log.Error(exc.Message, exc);
+                    Log.Error("Cannot instantiate mvc controller.", exc);
 
                     controller = base.GetControllerInstance(requestContext, typeof(ErrorController));
 
                     requestContext.RouteData.Values.Clear();
 
                     RouteHelper.InitErrorRoute(httpCode, requestContext.RouteData);
-
                 }
                 else
                 {

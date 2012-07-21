@@ -17,8 +17,9 @@
             return this.View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [AllowAnonymous]
+        [BusinessValidationFilter]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
             if (this.ModelState.IsValid)
@@ -49,7 +50,6 @@
         public ActionResult Index()
         {
             this.ViewBag.Message = "Modify this template to kick-start your ASP.NET MVC application.";
-
             return this.View();
         }
 

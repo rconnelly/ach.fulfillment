@@ -10,14 +10,14 @@
         {
             this.Response.StatusCode = (int)HttpStatusCode.NotFound;
             
-            return this.View("Error404");
+            return this.View();
         }
 
         public ActionResult Error403()
         {
             this.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
-            return this.View("Error403");
+            return this.View();
         }
     }
 }
