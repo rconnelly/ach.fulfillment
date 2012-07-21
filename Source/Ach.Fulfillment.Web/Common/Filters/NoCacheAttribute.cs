@@ -4,7 +4,7 @@
     using System.Web;
     using System.Web.Mvc;
 
-    public class NoCacheAttribute : ActionFilterAttribute
+    internal class NoCacheAttribute : ActionFilterAttribute
     {
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {

@@ -66,7 +66,7 @@
         #endregion
 
         #region Nested types
-
+        // ReSharper disable UnusedParameter.Local
         internal class BusinessValidationHandler : IExceptionHandler
         {
             public BusinessValidationHandler(NameValueCollection collection)
@@ -79,7 +79,7 @@
                 return result;
             }
         }
-
+        // ReSharper restore UnusedParameter.Local
         #endregion
     }
 }

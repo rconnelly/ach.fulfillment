@@ -10,7 +10,7 @@
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     // we could use Controller.OnException but I havn't found the way how to know what view is being rendered if it's not the same as action
-    public class BusinessValidationFilterAttribute : ActionFilterAttribute
+    internal class BusinessValidationFilterAttribute : ActionFilterAttribute
     {
         private readonly string view;
 

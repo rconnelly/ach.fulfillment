@@ -6,7 +6,7 @@ namespace Ach.Fulfillment.Web.Common.Data
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Data;
 
-    public static class PrincipalSessionExtender
+    internal static class PrincipalSessionExtender
     {
         public static PrincipalSession Convert(this UserEntity user)
         {

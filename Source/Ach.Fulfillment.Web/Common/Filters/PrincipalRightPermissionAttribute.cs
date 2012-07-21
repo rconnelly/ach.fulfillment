@@ -11,7 +11,7 @@
     using Ach.Fulfillment.Data;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
-    public class PrincipalRightPermissionAttribute : AuthorizeAttribute
+    internal class PrincipalRightPermissionAttribute : AuthorizeAttribute
     {
         #region Constants and Fields
 

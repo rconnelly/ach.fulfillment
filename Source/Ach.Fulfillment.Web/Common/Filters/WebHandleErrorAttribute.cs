@@ -10,7 +10,7 @@ namespace Ach.Fulfillment.Web.Common.Filters
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
-    public class WebHandleErrorAttribute : HandleErrorAttribute
+    internal class WebHandleErrorAttribute : HandleErrorAttribute
     {
         public override void OnException(ExceptionContext filterContext)
         {

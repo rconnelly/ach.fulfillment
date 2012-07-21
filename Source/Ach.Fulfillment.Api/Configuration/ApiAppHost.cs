@@ -12,7 +12,6 @@ namespace Ach.Fulfillment.Api.Configuration
     using ServiceStack.ServiceInterface.Auth;
     using ServiceStack.WebHost.Endpoints;
 
-    // todo: read validation - https://github.com/ServiceStack/ServiceStack/wiki/Validation
     internal class ApiAppHost : AppHostBase
     {
         #region Constants and Fields

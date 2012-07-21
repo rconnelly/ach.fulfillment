@@ -9,7 +9,7 @@ namespace Ach.Fulfillment.Web.Common.Controllers
 
     using global::Common.Logging;
 
-    public class CustomControllerFactory : DefaultControllerFactory
+    internal class CustomControllerFactory : DefaultControllerFactory
     {
         #region Constants and Fields
 
