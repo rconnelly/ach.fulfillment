@@ -115,6 +115,7 @@
 
                         if (user != null && user.UserPasswordCredential != null)
                         {
+                            // TODO: should not user be placed to cache with sliding expiration or absolute expiration with timeout correlated with forms auth timeout
                             session = user.Convert();
                         }
                     }
