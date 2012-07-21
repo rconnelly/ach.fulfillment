@@ -14,18 +14,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectToPublish Include="Ach.Fulfillment.Web.Azure\Ach.Fulfillment.Web.Azure.ccproj">
-            <TargetProfile>$(CloudTargetProfile)</TargetProfile>
-            <Path>Web</Path>
-        </ProjectToPublish>
-        <ProjectToPublish Include="Ach.Fulfillment.Api.Azure\Ach.Fulfillment.Api.Azure.ccproj">
-            <TargetProfile>$(CloudTargetProfile)</TargetProfile>
-            <Path>Api</Path>
-        </ProjectToPublish>
-        <ProjectToPublish Include="Ach.Fulfillment.Service.Azure\Ach.Fulfillment.Service.Azure.ccproj">
-            <TargetProfile>$(CloudTargetProfile)</TargetProfile>
-            <Path>Service</Path>
-        </ProjectToPublish>
+        <ProjectToPackage Include="Ach.Fulfillment.Web\Ach.Fulfillment.Web.csproj">
+            <Path>Packages</Path>
+        </ProjectToPackage>
+        <ProjectToPackage Include="Ach.Fulfillment.Api\Ach.Fulfillment.Api.csproj">
+            <Path>Packages</Path>
+        </ProjectToPackage>
+
         <FileToPublish Include="Database\crebas.sql">
             <Path>Database</Path>
         </FileToPublish>
