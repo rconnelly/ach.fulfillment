@@ -24,7 +24,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         public long CreateUser(UserModel model)
         {
             PartnerEntity partner = null;
-            if(model.PartnerId.HasValue)
+            if (model.PartnerId.HasValue)
             {
                 partner = this.PartnerManager.Load(model.PartnerId.Value);
             }

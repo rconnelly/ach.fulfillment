@@ -4,6 +4,5 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
     public class PartnerController : Controller<PartnerManager>
     {
-
     }
 }
