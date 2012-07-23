@@ -6,18 +6,28 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
 
+    using Lib.Web.Mvc.JQuery.JqGrid;
+
     public class UserController : Controller<UserManager>
     {
-        public ActionResult Index()
+        public ActionResult List()
         {
             return this.View();
+        }
+
+        [HttpPost]
+        public ActionResult List(JqGridRequest request)
+        {
+            var model = this.Manager.GetUsersGridModel(request);
+
+            return model;
         }
 
         public ActionResult Create()
         {
             var model = this.Manager.GetCreateModel();
 
-            return this.View("UserCreate", model);
+            return this.View(model);
         }
 
         [BusinessValidationFilter("UserCreate")]
@@ -31,7 +41,14 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            return this.View("UserCreate", model);
+            return this.View(model);
+        }
+
+        public ActionResult Edit(long id)
+        {
+            var model = this.Manager.GetEditModel(id);
+
+            return this.View(model);
         }
 
         /*

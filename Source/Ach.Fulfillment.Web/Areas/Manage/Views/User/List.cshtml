@@ -1,0 +1,38 @@
+﻿@using Ach.Fulfillment.Web.Areas.Manage.Models
+
+@{
+    ViewBag.Title = "Users List";
+}
+
+
+<h2>User list</h2>
+
+@{
+    var grid = new Lib.Web.Mvc.JQuery.JqGrid.JqGridHelper<UserGridModel>("users",
+        dataType: Lib.Web.Mvc.JQuery.JqGrid.JqGridDataTypes.Json,
+        methodType: Lib.Web.Mvc.JQuery.JqGrid.JqGridMethodTypes.Post,
+        pager: true,
+        rowsNumber: 10,
+        sortingName: "Name",
+        sortingOrder: Lib.Web.Mvc.JQuery.JqGrid.JqGridSortingOrders.Asc,
+        url: Url.Action("List"),
+        viewRecords: true,
+        width: 800
+      );
+}
+
+@grid.GetHtml()
+
+<p>
+@Html.ActionLink("Create", "Create", "User")
+</p>
+
+@section scripts {
+    @Scripts.Render("~/bundles/iqgrid")
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @grid.GetJavaScript()
+          });
+    </script>
+}

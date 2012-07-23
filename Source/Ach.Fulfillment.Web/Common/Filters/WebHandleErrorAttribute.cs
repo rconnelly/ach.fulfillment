@@ -8,8 +8,6 @@ namespace Ach.Fulfillment.Web.Common.Filters
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Web.Configuration;
 
-    using global::Common.Logging;
-
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     internal class WebHandleErrorAttribute : HandleErrorAttribute
     {

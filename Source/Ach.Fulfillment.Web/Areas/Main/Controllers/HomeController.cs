@@ -1,5 +1,6 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Main.Controllers
 {
+    using System.Web;
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Data;
@@ -13,6 +14,8 @@
         public ActionResult Login(string returnUrl)
         {
             this.ViewBag.ReturnUrl = returnUrl;
+
+            new HttpException(501, "ddd");
 
             return this.View();
         }

@@ -6,7 +6,7 @@
         <title>@ViewBag.Title - ACH Fulfllment</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        @Styles.Render("~/Content/themes/base/css", "~/Content/bootstrap/css", "~/Content/css")
+        @Styles.Render("~/Content/themes/base/css", "~/Content/bootstrap/css", "~/Content/css", "~/Content/jqgrid")
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -25,7 +25,7 @@
                         <div class="nav-collapse">
                             <ul class="nav">
                                 <li @Html.ActiveItem("Home", "Index")>@Html.ActionLink("Home", "Index", "Home", new { area = "Main" }, null)</li>
-                                <li @Html.ActiveItem("User", "Index")>@Html.ActionLink("Manage", "Index", "User", new { area = "Manage" }, null)</li>
+                                <li @Html.ActiveItem("User", "Index")>@Html.ActionLink("Manage", "List", "User", new { area = "Manage" }, null)</li>
                                 <li @Html.ActiveItem("Home", "About")>@Html.ActionLink("About", "About", "Home", new { area = "Main" }, null)</li>
                                 <li @Html.ActiveItem("Home", "Contact")>@Html.ActionLink("Contact", "Contact", "Home", new { area = "Main" }, null)</li>
                             </ul>
