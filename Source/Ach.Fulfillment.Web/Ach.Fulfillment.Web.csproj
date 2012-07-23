@@ -368,6 +368,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Logs\Web.config" />
+    <None Include="Ach.Fulfillment.Web.wpp.targets" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
