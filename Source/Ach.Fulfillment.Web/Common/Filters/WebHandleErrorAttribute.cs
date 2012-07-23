@@ -13,8 +13,6 @@ namespace Ach.Fulfillment.Web.Common.Filters
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     internal class WebHandleErrorAttribute : HandleErrorAttribute
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         public override void OnException(ExceptionContext filterContext)
         {
             Contract.Assert(filterContext != null);
@@ -34,14 +32,14 @@ namespace Ach.Fulfillment.Web.Common.Filters
                 return;
             }
 
+            var handledException = exception.TransformException(WebContainerExtension.DefaultPolicy);
+
             // avoid showing death screen even for not 500 error in production
             if (new HttpException(null, exception).GetHttpCode() != 500)
             {
-                Log.Error("Server error has been occured while processing page", exception);
-
                 var controllerName = (string) filterContext.RouteData.Values["controller"];
                 var actionName = (string)filterContext.RouteData.Values["action"];
-                var model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
+                var model = new HandleErrorInfo(handledException, controllerName, actionName);
                 filterContext.Result = new ViewResult
                     {
                         // if view is not defined - use action name by default
@@ -53,7 +51,7 @@ namespace Ach.Fulfillment.Web.Common.Filters
                 return;
             }
 
-            filterContext.Exception = exception.TransformException(WebContainerExtension.DefaultPolicy);
+            filterContext.Exception = handledException;
 
             base.OnException(filterContext);
         }
