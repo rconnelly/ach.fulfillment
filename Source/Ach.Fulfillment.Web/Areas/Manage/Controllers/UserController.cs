@@ -1,12 +1,17 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Providers.Entities;
 
     using Ach.Fulfillment.Web.Areas.Manage.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
 
     using Lib.Web.Mvc.JQuery.JqGrid;
+
+    using Mvc.JQuery.Datatables;
 
     public class UserController : Controller<UserManager>
     {
@@ -19,6 +24,14 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         public ActionResult List(JqGridRequest request)
         {
             var model = this.Manager.GetUsersGridModel(request);
+
+            return model;
+        }
+
+        [HttpPost]
+        public DataTablesResult<UserGridModel> List2(DataTablesParam dataTableParam)
+        {
+            var model = this.Manager.GetUsersGridModel(dataTableParam);
 
             return model;
         }

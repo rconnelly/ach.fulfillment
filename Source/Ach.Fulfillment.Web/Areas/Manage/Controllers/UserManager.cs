@@ -16,6 +16,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
     using Microsoft.Practices.Unity;
 
+    using Mvc.JQuery.Datatables;
+
     public class UserManager
     {
         [Dependency]
@@ -61,6 +63,29 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             response.Records.AddRange(list);
 
             return new JqGridJsonResult() { Data = response };
+        }
+
+        public DataTablesResult<UserGridModel> GetUsersGridModel(DataTablesParam dataTableParam)
+        {
+            var enumerable = this.Manager.FindAll(new UserAll(true));
+
+            var users = new List<UserEntity>(enumerable);
+
+            var totalRecordsCount = users.Count();
+
+            var list = (from u in users
+                        select
+                                new UserGridModel
+                                {
+                                    Id = u.Id,
+                                    Name = u.Name,
+                                    Email = u.Email,
+                                    Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
+                                });
+
+            IQueryable<UserGridModel> q = new EnumerableQuery<UserGridModel>(list);
+
+            return DataTablesResult.Create(q, dataTableParam);
         }
 
         public long CreateUser(UserModel model)
