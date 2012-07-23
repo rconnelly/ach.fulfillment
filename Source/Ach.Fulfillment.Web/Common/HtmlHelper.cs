@@ -5,8 +5,17 @@ namespace Ach.Fulfillment.Web.Common
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using Ach.Fulfillment.Common.Configuration;
+
     public static class HtmlHelperExtended
     {
+        public static MvcHtmlString ApplicationVersion<TModel>(this HtmlHelper<TModel> html)
+        {
+            var version = typeof(HtmlHelperExtended).Assembly.EffectiveVersion();
+            
+            return MvcHtmlString.Create(version);
+        }
+
         public static MvcHtmlString RequiredLabelFor<TModel, TValue>(this HtmlHelper<TModel> html, System.Linq.Expressions.Expression<Func<TModel, TValue>> expression)
         {
             var label = html.LabelFor(expression);

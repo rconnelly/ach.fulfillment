@@ -1,6 +1,9 @@
 namespace Ach.Fulfillment.Api.Configuration
 {
+    using System.Globalization;
+
     using Ach.Fulfillment.Api.Common.Adapters;
+    using Ach.Fulfillment.Common.Configuration;
 
     using Funq;
 
@@ -23,7 +26,9 @@ namespace Ach.Fulfillment.Api.Configuration
         #region Constructors and Destructors
 
         public ApiAppHost(IUnityContainer unityContainer)
-            : base("Fulfillment Web Services", typeof(ApiAppHost).Assembly)
+            : base(
+            string.Format(CultureInfo.InvariantCulture, "Fulfillment Web Services {0}", typeof(ApiAppHost).Assembly.EffectiveVersion()), 
+            typeof(ApiAppHost).Assembly)
         {
             this.unityContainer = unityContainer;
             LogManager.LogFactory = new ServiceStackLogFactoryAdapter();

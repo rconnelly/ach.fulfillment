@@ -13,6 +13,12 @@
             Include="$(SolutionRoot)\Ach.Fulfillment.sln" />
     </ItemGroup>
 
+     <ItemGroup>
+        <BeforePackSubstitutionFiles Include="Ach.Fulfillment.Api.Web.config">
+            <ContentFile>Ach.Fulfillment.Api\Web.config</ContentFile>
+        </BeforePackSubstitutionFiles>
+    </ItemGroup>
+    
     <ItemGroup>
         <ProjectToPackage Include="Ach.Fulfillment.Web\Ach.Fulfillment.Web.csproj">
             <Path>Packages</Path>

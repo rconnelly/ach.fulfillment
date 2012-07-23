@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-
-namespace Ach.Fulfillment.Service
+﻿namespace Ach.Fulfillment.Service
 {
+    using System.ServiceProcess;
+
     public partial class FulfillmentService : ServiceBase
     {
+        #region Constructors and Destructors
+
         public FulfillmentService()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
+
+        #endregion
+
+        #region Methods
 
         protected override void OnStart(string[] args)
         {
@@ -23,5 +22,7 @@ namespace Ach.Fulfillment.Service
         protected override void OnStop()
         {
         }
+
+        #endregion
     }
 }

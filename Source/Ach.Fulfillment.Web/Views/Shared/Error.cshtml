@@ -8,9 +8,7 @@
     <h3 class="error">@Model.Exception.Message</h3>
 </hgroup>
 
-@{
-#if DEBUG        
-}
+@if(@HttpContext.Current.IsDebuggingEnabled){
 
 <hr/>
 
@@ -20,7 +18,5 @@
     <pre style="font-size: 1.2em">@Model.Exception.ToString()</pre>
 </div>
 
-@{    
-#endif 
 }
     

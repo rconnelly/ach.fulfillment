@@ -10,9 +10,6 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         public void Override(AutoMapping<RoleEntity> mapping)
         {
             mapping.HasMany(i => i.Permissions)
-                //.Table("Permission")
-                //.AsSet()
-                //.KeyColumn("RoleId")
                 .Inverse()
                 .LazyLoad()
                 .Cascade.All();
