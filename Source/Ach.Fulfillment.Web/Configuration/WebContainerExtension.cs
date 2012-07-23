@@ -55,7 +55,7 @@
                             .WithSeverity(TraceEventType.Critical)
                             .UsingExceptionFormatter<TextExceptionFormatter>()
                         .WrapWith<Exception>()
-                            .UsingMessage("An error has occurred while consuming this service. Please contact your administrator for more information. [Error ID: {handlingInstanceID}]")
+                            .UsingMessage("An error has occurred while processing request. Please contact your administrator for more information. [Error ID: {handlingInstanceID}]")
                         .ThenThrowNewException();
             builder.UpdateConfigurationWithReplace(configurationSource);
 

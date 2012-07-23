@@ -5,13 +5,16 @@ namespace Ach.Fulfillment.Web.Common.Filters
     using System.Web;
     using System.Web.Mvc;
 
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Web.Configuration;
 
-    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+    using global::Common.Logging;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     internal class WebHandleErrorAttribute : HandleErrorAttribute
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         public override void OnException(ExceptionContext filterContext)
         {
             Contract.Assert(filterContext != null);
@@ -26,35 +29,33 @@ namespace Ach.Fulfillment.Web.Common.Filters
             }
 
             var exception = filterContext.Exception;
-            if (new HttpException(null, exception).GetHttpCode() != 500)
-            {
-                return;
-            }
-
             if (!this.ExceptionType.IsInstanceOfType(exception))
             {
                 return;
             }
 
-            filterContext.Exception = TransformException(exception);
-
-            base.OnException(filterContext);
-        }
-
-        private static Exception TransformException(Exception ex)
-        {
-            var exceptionToProcess = ex;
-            if (ex != null)
+            // avoid showing death screen even for not 500 error in production
+            if (new HttpException(null, exception).GetHttpCode() != 500)
             {
-                Exception exceptionToThrow;
-                var rethrow = ExceptionPolicy.HandleException(ex, WebContainerExtension.DefaultPolicy, out exceptionToThrow);
-                if (rethrow && exceptionToThrow != null)
-                {
-                    exceptionToProcess = exceptionToThrow;
-                }
+                Log.Error("Server error has been occured while processing page", exception);
+
+                var controllerName = (string) filterContext.RouteData.Values["controller"];
+                var actionName = (string)filterContext.RouteData.Values["action"];
+                var model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
+                filterContext.Result = new ViewResult
+                    {
+                        // if view is not defined - use action name by default
+                        ViewName = "Error",
+                        ViewData = new ViewDataDictionary(model)
+                    };
+                filterContext.ExceptionHandled = true;
+
+                return;
             }
 
-            return exceptionToProcess;
+            filterContext.Exception = exception.TransformException(WebContainerExtension.DefaultPolicy);
+
+            base.OnException(filterContext);
         }
     }
 }

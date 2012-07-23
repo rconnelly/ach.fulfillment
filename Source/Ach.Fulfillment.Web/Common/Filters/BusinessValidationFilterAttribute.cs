@@ -1,13 +1,11 @@
 ﻿namespace Ach.Fulfillment.Web.Common.Filters
 {
-    using System;
     using System.Linq;
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Web.Configuration;
-
-    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     // we could use Controller.OnException but I havn't found the way how to know what view is being rendered if it's not the same as action
     internal class BusinessValidationFilterAttribute : ActionFilterAttribute
@@ -26,7 +24,7 @@
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var transformedException = TransformException(filterContext.Exception);
+            var transformedException = filterContext.Exception.TransformException(WebContainerExtension.ValidationPolicy);
             var exception = transformedException as BusinessValidationException;
             if (exception != null)
             {
@@ -44,22 +42,6 @@
                         ViewData = filterContext.Controller.ViewData
                     };
             }
-        }
-
-        private static Exception TransformException(Exception ex)
-        {
-            var exceptionToProcess = ex;
-            if (ex != null)
-            {
-                Exception exceptionToThrow;
-                var rethrow = ExceptionPolicy.HandleException(ex, WebContainerExtension.ValidationPolicy, out exceptionToThrow);
-                if (rethrow && exceptionToThrow != null)
-                {
-                    exceptionToProcess = exceptionToThrow;
-                }
-            }
-
-            return exceptionToProcess;
         }
 
         private static void FillModelState(ModelStateDictionary modelStateDictionary, BusinessValidationException exception)

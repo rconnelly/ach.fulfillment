@@ -224,7 +224,6 @@
     <Compile Include="Common\Adapters\ServiceStackCredentialsAuthAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\UnitOfWorkAttribute.cs" />
     <Compile Include="Common\Adapters\ServiceStackContainerAdapter.cs" />
     <Compile Include="Configuration\ApiContainerExtension.cs" />
