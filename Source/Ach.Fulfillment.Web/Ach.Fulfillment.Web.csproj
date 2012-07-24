@@ -155,8 +155,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -262,6 +266,7 @@
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
+    <Compile Include="Common\Binders\DataTablesModelBinder.cs" />
     <Compile Include="Common\Data\PrincipalSession.cs" />
     <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
     <Compile Include="Common\Filters\BusinessValidationFilterAttribute.cs" />
@@ -282,6 +287,10 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ApiContext.cs" />
+    <Compile Include="Services\ClientApi.svc.cs">
+      <DependentUpon>ClientApi.svc</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -395,6 +404,7 @@
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
     <Content Include="Scripts\site.bootstrap.validate.js" />
+    <Content Include="Services\ClientApi.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

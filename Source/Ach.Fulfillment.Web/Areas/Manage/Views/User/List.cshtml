@@ -36,6 +36,7 @@
     <thead>
         <tr>
             <th>User Name</th>
+            <th>User Name</th>
             <th>Login</th>
             <th>Email</th>
         </tr>
@@ -44,11 +45,36 @@
     </tbody>
 </table>
 
+<div>
+    <input id="test" type="button" value="test"/>
+    <input id="test2" type="button" value="test"/>
+
+</div>
+
 @section scripts {
     @Scripts.Render("~/bundles/iqgrid")
     @Scripts.Render("~/bundles/datatables")
     
     <script type="text/javascript">
+        
+        /*odata*/
+        $(document).ready(function() {
+            var link = "/Services/ClientApi.svc/Users?$filter=startswith(Name,'Mrs')";
+            $('#test').click(function() {
+                $.ajax({
+                    url: link,
+                    dataType: "json",
+                    error: function(xhr, ts, e) {
+                        alert("error: " + JSON.stringify(xhr));
+                    },
+                    success: function(data, ts, xhr) {
+                        alert("succeed: " + JSON.stringify(data));
+                        alert(data.d[0]["Name"]);
+                    }
+                });
+            });
+        });
+        
         /* jqGrid */
         $(document).ready(function () {
             @grid.GetJavaScript()
@@ -73,6 +99,7 @@
                       } );
                     },
                 "aoColumns": [
+                                { "sName": "Id", "bVisible": false},
                                 { "sName": "UserName",
                                     "bSearchable": true,
                                     "bSortable": true,
