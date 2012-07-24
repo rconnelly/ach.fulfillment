@@ -26,11 +26,13 @@
         <ProjectToPackage Include="Ach.Fulfillment.Api\Ach.Fulfillment.Api.csproj">
             <Path>Packages</Path>
         </ProjectToPackage>
-
-        <FileToPublish Include="Database\crebas.sql">
-            <Path>Database</Path>
-        </FileToPublish>
-        <FileToPublish Include="Database\data\raw.sql">
+        <FileToPublish Include="Ach.Fulfillment.Migrations\bin\ECM7.Migrator.Console.exe;
+                                Ach.Fulfillment.Migrations\bin\ECM7.Common.dll;
+                                Ach.Fulfillment.Migrations\bin\ECM7.Migrator.dll;
+                                Ach.Fulfillment.Migrations\bin\ECM7.Migrator.Framework.dll;
+                                Ach.Fulfillment.Migrations\bin\log4net.dll;
+                                Ach.Fulfillment.Migrations\bin\ECM7.Migrator.Providers.SqlServer.dll;
+                                Ach.Fulfillment.Migrations\bin\Ach.Fulfillment.Migrations.dll">
             <Path>Database</Path>
         </FileToPublish>
     </ItemGroup>

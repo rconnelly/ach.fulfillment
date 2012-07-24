@@ -1,0 +1,1 @@
+ECM7.Migrator.Console SqlServer "Data Source=(local);Initial Catalog=Ach;Integrated Security=True" Ach.Fulfillment.Migrations.dll

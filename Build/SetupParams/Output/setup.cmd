@@ -18,13 +18,13 @@ set errorMessage=
 
 echo Setup Started...................................................
 
-rem    echo        DB Install Started.......................................
-rem    Database\Migrator.Console SqlServer "${DatabaseConnection}" Database\Ach.Migrations.dll
-rem        if %ERRORLEVEL% NEQ 0 (
-rem            set /A error=%error%+1
-rem            set errorMessage=%errorMessage% Cannot update database structure.
-rem        )
-rem    echo        .........................................DB Install Ended
+    echo        DB Install Started.......................................
+    Database\ECM7.Migrator.Console SqlServer "${DatabaseConnection}" Database\Ach.Fulfillment.Migrations.dll
+        if %ERRORLEVEL% NEQ 0 (
+            set /A error=%error%+1
+            set errorMessage=%errorMessage% Cannot update database structure.
+        )
+    echo        .........................................DB Install Ended
 
     echo        Site Install Started.....................................
     cmd /C Packages\Ach.Fulfillment.Web.deploy.cmd /Y %packageDest%

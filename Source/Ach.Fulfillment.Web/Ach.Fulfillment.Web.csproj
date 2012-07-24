@@ -525,7 +525,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Logs\Web.config" />
-    <None Include="Ach.Fulfillment.Web.wpp.targets" />
+    <None Include="Ach.Fulfillment.Web.wpp.targets">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Areas\Manage\Views\User\List.cshtml" />
     <Content Include="Areas\Manage\Views\User\Edit.cshtml" />
     <Content Include="Areas\Manage\Views\User\_userDetails.cshtml" />

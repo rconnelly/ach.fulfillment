@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
     <AfterAddIisSettingAndFileContentsToSourceManifest>
       DoSetAcl;
     </AfterAddIisSettingAndFileContentsToSourceManifest>
@@ -8,6 +9,7 @@
       DoSetParam;
     </AfterAddIisAndContentDeclareParametersItems>
     <AfterAddDeclareParametersItems/>
+    <OnBeforePackageUsingManifest>AddCustomSkipRules</OnBeforePackageUsingManifest>
   </PropertyGroup>
   <ItemGroup>
     <CustomDirAcl Include="Logs">
@@ -42,6 +44,22 @@
         <Priority>$(VsSetAclPriority)</Priority>
         <ExcludeFromSetParameter>True</ExcludeFromSetParameter>
       </MsDeployDeclareParameters>
+    </ItemGroup>
+  </Target>
+  <Target Name="AddCustomSkipRules">
+    <ItemGroup>
+      <MsDeploySkipRules Include="SkipDownloadsFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>.*\\Logs\\$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipDownloadsSubFolders">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>.*\\Logs\\.*$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
     </ItemGroup>
   </Target>
 </Project>

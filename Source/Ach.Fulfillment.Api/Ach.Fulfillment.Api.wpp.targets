@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <DeployManagedPipelineMode>Integrated</DeployManagedPipelineMode>
     <AfterAddIisSettingAndFileContentsToSourceManifest>
-      DoSetAcl;
+      DoSetAcl;MakeEmptyFolders;
     </AfterAddIisSettingAndFileContentsToSourceManifest>
     <AfterAddIisAndContentDeclareParametersItems>
       DoSetParam;
     </AfterAddIisAndContentDeclareParametersItems>
     <AfterAddDeclareParametersItems/>
+    <OnBeforePackageUsingManifest>AddCustomSkipRules</OnBeforePackageUsingManifest>
   </PropertyGroup>
   <ItemGroup>
     <CustomDirAcl Include="Logs">
@@ -42,6 +44,26 @@
         <Priority>$(VsSetAclPriority)</Priority>
         <ExcludeFromSetParameter>True</ExcludeFromSetParameter>
       </MsDeployDeclareParameters>
+    </ItemGroup>
+  </Target>
+  <Target Name="MakeEmptyFolders">
+    <Message Text="Adding empty folder to hold downloads" />
+    <MakeDir Directories="$(_MSDeployDirPath_FullPath)\Logs"/>
+  </Target>
+  <Target Name="AddCustomSkipRules">
+    <ItemGroup>
+      <MsDeploySkipRules Include="SkipDownloadsFolder">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>.*\\Logs\\$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
+      <MsDeploySkipRules Include="SkipDownloadsSubFolders">
+        <SkipAction>Delete</SkipAction>
+        <ObjectName>dirPath</ObjectName>
+        <AbsolutePath>.*\\Logs\\.*$</AbsolutePath>
+        <XPath></XPath>
+      </MsDeploySkipRules>
     </ItemGroup>
   </Target>
 </Project>

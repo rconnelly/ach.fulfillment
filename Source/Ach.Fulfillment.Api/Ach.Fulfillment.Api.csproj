@@ -238,8 +238,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ach.Fulfillment.Api.wpp.targets" />
-    <Content Include="Logs\empty.log" />
+    <None Include="Ach.Fulfillment.Api.wpp.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
