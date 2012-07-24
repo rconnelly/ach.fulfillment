@@ -2,21 +2,29 @@
 {
     using System;
     using System.Data;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     using ECM7.Migrator.Framework;
 
     public abstract class ResourcesSqlMigration : Migration
     {
+        #region Fields
+
+        private static readonly Regex CommentRegex = new Regex(@"(@(?:""[^""]*"")+|""(?:[^""\n\\]+|\\.)*""|'(?:[^'\n\\]+|\\.)*')|//.*|/\*(?s:.*?)\*/", RegexOptions.Compiled);
+
+        #endregion
+
         #region Properties
 
-        protected virtual string DefaultBatchSeparator
+        protected virtual string[] DefaultBatchSeparators
         {
-            get { return ";\r\n"; }
+            get { return new[] { ";\r\n", "\r\ngo" }; }
         }
 
         protected virtual int DefaultCommandTimeout
@@ -80,11 +88,11 @@
         {
             var queryDefinition = this.Query;
             Contract.Assert(!string.IsNullOrEmpty(queryDefinition));
-            var batchSeparator = this.GetBatchSeparator(queryDefinition);
+            var batchSeparators = this.GetBatchSeparator(queryDefinition);
             var timeout = this.GetTimeout(queryDefinition);
             var query = this.GetCoreQuery(queryDefinition);
-            var lines = query.Split(new[] { batchSeparator }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var command in lines.Select(Prepare))
+            var lines = query.Split(batchSeparators, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var command in lines.Select(Prepare).Where(s => !string.IsNullOrEmpty(s)))
             {
                 this.ExecuteNonQuery(command, timeout);
             }
@@ -93,7 +101,9 @@
         private static string Prepare(string line)
         {
             Contract.Assert(line != null);
-            return line.Replace("\r", string.Empty);
+            var result = line.Replace("\r", string.Empty);
+            result = CommentRegex.Replace(result, "$1");
+            return result.Trim(' ', '\r', '\n');
         }
 
         private long GetMigrationVersion()
@@ -113,11 +123,11 @@
         }
 
         // ReSharper disable UnusedParameter.Local
-        private string GetBatchSeparator(string queryDefinition)
+        private string[] GetBatchSeparator(string queryDefinition)
         // ReSharper restore UnusedParameter.Local
         {
             // todo: read batch separator
-            return this.DefaultBatchSeparator;
+            return this.DefaultBatchSeparators;
         }
 
         // ReSharper disable UnusedParameter.Local
