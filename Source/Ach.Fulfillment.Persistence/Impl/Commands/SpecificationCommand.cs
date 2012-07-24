@@ -4,6 +4,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
     using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
+
     using NHibernate.Linq;
 
     internal class SpecificationCommand<TResult> : CommandBase<ISpecification<TResult>, TResult>
@@ -40,7 +41,24 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
         private IQueryable<TResult> GetQuery(ISpecification<TResult> specification)
         {
-            return this.Session.Query<TResult>().Where(specification.IsSatisfiedBy());
+            IQueryable<TResult> result;
+
+            // we may add more specifications and if is not the best approach - consider something better
+            var pagedSpecification = specification as IPagedSpecification<TResult>;
+
+            if (pagedSpecification != null)
+            {
+                result = this.Session.Query<TResult>()
+                    .Skip(pagedSpecification.PageIndex * pagedSpecification.PageSize)
+                    .Take(pagedSpecification.PageSize)
+                    .Where(specification.IsSatisfiedBy());
+            }
+            else
+            {
+                result = this.Session.Query<TResult>().Where(specification.IsSatisfiedBy());
+            }
+
+            return result;
         }
     }
 }
