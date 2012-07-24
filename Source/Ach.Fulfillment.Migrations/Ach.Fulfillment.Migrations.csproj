@@ -13,7 +13,6 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
-    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -178,10 +177,10 @@ System.IO.File.AppendAllText(Output, string.Format(content, Namespace, Id));
     </Task>
   </UsingTask>
   <PropertyGroup>
-    <PreBuildEvent>copy $(SolutionDir)..\_libBinary\ECM7Migrator.2.6.0.0\tools $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)..\..\_libBinary\ECM7Migrator.2.6.0.0\tools $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
 </Project>

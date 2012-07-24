@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.IO;
