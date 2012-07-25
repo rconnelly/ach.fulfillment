@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Business.Impl
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Data;
@@ -42,6 +43,12 @@ namespace Ach.Fulfillment.Business.Impl
         {
             var instance = this.Repository.Load<T>(id);
             return instance;
+        }
+
+        public virtual int Count(IQueryData<T> queryData)
+        {
+            var count = this.Repository.Count<T>(queryData);
+            return count;
         }
 
         public virtual IEnumerable<T> FindAll(IQueryData<T> queryData)

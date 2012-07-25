@@ -14,6 +14,8 @@ namespace Ach.Fulfillment.Business
 
         IEnumerable<T> FindAll(IQueryData<T> queryData);
 
+        int Count(IQueryData<T> queryData);
+
         T FindOne(IQueryData<T> queryData);
 
         void Delete(T instance);
