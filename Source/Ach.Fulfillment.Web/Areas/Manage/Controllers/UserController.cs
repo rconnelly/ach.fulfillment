@@ -1,9 +1,6 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
-    using System.Web.Providers.Entities;
 
     using Ach.Fulfillment.Web.Areas.Manage.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
@@ -15,7 +12,9 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
     public class UserController : Controller<UserManager>
     {
-        public ActionResult List()
+        #region List
+
+        public ActionResult List(long? id)
         {
             return this.View();
         }
@@ -44,6 +43,10 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return model;
         }
 
+        #endregion List
+
+        #region Create
+
         public ActionResult Create()
         {
             var model = this.Manager.GetCreateModel();
@@ -51,19 +54,25 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return this.View(model);
         }
 
-        [BusinessValidationFilter("UserCreate")]
+        [BusinessValidationFilter]
         [HttpPost]
         public ActionResult Create(UserModel model)
         {
             if (this.ModelState.IsValid)
             {
-                this.Manager.CreateUser(model);
+                var id = this.Manager.CreateUser(model);
 
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("List", "User", new { id });
             }
+
+            this.Manager.FillUserModel(model);
 
             return this.View(model);
         }
+
+        #endregion Create
+
+        #region Edit
 
         public ActionResult Edit(long id)
         {
@@ -72,6 +81,24 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return this.View(model);
         }
 
+        [BusinessValidationFilter]
+        [HttpPost]
+        public ActionResult Edit(UserModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var id = this.Manager.EditUser(model);
+
+                return this.RedirectToAction("List", "User", new { id });
+            }
+
+            this.Manager.FillUserModel(model);
+
+            return this.View(model);
+        }
+
+        #endregion Edit
+        
         /*
          public ActionResult ChangePassword()
                 {

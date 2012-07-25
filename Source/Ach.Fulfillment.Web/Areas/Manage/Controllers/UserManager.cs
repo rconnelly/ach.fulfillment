@@ -8,6 +8,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
@@ -26,11 +27,25 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         [Dependency]
         public IPartnerManager PartnerManager { get; set; }
 
+        [Dependency]
+        public IRoleManager RoleManager { get; set; }
+
         public UserModel GetCreateModel()
         {
             var model = new UserModel();
 
+            this.FillUserModel(model);
+
             return model;
+        }
+
+        public void FillUserModel (UserModel model)
+        {
+            var partners = this.PartnerManager.FindAll(new PartnerAll());
+            var roles = this.RoleManager.FindAll(new RoleAll());
+
+            model.AvailablePartners = partners.ToDictionary(p => p.Id, p => p.Name);
+            model.AvailableRoles = roles.ToDictionary(p => p.Id, p => p.Name);
         }
 
         public JqGridJsonResult GetUsersGridModel (JqGridRequest request)
@@ -127,11 +142,14 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                 partner = this.PartnerManager.Load(model.PartnerId.Value);
             }
 
+            var role = this.RoleManager.Load(model.RoleId);
+
             var user = new UserEntity
                 {
                     Name = model.Name,
                     Email = model.Email,
-                    Partner = partner
+                    Partner = partner,
+                    Role = role
                 };
 
             this.Manager.Create(user, model.Login, model.Password);
@@ -145,12 +163,46 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             var model = new UserModel
                 {
+                    UserId = user.Id,
                     Name = user.Name,
                     Email = user.Email,
-                    Login = user.UserPasswordCredential != null ? user.UserPasswordCredential.Login : string.Empty,
+                    Login = user.UserPasswordCredential.Login,
+                    PartnerId = user.Partner != null ? user.Partner.Id : (long?)null,
+                    RoleId = user.Role.Id
                 };
 
+            this.FillUserModel(model);
+
             return model;
+        }
+
+        public long EditUser(UserModel model)
+        {
+            Contract.Assert(model.UserId.HasValue);
+
+            var user = this.Manager.Load(model.UserId.Value);
+            var role = this.RoleManager.Load(model.RoleId);
+
+            PartnerEntity partner = null;
+            if (model.PartnerId.HasValue)
+            {
+                partner = this.PartnerManager.Load(model.PartnerId.Value);
+            }
+
+            user.Name = model.Name;
+            user.Email = model.Email;
+            user.UserPasswordCredential.Login = model.Login;
+            user.Role = role;
+            user.Partner = partner;
+
+            using (var tx = new Transaction())
+            {
+                this.Manager.Update(user);
+
+                tx.Complete();
+            }
+
+            return user.Id;
         }
     }
 }

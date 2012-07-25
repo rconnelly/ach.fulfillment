@@ -4,14 +4,14 @@
     ViewBag.Title = "Edit User";
 }
 
-@using (Html.BeginForm("Create", "User", new {area = "Manage"})) {
+@using (Html.BeginForm("Edit", "User", new {area = "Manage"})) {
     <fieldset>
         <legend>Edit User</legend>
 
         @Html.Partial("_userDetails", this.Model)
 
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Update" />
             @Html.ActionLink("Back to List", "List", "User")
         </p>
     </fieldset>

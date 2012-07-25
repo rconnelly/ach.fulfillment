@@ -1,5 +1,7 @@
 ﻿@model Ach.Fulfillment.Web.Areas.Manage.Models.UserModel
 
+@Html.HiddenFor(model => model.UserId)
+
 <div class="editor-label">
     @Html.LabelFor(model => model.Name)
 </div>
@@ -16,6 +18,8 @@
     @Html.ValidationMessageFor(model => model.Login)
 </div>
 
+@if (!this.Model.UserId.HasValue)
+{
 <div class="editor-label">
     @Html.LabelFor(model => model.Password)
 </div>
@@ -23,6 +27,7 @@
     @Html.EditorFor(model => model.Password)
     @Html.ValidationMessageFor(model => model.Password)
 </div>
+}
 
 <div class="editor-label">
     @Html.LabelFor(model => model.Email)
@@ -36,8 +41,16 @@
     @Html.LabelFor(model => model.PartnerId)
 </div>
 <div class="editor-field">
-    @Html.EditorFor(model => model.PartnerId)
+    @Html.DropDownListFor(m => m.PartnerId, new SelectList(this.Model.AvailablePartners, "Key", "Value"), "<< empty >>")
     @Html.ValidationMessageFor(model => model.PartnerId)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.RoleId)
+</div>
+<div class="editor-field">
+    @Html.DropDownListFor(m => m.RoleId, new SelectList(this.Model.AvailableRoles, "Key", "Value"))
+    @Html.ValidationMessageFor(model => model.RoleId)
 </div>
 
 @Html.Partial("_errorSummary")
