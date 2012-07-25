@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.Linq;
 
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
@@ -94,6 +95,14 @@
             Contract.Assert(queryData != null);
             var command = this.ResolveCommand<T>(queryData);
             var result = command.FindAll(queryData);
+            return result;
+        }
+
+        public IQueryable<T> FindQuery<T>(IQueryData queryData)
+        {
+            Contract.Assert(queryData != null);
+            var command = this.ResolveCommand<T>(queryData);
+            var result = command.FindQuery(queryData);
             return result;
         }
 

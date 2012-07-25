@@ -11,6 +11,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
     {
         public override IEnumerable<TResult> FindAll(ISpecification<TResult> queryData)
         {
+            var query = this.FindQuery(queryData);
+            return query.ToList();
+        }
+
+        public override IQueryable<TResult> FindQuery(ISpecification<TResult> queryData)
+        {
             var query = this.GetQuery(queryData);
             var orderedSpecification = queryData as IOrderedSpecification<TResult>;
             if (orderedSpecification != null)
@@ -18,7 +24,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
                 query = orderedSpecification.Order(query);
             }
 
-            return query.ToList();
+            return query;
         }
 
         public override TResult FindOne(ISpecification<TResult> queryData)

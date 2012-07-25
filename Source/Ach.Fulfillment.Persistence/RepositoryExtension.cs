@@ -24,6 +24,12 @@ namespace Ach.Fulfillment.Data
             return repository.FindAll<T>(queryData);
         }
 
+        public static IEnumerable<T> FindQuery<T>(this IRepository repository, IQueryData<T> queryData)
+        {
+            Contract.Assert(repository != null);
+            return repository.FindQuery<T>(queryData);
+        }
+
         public static T FindOne<T>(this IRepository repository, IQueryData<T> queryData)
         {
             Contract.Assert(repository != null);

@@ -1,6 +1,7 @@
 ﻿namespace Ach.Fulfillment.Persistence
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
@@ -20,6 +21,8 @@
         int Count<T>(IQueryData queryData);
 
         IEnumerable<T> FindAll<T>(IQueryData queryData);
+
+        IQueryable<T> FindQuery<T>(IQueryData queryData);
 
         T FindOne<T>(IQueryData specification);
 
