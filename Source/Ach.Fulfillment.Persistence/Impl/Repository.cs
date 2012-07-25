@@ -1,7 +1,6 @@
 ﻿namespace Ach.Fulfillment.Persistence.Impl
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -90,19 +89,11 @@
             return this.ResolveCommand<T>(queryData).RowCount(queryData);
         }
 
-        public IEnumerable<T> FindAll<T>(IQueryData queryData)
+        public IQueryable<T> FindAll<T>(IQueryData queryData)
         {
             Contract.Assert(queryData != null);
             var command = this.ResolveCommand<T>(queryData);
             var result = command.FindAll(queryData);
-            return result;
-        }
-
-        public IQueryable<T> FindQuery<T>(IQueryData queryData)
-        {
-            Contract.Assert(queryData != null);
-            var command = this.ResolveCommand<T>(queryData);
-            var result = command.FindQuery(queryData);
             return result;
         }
 

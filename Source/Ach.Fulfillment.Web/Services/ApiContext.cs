@@ -42,8 +42,8 @@ namespace Ach.Fulfillment.Web.Services
             {
                 if (this.users == null)
                 {
-                    // var list = this.UserManager.FindAll(new UserPaged(5, 10));
-                    var list = this.UserManager.FindQuery(new UserAll());
+                    // var list = this.UserManager.FindAll(new UserPaged(0, 20));
+                    var list = this.UserManager.FindAll(new UserAll());
                     this.users = (from u in list
                                   select
                                       new UserGridModel
@@ -51,10 +51,7 @@ namespace Ach.Fulfillment.Web.Services
                                               Id = (int)u.Id,
                                               Name = u.Name,
                                               Email = u.Email,
-                                              /*Login =
-                                                  u.UserPasswordCredential != null
-                                                      ? u.UserPasswordCredential.Login
-                                                      : string.Empty*/
+                                              Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
                                           }).AsQueryable();
                 }
 

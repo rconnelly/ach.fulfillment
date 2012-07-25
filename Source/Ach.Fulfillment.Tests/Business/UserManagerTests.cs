@@ -126,11 +126,12 @@ namespace Ach.Fulfillment.Tests.Business
             Trace.WriteLine(ex.Message);
         }
 
-        [Test]
+
+        [Test(Description = "If manager returns IQueryable UI may perform request which our data layer can not proceed. If FindAll returns IQueryable - test failed")]
         public void QueryableUiTest()
         {
             var manager = this.Locator.GetInstance<IUserManager>();
-            var query = manager.FindQuery(new UserAll());
+            var query = manager.FindAll(new UserAll());
 
             var queryUi = (from u in query
                            select new {

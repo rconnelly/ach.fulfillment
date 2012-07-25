@@ -1,7 +1,6 @@
 namespace Ach.Fulfillment.Business
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
 
@@ -14,8 +13,6 @@ namespace Ach.Fulfillment.Business
         T Load(long id);
 
         IEnumerable<T> FindAll(IQueryData<T> queryData);
-
-        IQueryable<T> FindQuery(IQueryData<T> queryData);
 
         T FindOne(IQueryData<T> queryData);
 

@@ -9,13 +9,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
     internal class SpecificationCommand<TResult> : CommandBase<ISpecification<TResult>, TResult>
     {
-        public override IEnumerable<TResult> FindAll(ISpecification<TResult> queryData)
-        {
-            var query = this.FindQuery(queryData);
-            return query.ToList();
-        }
-
-        public override IQueryable<TResult> FindQuery(ISpecification<TResult> queryData)
+        public override IQueryable<TResult> FindAll(ISpecification<TResult> queryData)
         {
             var query = this.GetQuery(queryData);
             var orderedSpecification = queryData as IOrderedSpecification<TResult>;

@@ -1,13 +1,13 @@
 namespace Ach.Fulfillment.Persistence.Impl.Commands
 {
-    using System.Collections.Generic;
+    using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
 
     internal interface IQueryRepositoryCommand<in TQueryData, out TResult> : IQueryRepositoryCommand<TResult>
         where TQueryData : IQueryData
     {
-        IEnumerable<TResult> FindAll(TQueryData queryData);
+        IQueryable<TResult> FindAll(TQueryData queryData);
 
         TResult FindOne(TQueryData queryData);
 

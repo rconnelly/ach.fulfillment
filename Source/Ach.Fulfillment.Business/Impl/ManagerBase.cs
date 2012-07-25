@@ -1,7 +1,6 @@
 namespace Ach.Fulfillment.Business.Impl
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Data;
@@ -48,12 +47,6 @@ namespace Ach.Fulfillment.Business.Impl
         public virtual IEnumerable<T> FindAll(IQueryData<T> queryData)
         {
             var result = this.Repository.FindAll<T>(queryData);
-            return result;
-        }
-
-        public virtual IQueryable<T> FindQuery(IQueryData<T> queryData)
-        {
-            var result = this.Repository.FindQuery<T>(queryData);
             return result;
         }
 
