@@ -12,7 +12,7 @@
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">Security</li>
-                <li @Html.ActiveItem("User", "Index")>@Html.ActionLink("Users", "Index", "User", new { area = "Manage" }, null)</li>
+                <li @Html.ActiveItem("User", "Index")>@Html.ActionLink("Users", "List", "User", new { area = "Manage" }, null)</li>
                 <li><a href="#">Roles</a></li>
                 <li><a href="#">Permissions</a></li>
                 <li class="nav-header">Partner management</li>
