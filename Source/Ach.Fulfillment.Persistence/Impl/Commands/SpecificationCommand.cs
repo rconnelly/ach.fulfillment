@@ -1,6 +1,5 @@
 namespace Ach.Fulfillment.Persistence.Impl.Commands
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
@@ -44,14 +43,19 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
             IQueryable<TResult> result;
 
             // we may add more specifications and if is not the best approach - consider something better
-            var pagedSpecification = specification as IPagedSpecification<TResult>;
+            var pagedSpecification = specification as ISpecificationPaged<TResult>;
 
             if (pagedSpecification != null)
             {
                 result = this.Session.Query<TResult>()
                     .Skip(pagedSpecification.PageIndex * pagedSpecification.PageSize)
                     .Take(pagedSpecification.PageSize)
-                    .Where(specification.IsSatisfiedBy());
+                    .Where(specification.IsSatisfiedBy()); 
+
+                var count = this.Session.Query<TResult>().Where(specification.IsSatisfiedBy()).Count();
+
+                // get count here to make sure we use the same query for paging and for counting
+                pagedSpecification.TotalRecords = count;
             }
             else
             {

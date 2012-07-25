@@ -6,7 +6,7 @@ namespace Ach.Fulfillment.Data.Specifications
 
     using Ach.Fulfillment.Data.Common;
 
-    public class UserPaged : SpecificationBase<UserEntity>, IPagedSpecification<UserEntity>, IOrderedSpecification<UserEntity>
+    public class UserPaged : SpecificationPagedBase<UserEntity>, IOrderedSpecification<UserEntity>
     {
         private readonly bool withDeleted;
 
@@ -16,10 +16,6 @@ namespace Ach.Fulfillment.Data.Specifications
             this.PageSize = pageSize;
             this.withDeleted = withDeleted;
         }
-
-        public int PageIndex { get; private set; }
-
-        public int PageSize { get; private set; }
 
         public override Expression<Func<UserEntity, bool>> IsSatisfiedBy()
         {

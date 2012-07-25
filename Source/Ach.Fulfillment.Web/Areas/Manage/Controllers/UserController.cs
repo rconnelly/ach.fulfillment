@@ -29,9 +29,17 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         }
 
         [HttpPost]
-        public DataTablesResult<UserGridModel> List2(DataTablesParam dataTableParam)
+        public DataTablesResult List2(DataTablesParam dataTableParam)
         {
             var model = this.Manager.GetUsersGridModel(dataTableParam);
+
+            return model;
+        }
+
+        [HttpPost]
+        public DataTablesResult List3(DataTablesParam dataTableParam)
+        {
+            var model = this.Manager.GetUsersGridModel2(dataTableParam);
 
             return model;
         }

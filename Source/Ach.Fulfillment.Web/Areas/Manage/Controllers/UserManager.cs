@@ -2,8 +2,10 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
+    using System.Web.Mvc;
 
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Data;
@@ -62,25 +64,59 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return new JqGridJsonResult { Data = response };
         }
 
-        public DataTablesResult<UserGridModel> GetUsersGridModel(DataTablesParam dataTableParam)
+        public DataTablesResult GetUsersGridModel(DataTablesParam dataTableParam)
         {
-            var enumerable = this.Manager.FindAll(new UserAll(true));
+            Contract.Assert(dataTableParam != null);
+            Contract.Assert(dataTableParam.iDisplayLength != 0);
 
-            var users = new List<UserEntity>(enumerable);
+            var pageIndex = dataTableParam.iDisplayStart / dataTableParam.iDisplayLength;
+            var queryData = new UserPaged(pageIndex, dataTableParam.iDisplayLength);
 
-            var list = (from u in users
+            var query = this.Manager.FindAll(queryData);
+
+            var list = (from u in query
                         select
-                                new UserGridModel
+                                new []
                                 {
-                                    Id = u.Id,
-                                    Name = u.Name,
-                                    Email = u.Email,
-                                    Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
-                                });
+                                    u.Id.ToString(CultureInfo.InvariantCulture),
+                                    u.Name,
+                                    u.Email,
+                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
+                                }).ToArray();
 
-            var q = new EnumerableQuery<UserGridModel>(list);
+            // TODO (AS) replace 3rd party wrapper with own one if we use database side paging 
+            var result = new DataTablesResult
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.DenyGet,
+                    Data = new DataTablesData
+                        {
+                            iTotalRecords = list.Count(),
+                            iTotalDisplayRecords = queryData.TotalRecords, 
+                            sEcho = dataTableParam.sEcho, 
+                            aaData = list
+                        }
+                };
 
-            return DataTablesResult.Create(q, dataTableParam);
+            return result;
+        }
+
+        public DataTablesResult<UserGridModel> GetUsersGridModel2(DataTablesParam dataTableParam)
+        {
+            Contract.Assert(dataTableParam != null);
+            Contract.Assert(dataTableParam.iDisplayLength != 0);
+
+            var list = this.Manager.FindAll(new UserAll());
+
+            var query = (from u in list
+                         select new UserGridModel
+                                 {
+                                     Id = u.Id,
+                                     Name = u.Name,
+                                     Email = u.Email,
+                                     Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
+                                 }).AsQueryable();
+
+            return DataTablesResult.Create(query, dataTableParam);
         }
 
         public long CreateUser(UserModel model)

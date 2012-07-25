@@ -1,9 +1,11 @@
 namespace Ach.Fulfillment.Data.Common
 {
-    public interface IPagedSpecification<T> : ISpecification<T>
+    public interface ISpecificationPaged<T> : ISpecification<T>
     {
         int PageIndex { get; }
 
         int PageSize { get; }
+
+        int TotalRecords { get; set; }
     }
 }
