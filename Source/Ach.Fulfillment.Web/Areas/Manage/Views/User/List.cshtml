@@ -10,7 +10,7 @@
 
 <h2>User list</h2>
 
-@{
+@*@{
     var grid = new Lib.Web.Mvc.JQuery.JqGrid.JqGridHelper<UserGridModel>("users",
         dataType: Lib.Web.Mvc.JQuery.JqGrid.JqGridDataTypes.Json,
         methodType: Lib.Web.Mvc.JQuery.JqGrid.JqGridMethodTypes.Post,
@@ -24,11 +24,15 @@
       );
 }
 
-@grid.GetHtml()
+@grid.GetHtml()*@
 
-<p>
-    @Html.ActionLink("Create", "Create", "User")
-</p>
+<hr />
+
+<div class="btn-toolbar">
+    <div class="btn-group">
+        @Html.ActionLink("New User", "Create", "User", new { @class = "btn btn-large" })
+     </div>
+</div>
 
 <hr />
 
@@ -45,11 +49,11 @@
     </tbody>
 </table>
 
-<div>
+@*<div>
     <input id="test" type="button" value="test"/>
     <input id="test2" type="button" value="test"/>
 
-</div>
+</div>*@
 
 @section scripts {
     @Scripts.Render("~/bundles/iqgrid")
@@ -77,7 +81,7 @@
         
         /* jqGrid */
         $(document).ready(function () {
-            @grid.GetJavaScript()
+            @*@grid.GetJavaScript()*@
           });
         
         /* datatables*/
