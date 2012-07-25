@@ -23,13 +23,6 @@
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/iqgrid").Include(
-                "~/Scripts/i18n/grid.locale-en.js",
-                "~/Scripts/jquery.jqGrid.min.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
-                "~/Scripts/DataTables-1.9.2/media/js/jquery.dataTables.min.js"));
-
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                 "~/Content/themes/base/jquery.ui.core.css",
                 "~/Content/themes/base/jquery.ui.resizable.css",
@@ -51,12 +44,22 @@
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/site.css"));
 
+            /* jqGrid */
+            bundles.Add(new ScriptBundle("~/bundles/iqgrid").Include(
+                "~/Scripts/i18n/grid.locale-en.js",
+                "~/Scripts/jquery.jqGrid.min.js"));
+
             bundles.Add(new StyleBundle("~/Content/jqgrid").Include(
                 "~/Content/jquery.jqGrid/ui.jqgrid.css"));
 
+            /* datatables */
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                "~/Scripts/jquery.dataTables-1.9.2.min.js",
+                "~/Scripts/jquery.dataTables-1.9.2.paging.js"));
+
             bundles.Add(new StyleBundle("~/Content/datatables").Include(
-                "~/Content/DataTables-1.9.2/media/css/jquery.dataTables.css",
-                "~/Content/DataTables-1.9.2/media/css/jquery.dataTables.fix.css"));
+                 "~/Content/jquery.datatables-1.9.2/css/jquery.dataTables.css",
+                 "~/Content/jquery.datatables-1.9.2/css/jquery.dataTables.bootstrapper.css"));
         }
     }
 }

@@ -2,9 +2,9 @@
 namespace Ach.Fulfillment.Data
 // ReSharper restore CheckNamespace
 {
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
+    using System.Linq;
 
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Data.Common;
@@ -18,7 +18,7 @@ namespace Ach.Fulfillment.Data
             return repository.Count<T>(queryData);
         }
 
-        public static IEnumerable<T> FindAll<T>(this IRepository repository, IQueryData<T> queryData)
+        public static IQueryable<T> FindAll<T>(this IRepository repository, IQueryData<T> queryData)
         {
             Contract.Assert(repository != null);
             return repository.FindAll<T>(queryData);

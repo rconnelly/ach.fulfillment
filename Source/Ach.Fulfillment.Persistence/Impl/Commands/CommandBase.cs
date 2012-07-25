@@ -1,6 +1,6 @@
 namespace Ach.Fulfillment.Persistence.Impl.Commands
 {
-    using System.Collections.Generic;
+    using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
 
@@ -20,7 +20,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
         #region Public Methods and Operators
 
-        public abstract IEnumerable<TResult> FindAll(TQueryData queryData);
+        public abstract IQueryable<TResult> FindAll(TQueryData queryData);
         
         public abstract TResult FindOne(TQueryData queryData);
 
@@ -30,7 +30,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
         #region Explicit Interface Methods
 
-        IEnumerable<TResult> IQueryRepositoryCommand<TResult>.FindAll(IQueryData queryData)
+        IQueryable<TResult> IQueryRepositoryCommand<TResult>.FindAll(IQueryData queryData)
         {
             return this.FindAll((TQueryData)queryData);
         }

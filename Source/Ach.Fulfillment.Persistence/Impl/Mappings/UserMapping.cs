@@ -13,8 +13,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         public void Override(AutoMapping<UserEntity> mapping)
         {
             mapping.Table("[User]");
-            mapping.HasMany(Reveal.Member<UserEntity, IEnumerable<UserPasswordCredentialEntity>>("userPasswordCredentials"))
-                .LazyLoad().Cascade.AllDeleteOrphan().Inverse();
+            mapping
+                .HasMany(Reveal.Member<UserEntity, IEnumerable<UserPasswordCredentialEntity>>("userPasswordCredentials"))
+                .LazyLoad()
+                .Cascade.AllDeleteOrphan()
+                .Fetch.Join() // use this to avoid running separate query because we always need it
+                .Inverse();
             mapping.HasManyToMany(Reveal.Member<UserEntity, IEnumerable<PartnerEntity>>("partners"))
                 .LazyLoad().Table("PartnerUser");
             mapping.IgnoreProperty(i => i.Partner);

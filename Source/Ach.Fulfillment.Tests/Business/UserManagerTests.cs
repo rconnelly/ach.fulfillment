@@ -9,6 +9,7 @@ namespace Ach.Fulfillment.Tests.Business
     using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Specifications;
 
     using FluentNHibernate.Testing;
 
@@ -123,6 +124,25 @@ namespace Ach.Fulfillment.Tests.Business
             user = manager.Load(user.Id);
             var ex = Assert.Throws<BusinessValidationException>(() => manager.ChangePassword(user, "password"));
             Trace.WriteLine(ex.Message);
+        }
+
+
+        [Test(Description = "If manager returns IQueryable UI may perform request which our data layer can not proceed. If FindAll returns IQueryable - test failed")]
+        public void QueryableUiTest()
+        {
+            var manager = this.Locator.GetInstance<IUserManager>();
+            var query = manager.FindAll(new UserAll());
+
+            var queryUi = (from u in query
+                           select new {
+                                       u.Name,
+                                       Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
+                                   });
+
+            foreach (var user in queryUi.Where(u => u.Login.StartsWith("w")))
+            {
+                Trace.WriteLine("User: " + user.Name + ". Login: " + user.Login);
+            }
         }
 
         private UserEntity CreateUser(

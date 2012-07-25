@@ -1,11 +1,14 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Models
 {
     using System.ComponentModel;
+    using System.Data.Services.Common;
+    using System.ServiceModel;
     using System.Web.Mvc;
 
     using Lib.Web.Mvc.JQuery.JqGrid;
     using Lib.Web.Mvc.JQuery.JqGrid.DataAnnotations;
 
+    [DataServiceKey("Id")]
     public class UserGridModel
     {
         [HiddenInput]
@@ -29,4 +32,16 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
         [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
         public string Email { get; set; }
     }
+
+    /*[DataServiceKey("Id")]
+    public class UserGridModel
+    {
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Login { get; set; }
+
+        public string Email { get; set; }
+    }*/
 }

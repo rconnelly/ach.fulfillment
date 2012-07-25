@@ -10,8 +10,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
 
-    using AutoMapper;
-
     using Lib.Web.Mvc.JQuery.JqGrid;
 
     using Microsoft.Practices.Unity;
@@ -35,7 +33,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
         public JqGridJsonResult GetUsersGridModel (JqGridRequest request)
         {
-            // TODO change FindAll return type
             var enumerable = this.Manager.FindAll(new UserAll(true));
 
             var users = new List<UserEntity>(enumerable);
@@ -62,7 +59,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             response.Records.AddRange(list);
 
-            return new JqGridJsonResult() { Data = response };
+            return new JqGridJsonResult { Data = response };
         }
 
         public DataTablesResult<UserGridModel> GetUsersGridModel(DataTablesParam dataTableParam)
@@ -70,8 +67,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             var enumerable = this.Manager.FindAll(new UserAll(true));
 
             var users = new List<UserEntity>(enumerable);
-
-            var totalRecordsCount = users.Count();
 
             var list = (from u in users
                         select
@@ -83,7 +78,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                                     Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
                                 });
 
-            IQueryable<UserGridModel> q = new EnumerableQuery<UserGridModel>(list);
+            var q = new EnumerableQuery<UserGridModel>(list);
 
             return DataTablesResult.Create(q, dataTableParam);
         }
