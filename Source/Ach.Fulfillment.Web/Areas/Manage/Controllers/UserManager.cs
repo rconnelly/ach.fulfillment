@@ -88,6 +88,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             var queryData = new UserPaged(pageIndex, dataTableParam.iDisplayLength);
 
             var query = this.Manager.FindAll(queryData);
+            var count = this.Manager.Count(queryData);
 
             var list = (from u in query
                         select
@@ -99,14 +100,13 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                                     u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
                                 }).ToArray();
 
-            // TODO (AS) replace 3rd party wrapper with own one if we use database side paging 
             var result = new DataTablesResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
                     Data = new DataTablesData
                         {
-                            iTotalRecords = list.Count(),
-                            iTotalDisplayRecords = queryData.TotalRecords, 
+                            iTotalRecords = dataTableParam.iDisplayLength,
+                            iTotalDisplayRecords = count,
                             sEcho = dataTableParam.sEcho, 
                             aaData = list
                         }

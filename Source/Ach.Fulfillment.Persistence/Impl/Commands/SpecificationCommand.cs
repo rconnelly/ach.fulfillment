@@ -32,9 +32,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
             return query.FirstOrDefault();
         }
 
-        public override int RowCount(ISpecification<TResult> queryData)
+        public override int RowCount(ISpecification<TResult> specification)
         {
-            var query = this.GetQuery(queryData);
+            var pagedSpecification = specification as ISpecificationPaged<TResult>;
+
+            var query = pagedSpecification != null ? this.GetBaseQuery(specification) : this.GetQuery(specification);
+
             return query.Count();
         }
 
@@ -51,17 +54,19 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
                     .Skip(pagedSpecification.PageIndex * pagedSpecification.PageSize)
                     .Take(pagedSpecification.PageSize)
                     .Where(specification.IsSatisfiedBy()); 
-
-                var count = this.Session.Query<TResult>().Where(specification.IsSatisfiedBy()).Count();
-
-                // get count here to make sure we use the same query for paging and for counting
-                pagedSpecification.TotalRecords = count;
             }
             else
             {
-                result = this.Session.Query<TResult>().Where(specification.IsSatisfiedBy());
+                result = this.GetBaseQuery(specification);
             }
 
+            return result;
+        }
+
+        private IQueryable<TResult> GetBaseQuery(ISpecification<TResult> specification)
+        {
+            var result = this.Session.Query<TResult>().Where(specification.IsSatisfiedBy());
+            
             return result;
         }
     }

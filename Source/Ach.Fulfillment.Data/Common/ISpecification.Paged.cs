@@ -5,7 +5,5 @@ namespace Ach.Fulfillment.Data.Common
         int PageIndex { get; }
 
         int PageSize { get; }
-
-        int TotalRecords { get; set; }
     }
 }
