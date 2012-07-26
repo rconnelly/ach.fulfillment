@@ -6,7 +6,6 @@
     using System.Globalization;
     using System.Runtime.Caching;
     using System.Security.Principal;
-    using System.Text.RegularExpressions;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Optimization;
@@ -102,17 +101,17 @@
         private IPrincipal GetPrincipal()
         {
             IPrincipal principal = ApplicationPrincipal.Anonymous;
-            if (this.IsPrincipalRequired())
+            var authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
             {
-                var cookieName = FormsAuthentication.FormsCookieName;
-                var authCookie = HttpContext.Current.Request.Cookies[cookieName];
-                if (authCookie != null)
+                var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+                if (!authTicket.Expired)
                 {
-                    var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
                     var login = authTicket.Name;
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
-                    var session = cache.Get(login) as PrincipalSession;
 
+                    // TODO: if we going to use login as cache key we should not allow to change login?!
+                    var session = cache.Get(login) as PrincipalSession;
                     if (session == null)
                     {
                         var manager = ServiceLocator.Current.GetInstance<IUserManager>();
@@ -121,8 +120,10 @@
                         if (user != null && user.UserPasswordCredential != null)
                         {
                             session = user.Convert();
-
-                            cache.Add(login, session, new CacheItemPolicy { SlidingExpiration = new TimeSpan(0, 0, 60) });
+                            cache.Add(
+                                login, 
+                                session, 
+                                new CacheItemPolicy { SlidingExpiration = new TimeSpan(0, 0, 60) });
                         }
                     }
 
@@ -134,13 +135,6 @@
             }
 
             return principal;
-        }
-
-        private bool IsPrincipalRequired()
-        {
-            var regEx = new Regex(Properties.Settings.Default.SkipPrincipalPattern);
-            var path = this.Context.Request.Url.AbsolutePath;
-            return !regEx.IsMatch(path);
         }
 
         private void HandleCustomErrors(Exception exception)

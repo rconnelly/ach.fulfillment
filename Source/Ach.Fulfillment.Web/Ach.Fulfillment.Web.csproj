@@ -276,7 +276,6 @@
     <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\Filters\BusinessValidationFilterAttribute.cs" />
     <Compile Include="Common\Filters\WebHandleErrorAttribute.cs" />
-    <Compile Include="Common\ObjectCacheHelper.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
     <Compile Include="Common\Controllers\CustomControllerFactory.cs" />
     <Compile Include="Common\Filters\NoCacheAttribute.cs" />
