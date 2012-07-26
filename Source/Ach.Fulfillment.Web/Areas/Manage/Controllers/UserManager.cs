@@ -166,7 +166,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                     UserId = user.Id,
                     Name = user.Name,
                     Email = user.Email,
-                    Login = user.UserPasswordCredential.Login,
+                    Login = user.UserPasswordCredential != null ? user.UserPasswordCredential.Login : string.Empty,
                     PartnerId = user.Partner != null ? user.Partner.Id : (long?)null,
                     RoleId = user.Role.Id
                 };

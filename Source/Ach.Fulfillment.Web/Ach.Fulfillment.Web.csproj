@@ -266,6 +266,7 @@
     <Compile Include="Areas\Manage\Controllers\UserController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserManager.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\PartnerGridModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
@@ -456,6 +457,10 @@
     <Content Include="Areas\Manage\Views\User\List.cshtml" />
     <Content Include="Areas\Manage\Views\User\Edit.cshtml" />
     <Content Include="Areas\Manage\Views\User\_userDetails.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\Create.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\Edit.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\List.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\_partnerDetails.cshtml" />
     <None Include="Content\jquery.datatables-1.9.2\images\Sorting icons.psd" />
     <None Include="packages.config" />
   </ItemGroup>

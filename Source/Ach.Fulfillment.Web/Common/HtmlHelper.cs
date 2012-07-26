@@ -1,6 +1,8 @@
 namespace Ach.Fulfillment.Web.Common
 {
     using System;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
@@ -33,6 +35,17 @@ namespace Ach.Fulfillment.Web.Common
             var currentAction = html.ViewContext.RouteData.GetRequiredString("action");
             var currentController = html.ViewContext.RouteData.GetRequiredString("controller");
             var result = controller == currentController && action == currentAction ? "class=\"active\"" : string.Empty;
+            return html.Raw(result);
+        }
+
+        public static IHtmlString ActiveController<TModel>(
+            this HtmlHelper<TModel> html,
+            params string[] controllers)
+        {
+            Contract.Assert(controllers != null);
+
+            var currentController = html.ViewContext.RouteData.GetRequiredString("controller");
+            var result = controllers.Any(c => c.Equals(currentController, StringComparison.InvariantCultureIgnoreCase)) ? "class=\"active\"" : string.Empty;
             return html.Raw(result);
         }
 
