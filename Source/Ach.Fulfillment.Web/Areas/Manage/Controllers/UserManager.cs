@@ -8,7 +8,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
@@ -40,7 +39,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return model;
         }
 
-        public void FillUserModel (UserModel model)
+        public void FillUserModel(UserModel model)
         {
             var partners = this.PartnerManager.FindAll(new PartnerAll());
             var roles = this.RoleManager.FindAll(new RoleAll());
@@ -49,7 +48,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             model.AvailableRoles = roles.ToDictionary(p => p.Id, p => p.Name);
         }
 
-        public JqGridJsonResult GetUsersGridModel (JqGridRequest request)
+        public JqGridJsonResult GetUsersGridModel(JqGridRequest request)
         {
             var enumerable = this.Manager.FindAll(new UserAll(true));
 
@@ -59,7 +58,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             var list = (from u in users
                         select
-                            new JqGridRecord<UserGridModel>(u.Id.ToString(CultureInfo.InvariantCulture), 
+                            new JqGridRecord<UserGridModel>(
+                                u.Id.ToString(CultureInfo.InvariantCulture), 
                                 new UserGridModel
                                 {
                                     Id = u.Id,
@@ -86,20 +86,19 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             Contract.Assert(dataTableParam.iDisplayLength != 0);
 
             var pageIndex = dataTableParam.iDisplayStart / dataTableParam.iDisplayLength;
-            var queryData = new UserPaged(pageIndex, dataTableParam.iDisplayLength);
+            var queryData = new UserAll { PageIndex = pageIndex, PageSize = dataTableParam.iDisplayLength };
 
             var query = this.Manager.FindAll(queryData);
             var count = this.Manager.Count(queryData);
 
             var list = (from u in query
-                        select
-                                new []
-                                {
+                        select new[] 
+                                { 
                                     u.Id.ToString(CultureInfo.InvariantCulture),
                                     u.Name,
                                     u.Email,
-                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
-                                }).ToArray();
+                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
+                                }).OfType<object>().ToArray();
 
             var result = new DataTablesResult
                 {
@@ -196,16 +195,13 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             user.Role = role;
             user.Partner = partner;
 
-            
-                using (var tx = new Transaction())
-                {
-                    this.Manager.Update(user);
+            using (var tx = new Transaction())
+            {
+                this.Manager.Update(user);
 
-                    tx.Complete();
-                }
+                tx.Complete();
+            }
             
-            
-
             return user.Id;
         }
     }

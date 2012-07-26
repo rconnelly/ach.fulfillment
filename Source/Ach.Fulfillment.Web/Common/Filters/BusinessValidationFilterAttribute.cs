@@ -22,28 +22,6 @@
             this.view = view;
         }
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            var transformedException = filterContext.Exception.TransformException(WebContainerExtension.ValidationPolicy);
-            var exception = transformedException as BusinessValidationException;
-            if (exception != null)
-            {
-                // put error into ViewData for custom handling - it's not used right now
-                filterContext.Controller.ViewData.Add("Error", exception.Errors);
-
-                FillModelState(filterContext.Controller.ViewData.ModelState, exception);
-
-                filterContext.ExceptionHandled = true;
-                filterContext.Result = new ViewResult
-                    {
-                        // if view is not defined - use action name by default
-                        ViewName = this.view ?? filterContext.RouteData.Values["action"].ToString(),
-                        TempData = filterContext.Controller.TempData,
-                        ViewData = filterContext.Controller.ViewData
-                    };
-            }
-        }
-
         // TODO (AS) temporary make it public
         public static void FillModelState(ModelStateDictionary modelStateDictionary, BusinessValidationException exception)
         {
@@ -63,6 +41,28 @@
             if (messages.Length > 0)
             {
                 modelStateDictionary.AddModelError(string.Empty, string.Join("\r\n", messages));
+            }
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            var transformedException = filterContext.Exception.TransformException(WebContainerExtension.ValidationPolicy);
+            var exception = transformedException as BusinessValidationException;
+            if (exception != null)
+            {
+                // put error into ViewData for custom handling - it's not used right now
+                filterContext.Controller.ViewData.Add("Error", exception.Errors);
+
+                FillModelState(filterContext.Controller.ViewData.ModelState, exception);
+
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = new ViewResult
+                    {
+                        // if view is not defined - use action name by default
+                        ViewName = this.view ?? filterContext.RouteData.Values["action"].ToString(),
+                        TempData = filterContext.Controller.TempData,
+                        ViewData = filterContext.Controller.ViewData
+                    };
             }
         }
     }
