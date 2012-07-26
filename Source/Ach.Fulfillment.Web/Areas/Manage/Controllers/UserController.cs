@@ -1,7 +1,9 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
+    using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
@@ -60,9 +62,16 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var id = this.Manager.CreateUser(model);
+                try
+                {
+                    var id = this.Manager.CreateUser(model);
 
-                return this.RedirectToAction("List", "User", new { id });
+                    return this.RedirectToAction("List", "User", new { id });
+                }
+                catch (BusinessValidationException exc)
+                {
+                    BusinessValidationFilterAttribute.FillModelState(this.ModelState, exc);
+                }
             }
 
             this.Manager.FillUserModel(model);
@@ -87,9 +96,16 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var id = this.Manager.EditUser(model);
+                try
+                {
+                    var id = this.Manager.EditUser(model);
 
-                return this.RedirectToAction("List", "User", new { id });
+                    return this.RedirectToAction("List", "User", new { id });
+                }
+                catch (BusinessValidationException exc)
+                {
+                    BusinessValidationFilterAttribute.FillModelState(this.ModelState, exc);
+                }
             }
 
             this.Manager.FillUserModel(model);

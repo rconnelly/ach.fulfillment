@@ -8,6 +8,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
@@ -195,12 +196,15 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             user.Role = role;
             user.Partner = partner;
 
-            using (var tx = new Transaction())
-            {
-                this.Manager.Update(user);
+            
+                using (var tx = new Transaction())
+                {
+                    this.Manager.Update(user);
 
-                tx.Complete();
-            }
+                    tx.Complete();
+                }
+            
+            
 
             return user.Id;
         }

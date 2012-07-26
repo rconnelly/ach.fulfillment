@@ -44,10 +44,13 @@
             }
         }
 
-        private static void FillModelState(ModelStateDictionary modelStateDictionary, BusinessValidationException exception)
+        // TODO (AS) temporary make it public
+        public static void FillModelState(ModelStateDictionary modelStateDictionary, BusinessValidationException exception)
         {
             var pairs = (from info in exception.Errors
-                         let key = !string.IsNullOrEmpty(info.PropertyName) ? info.PropertyName : info.ErrorCode
+                         let property = !string.IsNullOrEmpty(info.PropertyName) ? info.PropertyName : info.ErrorCode
+                         let index = property.LastIndexOf('.')
+                         let key = index > 0 && index < property.Length ? property.Substring(index + 1) : property
                          select new { key, info.ErrorMessage }).ToList();
 
             foreach (var p in pairs.Where(i => !string.IsNullOrEmpty(i.key)))
