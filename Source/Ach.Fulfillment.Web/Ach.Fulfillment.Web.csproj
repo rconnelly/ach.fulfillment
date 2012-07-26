@@ -273,6 +273,7 @@
     <Compile Include="Common\Binders\DataTablesModelBinder.cs" />
     <Compile Include="Common\Data\PrincipalSession.cs" />
     <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
+    <Compile Include="Common\ExceptionHelper.cs" />
     <Compile Include="Common\Filters\BusinessValidationFilterAttribute.cs" />
     <Compile Include="Common\Filters\WebHandleErrorAttribute.cs" />
     <Compile Include="Common\ObjectCacheHelper.cs" />

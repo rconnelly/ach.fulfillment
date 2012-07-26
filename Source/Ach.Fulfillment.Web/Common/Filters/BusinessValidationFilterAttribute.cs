@@ -1,6 +1,5 @@
 ﻿namespace Ach.Fulfillment.Web.Common.Filters
 {
-    using System.Linq;
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business.Exceptions;
@@ -22,28 +21,6 @@
             this.view = view;
         }
 
-        // TODO (AS) temporary make it public
-        public static void FillModelState(ModelStateDictionary modelStateDictionary, BusinessValidationException exception)
-        {
-            var pairs = (from info in exception.Errors
-                         let property = !string.IsNullOrEmpty(info.PropertyName) ? info.PropertyName : info.ErrorCode
-                         let index = property.LastIndexOf('.')
-                         let key = index > 0 && index < property.Length ? property.Substring(index + 1) : property
-                         select new { key, info.ErrorMessage }).ToList();
-
-            foreach (var p in pairs.Where(i => !string.IsNullOrEmpty(i.key)))
-            {
-                // try to match business property name and model property name
-                modelStateDictionary.AddModelError(p.key, p.ErrorMessage);
-            }
-
-            var messages = pairs.Where(i => string.IsNullOrEmpty(i.key)).Select(i => i.ErrorMessage).ToArray();
-            if (messages.Length > 0)
-            {
-                modelStateDictionary.AddModelError(string.Empty, string.Join("\r\n", messages));
-            }
-        }
-
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             var transformedException = filterContext.Exception.TransformException(WebContainerExtension.ValidationPolicy);
@@ -53,7 +30,7 @@
                 // put error into ViewData for custom handling - it's not used right now
                 filterContext.Controller.ViewData.Add("Error", exception.Errors);
 
-                FillModelState(filterContext.Controller.ViewData.ModelState, exception);
+                filterContext.Controller.ViewData.ModelState.FillFrom(exception);
 
                 filterContext.ExceptionHandled = true;
                 filterContext.Result = new ViewResult

@@ -1,10 +1,10 @@
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
-    using System;
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
+    using Ach.Fulfillment.Web.Common;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
 
@@ -70,7 +70,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                 }
                 catch (BusinessValidationException exc)
                 {
-                    BusinessValidationFilterAttribute.FillModelState(this.ModelState, exc);
+                    this.ModelState.FillFrom(exc);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                 }
                 catch (BusinessValidationException exc)
                 {
-                    BusinessValidationFilterAttribute.FillModelState(this.ModelState, exc);
+                    this.ModelState.FillFrom(exc);
                 }
             }
 
