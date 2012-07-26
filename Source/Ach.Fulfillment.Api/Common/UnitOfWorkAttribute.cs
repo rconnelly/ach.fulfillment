@@ -12,6 +12,8 @@ namespace Ach.Fulfillment.Api.Common
     using ServiceStack.ServiceHost;
     using ServiceStack.ServiceInterface;
 
+    using ApplicationIdentity = Ach.Fulfillment.Common.Security.ApplicationIdentity;
+
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     internal class UnitOfWorkAttribute : Attribute, IHasRequestFilter, IHasResponseFilter
     {
@@ -150,11 +152,11 @@ namespace Ach.Fulfillment.Api.Common
                     this.Transaction = new Transaction();
                 }
 
-                IApplicationPrincipal principal = null;
+                IApplicationPrincipal principal;
                 var session = this.req.GetSession();
                 if (session != null && session.IsAuthenticated)
                 {
-                    var identity = new Fulfillment.Common.Security.ApplicationIdentity(
+                    var identity = new ApplicationIdentity(
                         long.Parse(session.UserAuthId),
                         session.UserName, 
                         session.DisplayName,

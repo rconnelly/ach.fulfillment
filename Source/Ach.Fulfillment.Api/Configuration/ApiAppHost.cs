@@ -27,7 +27,7 @@ namespace Ach.Fulfillment.Api.Configuration
 
         public ApiAppHost(IUnityContainer unityContainer)
             : base(
-            string.Format(CultureInfo.InvariantCulture, "Fulfillment Web Services {0}", typeof(ApiAppHost).Assembly.EffectiveVersion()), 
+            string.Format(CultureInfo.InvariantCulture, "Ach.Fulfillment Web Services {0}", typeof(ApiAppHost).Assembly.EffectiveVersion()), 
             typeof(ApiAppHost).Assembly)
         {
             this.unityContainer = unityContainer;
