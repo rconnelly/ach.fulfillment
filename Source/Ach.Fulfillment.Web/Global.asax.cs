@@ -54,6 +54,7 @@
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             ModelBinders.Binders.Add(typeof(DataTablesParam), new DataTablesModelBinder());
+            MvcHandler.DisableMvcResponseHeader = true;
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
