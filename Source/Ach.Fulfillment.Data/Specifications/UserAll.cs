@@ -6,7 +6,7 @@ namespace Ach.Fulfillment.Data.Specifications
 
     using Ach.Fulfillment.Data.Common;
 
-    public class UserAll : SpecificationBase<UserEntity>, IOrderedSpecification<UserEntity>
+    public class UserAll : SpecificationBase<UserEntity>
     {
         private readonly bool withDeleted;
 
@@ -20,7 +20,7 @@ namespace Ach.Fulfillment.Data.Specifications
             return m => this.withDeleted || !m.Deleted;
         }
 
-        public IQueryable<UserEntity> Order(IQueryable<UserEntity> query)
+        public override IQueryable<UserEntity> Order(IQueryable<UserEntity> query)
         {
             return query.OrderBy(m => m.Created);
         }

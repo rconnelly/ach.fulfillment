@@ -76,7 +76,7 @@ namespace Ach.Fulfillment.Business.Impl
             Contract.Assert(login != null);
             Contract.Assert(password != null);
             UserEntity user = null;
-            var credential = this.Repository.FindOne<UserPasswordCredentialEntity>(new UserPasswordCredentialByLogin(login));
+            var credential = this.Repository.FindOne(new UserPasswordCredentialByLogin(login));
             if (credential != null)
             {
                 var saltedPassword = GetSaltedPassword(password, credential.PasswordSalt);
@@ -96,7 +96,7 @@ namespace Ach.Fulfillment.Business.Impl
         {
             Contract.Assert(login != null);
             UserEntity user = null;
-            var credential = this.Repository.FindOne<UserPasswordCredentialEntity>(new UserPasswordCredentialByLogin(login));
+            var credential = this.Repository.FindOne(new UserPasswordCredentialByLogin(login));
             if (credential != null && credential.User != null && (fetchDeleted || !credential.User.Deleted))
             {
                 user = credential.User;

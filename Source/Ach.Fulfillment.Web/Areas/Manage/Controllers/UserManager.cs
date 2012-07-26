@@ -33,7 +33,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return model;
         }
 
-        public JqGridJsonResult GetUsersGridModel (JqGridRequest request)
+        public JqGridJsonResult GetUsersGridModel(JqGridRequest request)
         {
             var enumerable = this.Manager.FindAll(new UserAll(true));
 
@@ -43,7 +43,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             var list = (from u in users
                         select
-                            new JqGridRecord<UserGridModel>(u.Id.ToString(CultureInfo.InvariantCulture), 
+                            new JqGridRecord<UserGridModel>(
+                                u.Id.ToString(CultureInfo.InvariantCulture), 
                                 new UserGridModel
                                 {
                                     Id = u.Id,
@@ -70,19 +71,24 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             Contract.Assert(dataTableParam.iDisplayLength != 0);
 
             var pageIndex = dataTableParam.iDisplayStart / dataTableParam.iDisplayLength;
-            var queryData = new UserPaged(pageIndex, dataTableParam.iDisplayLength);
+            var queryData = new UserAll
+                {
+                    PageIndex = pageIndex, 
+                    PageSize = dataTableParam.iDisplayLength
+                };
 
             var query = this.Manager.FindAll(queryData);
 
             var list = (from u in query
-                        select
-                                new []
-                                {
+                        select new[] 
+                                { 
                                     u.Id.ToString(CultureInfo.InvariantCulture),
                                     u.Name,
                                     u.Email,
-                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
-                                }).ToArray();
+                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
+                                }).OfType<object>().ToArray();
+
+            var count = this.Manager.Count(queryData);
 
             // TODO (AS) replace 3rd party wrapper with own one if we use database side paging 
             var result = new DataTablesResult
@@ -91,7 +97,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                     Data = new DataTablesData
                         {
                             iTotalRecords = list.Count(),
-                            iTotalDisplayRecords = queryData.TotalRecords, 
+                            iTotalDisplayRecords = count, 
                             sEcho = dataTableParam.sEcho, 
                             aaData = list
                         }

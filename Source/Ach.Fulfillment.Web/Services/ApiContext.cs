@@ -8,28 +8,32 @@ namespace Ach.Fulfillment.Web.Services
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
 
-    using Microsoft.Practices.Unity;
-
     using global::Common.Logging;
+
+    using Microsoft.Practices.Unity;
 
     public class ApiContext : IDisposable
     {
         #region Constants and Fields
 
-        private IQueryable<UserGridModel> users;
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly UnitOfWork unitOfWork;
 
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger(); 
+        private IQueryable<UserGridModel> users;
 
         #endregion
 
-        public ApiContext ()
+        #region Constructors and Destructors
+
+        public ApiContext()
         {
             Log.Debug("Creating ApiContext instance");
 
-            unitOfWork = new UnitOfWork();
+            this.unitOfWork = new UnitOfWork();
         }
+
+        #endregion
 
         #region Public Properties
 
@@ -48,10 +52,13 @@ namespace Ach.Fulfillment.Web.Services
                                   select
                                       new UserGridModel
                                           {
-                                              Id = (int)u.Id,
-                                              Name = u.Name,
-                                              Email = u.Email,
-                                              Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
+                                              Id = (int)u.Id, 
+                                              Name = u.Name, 
+                                              Email = u.Email, 
+                                              Login =
+                                                  u.UserPasswordCredential != null
+                                                      ? u.UserPasswordCredential.Login
+                                                      : string.Empty
                                           }).AsQueryable();
                 }
 
@@ -61,6 +68,8 @@ namespace Ach.Fulfillment.Web.Services
 
         #endregion
 
+        #region Public Methods and Operators
+
         public void Dispose()
         {
             Log.Debug("Disposing ApiContext");
@@ -68,15 +77,21 @@ namespace Ach.Fulfillment.Web.Services
             this.Dispose(true);
         }
 
-        protected virtual void Dispose (bool disposing)
+        #endregion
+
+        #region Methods
+
+        protected virtual void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
-                if(this.unitOfWork != null)
+                if (this.unitOfWork != null)
                 {
                     this.unitOfWork.Dispose();
                 }
             }
         }
+
+        #endregion
     }
 }

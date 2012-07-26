@@ -158,6 +158,7 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Impl\Commands\SpecificationExtension.cs" />
     <Compile Include="Impl\Mappings\PartnerMapping.cs" />
     <Compile Include="Impl\Mappings\PermissionMapping.cs" />
     <Compile Include="Impl\Mappings\RoleMapping.cs" />

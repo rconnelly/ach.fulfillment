@@ -128,10 +128,7 @@
       <DependentUpon>AccessRight.tt</DependentUpon>
     </Compile>
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="Common\ISpecification.Paged.cs" />
-    <Compile Include="Common\SpecificationPagedBase.cs" />
     <Compile Include="Specifications\UserAll.cs" />
-    <Compile Include="Specifications\UserPaged.cs" />
     <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />
     <Compile Include="Specifications\PartnerAll.cs" />
     <Compile Include="Specifications\PartnerUniqness.cs" />
@@ -150,8 +147,6 @@
     <Compile Include="Common\IQueryData.Instance.cs" />
     <Compile Include="RoleEntity.cs" />
     <Compile Include="Common\ISpecification.cs" />
-    <Compile Include="Common\ISpecification.Generic.cs" />
-    <Compile Include="Common\ISpecification.Ordered.cs" />
     <Compile Include="Common\SpecificationBase.cs" />
     <Compile Include="Common\SpecificationInstanceBase.cs" />
     <Compile Include="UserEntity.cs" />

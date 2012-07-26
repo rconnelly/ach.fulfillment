@@ -7,9 +7,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
     internal interface IQueryRepositoryCommand<in TQueryData, out TResult> : IQueryRepositoryCommand<TResult>
         where TQueryData : IQueryData
     {
-        IQueryable<TResult> FindAll(TQueryData queryData);
-
-        TResult FindOne(TQueryData queryData);
+        IQueryable<TResult> Execute(TQueryData queryData);
 
         int RowCount(TQueryData queryData);
     }

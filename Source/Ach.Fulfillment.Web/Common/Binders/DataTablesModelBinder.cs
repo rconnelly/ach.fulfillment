@@ -29,6 +29,7 @@
                 obj.iSortCol.Add(Convert.ToInt32(request["iSortCol_" + i]));
                 obj.sSortDir.Add(request["sSortDir_" + i]);
             }
+
             return obj;
         }
     }

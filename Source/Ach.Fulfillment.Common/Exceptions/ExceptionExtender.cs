@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Ach.Fulfillment.Common.Exceptions
+﻿namespace Ach.Fulfillment.Common.Exceptions
 {
+    using System;
     using System.Diagnostics.Contracts;
 
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;

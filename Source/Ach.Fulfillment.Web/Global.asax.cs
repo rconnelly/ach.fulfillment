@@ -23,11 +23,11 @@
     using Ach.Fulfillment.Web.Common.Data;
     using Ach.Fulfillment.Web.Configuration;
 
-    using Mvc.JQuery.Datatables;
-
     using global::Common.Logging;
 
     using Microsoft.Practices.ServiceLocation;
+
+    using Mvc.JQuery.Datatables;
 
     public class MvcApplication : HttpApplication
     {

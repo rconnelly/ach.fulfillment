@@ -20,7 +20,7 @@ namespace Ach.Fulfillment.Data.Specifications
             return m => this.withDisabled || !m.Disabled;
         }
 
-        public IQueryable<PartnerEntity> Order(IQueryable<PartnerEntity> query)
+        public override IQueryable<PartnerEntity> Order(IQueryable<PartnerEntity> query)
         {
             return query.OrderBy(m => m.Created);
         }

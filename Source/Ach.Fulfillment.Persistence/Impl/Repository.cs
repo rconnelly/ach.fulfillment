@@ -86,22 +86,16 @@
         public int Count<T>(IQueryData queryData)
         {
             Contract.Assert(queryData != null);
-            return this.ResolveCommand<T>(queryData).RowCount(queryData);
+            var command = this.ResolveCommand<T>(queryData);
+            var count = command.RowCount(queryData);
+            return count;
         }
 
-        public IQueryable<T> FindAll<T>(IQueryData queryData)
+        public IQueryable<T> Query<T>(IQueryData queryData)
         {
             Contract.Assert(queryData != null);
             var command = this.ResolveCommand<T>(queryData);
-            var result = command.FindAll(queryData);
-            return result;
-        }
-
-        public T FindOne<T>(IQueryData queryData)
-        {
-            Contract.Assert(queryData != null);
-            var command = this.ResolveCommand<T>(queryData);
-            var result = command.FindOne(queryData);
+            var result = command.Execute(queryData);
             return result;
         }
 

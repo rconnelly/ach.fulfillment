@@ -1,8 +1,7 @@
-﻿using System.Data.Services;
-using System.Data.Services.Common;
-
-namespace Ach.Fulfillment.Web.Services
+﻿namespace Ach.Fulfillment.Web.Services
 {
+    using System.Data.Services;
+    using System.Data.Services.Common;
     using System.Diagnostics.Contracts;
     using System.ServiceModel;
 
@@ -15,16 +14,6 @@ namespace Ach.Fulfillment.Web.Services
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class ClientApi : DataService<ApiContext>
     {
-        protected override ApiContext CreateDataSource()
-        {
-            var context = base.CreateDataSource();
-
-            var container = ServiceLocator.Current.GetInstance<IUnityContainer>();
-            container.BuildUp(context);
-
-            return context;
-        }
-
         public static void InitializeService(DataServiceConfiguration config)
         {
             config.SetEntitySetAccessRule("Users", EntitySetRights.AllRead);
@@ -39,6 +28,16 @@ namespace Ach.Fulfillment.Web.Services
             var handledException = args.Exception.TransformException(WebContainerExtension.DefaultPolicy);
 
             throw handledException;
+        }
+        
+        protected override ApiContext CreateDataSource()
+        {
+            var context = base.CreateDataSource();
+
+            var container = ServiceLocator.Current.GetInstance<IUnityContainer>();
+            container.BuildUp(context);
+
+            return context;
         }
     }
 }

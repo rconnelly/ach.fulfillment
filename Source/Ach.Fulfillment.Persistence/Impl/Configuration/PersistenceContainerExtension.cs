@@ -124,12 +124,12 @@
         private void RegisterCommands()
         {
             this
-                .ConfigureSelfAutoRegistration(typeof(ISpecification))
+                .ConfigureSelfAutoRegistration(typeof(ISpecification<>))
                 .Include(
                     t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.Name.EndsWith(WellKnownAppParts.Command),
                     Then.Register().As(t => this.CommandToContract(t)))
                 .Include(
-                    t => t.IsClass && t.ImplementsOpenGeneric(typeof(ISpecification<>)),
+                    t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.ImplementsOpenGeneric(typeof(ISpecification<>)),
                     this.RegisterSpecification)
                 .ApplyAutoRegistration();
         }

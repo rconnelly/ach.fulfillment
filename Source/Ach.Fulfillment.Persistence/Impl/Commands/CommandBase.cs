@@ -20,24 +20,17 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
         #region Public Methods and Operators
 
-        public abstract IQueryable<TResult> FindAll(TQueryData queryData);
+        public abstract IQueryable<TResult> Execute(TQueryData queryData);
         
-        public abstract TResult FindOne(TQueryData queryData);
-
         public abstract int RowCount(TQueryData queryData);
 
         #endregion
 
         #region Explicit Interface Methods
 
-        IQueryable<TResult> IQueryRepositoryCommand<TResult>.FindAll(IQueryData queryData)
+        IQueryable<TResult> IQueryRepositoryCommand<TResult>.Execute(IQueryData queryData)
         {
-            return this.FindAll((TQueryData)queryData);
-        }
-
-        TResult IQueryRepositoryCommand<TResult>.FindOne(IQueryData queryData)
-        {
-            return this.FindOne((TQueryData)queryData);
+            return this.Execute((TQueryData)queryData);
         }
 
         int IQueryRepositoryCommand<TResult>.RowCount(IQueryData queryData)

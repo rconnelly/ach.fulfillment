@@ -126,18 +126,18 @@ namespace Ach.Fulfillment.Tests.Business
             Trace.WriteLine(ex.Message);
         }
 
-
         [Test(Description = "If manager returns IQueryable UI may perform request which our data layer can not proceed. If FindAll returns IQueryable - test failed")]
         public void QueryableUiTest()
         {
             var manager = this.Locator.GetInstance<IUserManager>();
             var query = manager.FindAll(new UserAll());
 
-            var queryUi = (from u in query
-                           select new {
+            var queryUi = from u in query
+                           select new 
+                                   {
                                        u.Name,
                                        Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
-                                   });
+                                   };
 
             foreach (var user in queryUi.Where(u => u.Login.StartsWith("w")))
             {
@@ -149,14 +149,14 @@ namespace Ach.Fulfillment.Tests.Business
         public void PagerTest()
         {
             var manager = this.Locator.GetInstance<IUserManager>();
-            var query = manager.FindAll(new UserPaged(1, 10));
+            var query = manager.FindAll(new UserAll { PageIndex = 1, PageSize = 10 });
 
-            var queryUi = (from u in query
+            var queryUi = from u in query
                            select new
                            {
                                u.Name,
                                Login = u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
-                           });
+                           };
 
             Assert.That(query, Is.Not.Null);
             Assert.That(query.Any());

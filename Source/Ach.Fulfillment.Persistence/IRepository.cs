@@ -19,9 +19,7 @@
 
         int Count<T>(IQueryData queryData);
 
-        IQueryable<T> FindAll<T>(IQueryData queryData);
-
-        T FindOne<T>(IQueryData specification);
+        IQueryable<T> Query<T>(IQueryData queryData);
 
         void Flush(bool force = false);
     }

@@ -35,7 +35,7 @@ namespace Ach.Fulfillment.Web.Common.Filters
             // avoid showing death screen even for not 500 error in production
             if (new HttpException(null, exception).GetHttpCode() != 500)
             {
-                var controllerName = (string) filterContext.RouteData.Values["controller"];
+                var controllerName = (string)filterContext.RouteData.Values["controller"];
                 var actionName = (string)filterContext.RouteData.Values["action"];
                 var model = new HandleErrorInfo(handledException, controllerName, actionName);
                 filterContext.Result = new ViewResult
