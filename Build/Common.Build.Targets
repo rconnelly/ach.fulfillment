@@ -21,7 +21,7 @@
         <GlobalVersionInfoFile Condition="'$(GlobalVersionInfoFile)' == ''">$(SolutionRoot)\Common\GlobalVersionInfo.cs</GlobalVersionInfoFile>
         <DictionaryFile Condition="'$(DictionaryFile)' == ''">$(SolutionRoot)\Common\Dictionary.xml</DictionaryFile>
 
-        <ProductName Condition="'$(ProductName)' == ''">Ach</ProductName>
+        <ProductName Condition="'$(ProductName)' == ''">Product</ProductName>
         <ProductPrefix Condition="'$(ProductPrefix)' == ''">$(ProductName)</ProductPrefix>
         <BuildRevision Condition="'$(BuildRevision)' == ''">0</BuildRevision>
         <ProductVersion Condition="'$(ProductVersion)' == ''">1.0.0.$(BuildRevision)</ProductVersion>
@@ -44,8 +44,8 @@
         <ResetChangesAfterBuild Condition="'$(ResetChangesAfterBuild)' == ''">true</ResetChangesAfterBuild>
     </PropertyGroup>
 
-    <Import Project="Ach.Tasks.Targets" />
-    <Import Project="Ach.Tasks.Extra.Targets" />
+    <Import Project="Common.Tasks.Targets" />
+    <Import Project="Common.Tasks.Extra.Targets" />
 
     <Import Project="$(BuildTypeOverrideFile)"
         Condition="Exists('$(BuildTypeOverrideFile)')" />

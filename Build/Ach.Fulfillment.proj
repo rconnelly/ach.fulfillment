@@ -6,7 +6,7 @@
         <Platform>Any CPU</Platform>
     </PropertyGroup>
 
-    <Import Project="Ach.Build.Targets" />
+    <Import Project="Common.Build.Targets" />
 
     <ItemGroup>
         <CompileProjectList

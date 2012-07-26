@@ -91,4 +91,4 @@ Desktop.ini
 /Build/Assembly
 /Build/Metrics
 /Build/Publish
-/Build/Ach.Fulfillment.build.version
+/Build/*.build.version

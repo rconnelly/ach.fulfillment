@@ -72,7 +72,7 @@
             Source="$(Repository)" />
         <Message Text="----------------"/>
 
-        <Exec Command="$(MSBuildBinPath)\msbuild /p:ProjectRoot=$(ProjectRoot);ProductVersionFile=$(ProductVersionFile);Repository=$(Repository) Ach.Tasks.Extra.Targets" />
+        <Exec Command="$(MSBuildBinPath)\msbuild /p:ProjectRoot=$(ProjectRoot);ProductVersionFile=$(ProductVersionFile);Repository=$(Repository) Common.Tasks.Extra.Targets" />
             
     </Target>
     <!--///////////////////////////End Target IncrementBuildRepair/////////////////////////////////////////////////////////////////-->
