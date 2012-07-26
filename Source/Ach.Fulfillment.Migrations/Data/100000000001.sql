@@ -9,7 +9,7 @@ SET IDENTITY_INSERT [ach].[Permission] ON
 SET IDENTITY_INSERT [ach].[Permission] OFF
 
 SET IDENTITY_INSERT [ach].[Partner] ON
-	INSERT INTO [ach].[Partner] (PartnerId, Name, [Disabled], Created) values (1, 'PPS', 0, GetDate())
+	INSERT INTO [ach].[Partner] (PartnerId, Name, [Disabled], Created) values (1, 'Partner', 0, GetDate())
 SET IDENTITY_INSERT [ach].[Partner] OFF
 
 SET IDENTITY_INSERT [ach].[User] ON
@@ -18,8 +18,8 @@ SET IDENTITY_INSERT [ach].[User] ON
 SET IDENTITY_INSERT [ach].[User] OFF
 
 SET IDENTITY_INSERT [ach].[UserPasswordCredential] ON
-	INSERT INTO [ach].[UserPasswordCredential] (UserPasswordCredentialId, UserId, [Login], PasswordHash, PasswordSalt, Created) values (1, 1, 'ach', 'spfoYfPKWBvMv8Vk7ond80NGr/J6xP3mmmgkeQ/Cd/96poBQv05h7A==', 'lfeyTsixmrUjQgNPkXj1', GetDate())
-	INSERT INTO [ach].[UserPasswordCredential] (UserPasswordCredentialId, UserId, [Login], PasswordHash, PasswordSalt, Created) values (2, 2, 'wo', 'spfoYfPKWBvMv8Vk7ond80NGr/J6xP3mmmgkeQ/Cd/96poBQv05h7A==', 'lfeyTsixmrUjQgNPkXj1', GetDate())
+	INSERT INTO [ach].[UserPasswordCredential] (UserPasswordCredentialId, UserId, [Login], PasswordHash, PasswordSalt, Created) values (1, 1, 'admin', 'tzz372n5WtIAgY5SvSclpfUyaRuXoMpEgMiRnMptbf29iqGm1RVznw==', 'fMjtdJTx2XBLdpmDXWJV', GetDate())
+	INSERT INTO [ach].[UserPasswordCredential] (UserPasswordCredentialId, UserId, [Login], PasswordHash, PasswordSalt, Created) values (2, 2, 'super', 'kLtziaXFt7C7lVZN6LNRXj9lb+Ybhzc1/ymyNvfJm/ZjUltvXMxyyg==', '7CC5dg2d/sYexAMJ/k7+', GetDate())
 SET IDENTITY_INSERT [ach].[UserPasswordCredential] OFF
 
 SET IDENTITY_INSERT [ach].[PartnerUser] ON
