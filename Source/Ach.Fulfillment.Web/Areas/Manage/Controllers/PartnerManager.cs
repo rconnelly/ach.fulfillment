@@ -42,13 +42,14 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             Contract.Assert(dataTableParam != null);
             Contract.Assert(dataTableParam.iDisplayLength != 0);
 
-            var list = this.Manager.FindAll(new PartnerAll());
+            var list = this.Manager.FindAll(new PartnerAll(true));
 
-            var query = (from u in list
+            var query = (from entity in list
                          select new PartnerGridModel
                          {
-                             Id = u.Id,
-                             Name = u.Name
+                             Id = entity.Id,
+                             Name = entity.Name,
+                             Disabled = entity.Disabled
                          }).AsQueryable();
 
             return DataTablesResult.Create(query, dataTableParam);
@@ -56,7 +57,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
         public long CreatePartner(PartnerModel model)
         {
-            var partner = new PartnerEntity { Name = model.Name };
+            var partner = new PartnerEntity { Name = model.Name, Disabled = model.Disabled };
 
             this.Manager.Create(partner);
 
@@ -67,7 +68,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         {
             var partner = this.Manager.Load(id);
 
-            var model = new PartnerModel { PartnerId = partner.Id, Name = partner.Name };
+            var model = new PartnerModel { PartnerId = partner.Id, Name = partner.Name, Disabled = partner.Disabled };
 
             this.FillPartnerModel(model);
 
@@ -81,6 +82,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             var partner = this.Manager.Load(model.PartnerId.Value);
 
             partner.Name = model.Name;
+            partner.Disabled = model.Disabled;
 
             using (var tx = new Transaction())
             {

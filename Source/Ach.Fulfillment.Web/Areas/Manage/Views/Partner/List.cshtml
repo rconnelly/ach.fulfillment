@@ -3,7 +3,7 @@
 }
 
 @section styles{
-    @Styles.Render("~/Content/jqgrid", "~/Content/datatables")
+    @Styles.Render("~/Content/css/jqgrid", "~/Content/css/datatables")
 }
 
 <h2>Partners list</h2>
@@ -23,6 +23,7 @@
         <tr>
             <th>Partner ID</th>
             <th>Partner Name</th>
+            <th>Disabled</th>
         </tr>
     </thead>
     <tbody> 
@@ -61,6 +62,13 @@
                                     "bSortable": true,
                                     "fnRender": function (oObj) {
                                         return '<a href=\"/Manage/Partner/Edit/' + oObj.aData[0] + '\">' + oObj.aData[1] + '</a>';
+                                    }
+                                },
+                                { "sName": "Disabled",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "fnRender": function (oObj) {
+                                        return oObj.aData[2] == "True" ? 'Y' : 'N';
                                     }
                                 }
                             ]

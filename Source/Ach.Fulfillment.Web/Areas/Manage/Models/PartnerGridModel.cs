@@ -20,5 +20,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
         [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
         [JqGridColumnFormatter("'showlink'", BaseLinkUrl = "/Manage/Partner/Edit/", IdName = "Id")]
         public string Name { get; set; }
+
+        [JqGridColumnSortable(false)]
+        public bool Disabled { get; set; }
     }
 }

@@ -10,12 +10,10 @@
 
         @Html.Partial("_userDetails", this.Model)
         
-        <div class="btn-toolbar">
-            <div class="btn-group">
-                <input type="submit" value="Update" class="btn btn-large" />
-                @Html.ActionLink("Change Password", "List", "User", new { @class = "btn btn-large", onclick="return alert('not implemented yet');" })
-                @Html.ActionLink("Back to List", "List", "User", new { @class = "btn btn-large" })
-             </div>
+        <div class="form-actions btn-group">
+            <input type="submit" value="Update" class="btn btn-large btn-primary" />
+            @Html.ActionLink("Change Password", "List", "User", null, new { @class = "btn btn-large", onclick = "return alert('not implemented yet');" })
+            @Html.ActionLink("Back to List", "List", "User", null, new { @class = "btn btn-large" })
         </div>
     </fieldset>
 }

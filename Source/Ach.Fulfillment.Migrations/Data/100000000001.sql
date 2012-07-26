@@ -9,7 +9,7 @@ SET IDENTITY_INSERT [ach].[Permission] ON
 SET IDENTITY_INSERT [ach].[Permission] OFF
 
 SET IDENTITY_INSERT [ach].[Partner] ON
-	INSERT INTO [ach].[Partner] (PartnerId, Name, [Disabled], Created) values (1, 'PPS', 1, GetDate())
+	INSERT INTO [ach].[Partner] (PartnerId, Name, [Disabled], Created) values (1, 'PPS', 0, GetDate())
 SET IDENTITY_INSERT [ach].[Partner] OFF
 
 SET IDENTITY_INSERT [ach].[User] ON

@@ -4,6 +4,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
+    using Ach.Fulfillment.Data;
+
     using Foolproof;
 
     public class UserModel
@@ -12,22 +14,25 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
         public long? UserId { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(MetadataInfo.StringNormal)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(MetadataInfo.StringNormal)]
         public string Login { get; set; }
 
         [RequiredIf("UserId", Operator.EqualTo, null, ErrorMessage = "Password is required")]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.EmailAddress)]
-        [StringLength(255)]
+        [StringLength(MetadataInfo.StringNormal)]
         public string Email { get; set; }
 
+        [Display(Name = "Role")]
         public long RoleId { get; set; }
-        
+
+        [Display(Name = "Partner")]
         public long? PartnerId { get; set; }
 
         public Dictionary<long, string> AvailablePartners { get; set; }
