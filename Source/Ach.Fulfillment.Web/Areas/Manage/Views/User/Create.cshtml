@@ -10,10 +10,13 @@
         <legend>Create User</legend>
 
         @Html.Partial("_userDetails", this.Model)
-        <p>
-            <input type="submit" value="Update" />
-            @Html.ActionLink("Back to List", "List", "User")
-        </p>
+        
+         <div class="btn-toolbar">
+            <div class="btn-group">
+                <input type="submit" value="Create" class="btn btn-large" />
+                @Html.ActionLink("Back to List", "List", "User", new { @class = "btn btn-large" })
+             </div>
+        </div>
     </fieldset>
 }
 

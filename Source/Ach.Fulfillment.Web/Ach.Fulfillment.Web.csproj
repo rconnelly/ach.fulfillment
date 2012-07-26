@@ -146,6 +146,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_libBinary\Unity.Interception.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Interception.dll</HintPath>
     </Reference>
+    <Reference Include="MVC Foolproof Validation">
+      <HintPath>..\..\_libBinary\foolproof.0.9.4517\lib\MVC Foolproof Validation.dll</HintPath>
+    </Reference>
     <Reference Include="Mvc.JQuery.Datatables">
       <HintPath>..\..\_libBinary\Mvc.JQuery.Datatables.1.2.21\lib\net40\Mvc.JQuery.Datatables.dll</HintPath>
     </Reference>
@@ -263,6 +266,7 @@
     <Compile Include="Areas\Manage\Controllers\UserController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserManager.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\PartnerGridModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
@@ -403,6 +407,9 @@
     <Content Include="Scripts\knockout-2.0.0.debug.js" />
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
+    <Content Include="Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Scripts\site.bootstrap.validate.js" />
     <Content Include="Services\ClientApi.svc" />
     <Content Include="Web.config" />
@@ -431,6 +438,10 @@
     <Content Include="Areas\Manage\Views\User\List.cshtml" />
     <Content Include="Areas\Manage\Views\User\Edit.cshtml" />
     <Content Include="Areas\Manage\Views\User\_userDetails.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\Create.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\Edit.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\List.cshtml" />
+    <Content Include="Areas\Manage\Views\Partner\_partnerDetails.cshtml" />
     <None Include="Content\jquery.datatables-1.9.2\images\Sorting icons.psd" />
     <None Include="packages.config" />
   </ItemGroup>

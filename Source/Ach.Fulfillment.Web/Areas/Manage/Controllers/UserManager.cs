@@ -8,6 +8,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
@@ -26,14 +28,28 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         [Dependency]
         public IPartnerManager PartnerManager { get; set; }
 
+        [Dependency]
+        public IRoleManager RoleManager { get; set; }
+
         public UserModel GetCreateModel()
         {
             var model = new UserModel();
 
+            this.FillUserModel(model);
+
             return model;
         }
 
-        public JqGridJsonResult GetUsersGridModel(JqGridRequest request)
+        public void FillUserModel (UserModel model)
+        {
+            var partners = this.PartnerManager.FindAll(new PartnerAll());
+            var roles = this.RoleManager.FindAll(new RoleAll());
+
+            model.AvailablePartners = partners.ToDictionary(p => p.Id, p => p.Name);
+            model.AvailableRoles = roles.ToDictionary(p => p.Id, p => p.Name);
+        }
+
+        public JqGridJsonResult GetUsersGridModel (JqGridRequest request)
         {
             var enumerable = this.Manager.FindAll(new UserAll(true));
 
@@ -43,8 +59,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             var list = (from u in users
                         select
-                            new JqGridRecord<UserGridModel>(
-                                u.Id.ToString(CultureInfo.InvariantCulture), 
+                            new JqGridRecord<UserGridModel>(u.Id.ToString(CultureInfo.InvariantCulture), 
                                 new UserGridModel
                                 {
                                     Id = u.Id,
@@ -71,33 +86,28 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             Contract.Assert(dataTableParam.iDisplayLength != 0);
 
             var pageIndex = dataTableParam.iDisplayStart / dataTableParam.iDisplayLength;
-            var queryData = new UserAll
-                {
-                    PageIndex = pageIndex, 
-                    PageSize = dataTableParam.iDisplayLength
-                };
+            var queryData = new UserPaged(pageIndex, dataTableParam.iDisplayLength);
 
             var query = this.Manager.FindAll(queryData);
+            var count = this.Manager.Count(queryData);
 
             var list = (from u in query
-                        select new[] 
-                                { 
+                        select
+                                new []
+                                {
                                     u.Id.ToString(CultureInfo.InvariantCulture),
                                     u.Name,
                                     u.Email,
-                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty
-                                }).OfType<object>().ToArray();
+                                    u.UserPasswordCredential != null ? u.UserPasswordCredential.Login : string.Empty,
+                                }).ToArray();
 
-            var count = this.Manager.Count(queryData);
-
-            // TODO (AS) replace 3rd party wrapper with own one if we use database side paging 
             var result = new DataTablesResult
                 {
                     JsonRequestBehavior = JsonRequestBehavior.DenyGet,
                     Data = new DataTablesData
                         {
-                            iTotalRecords = list.Count(),
-                            iTotalDisplayRecords = count, 
+                            iTotalRecords = dataTableParam.iDisplayLength,
+                            iTotalDisplayRecords = count,
                             sEcho = dataTableParam.sEcho, 
                             aaData = list
                         }
@@ -133,11 +143,14 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                 partner = this.PartnerManager.Load(model.PartnerId.Value);
             }
 
+            var role = this.RoleManager.Load(model.RoleId);
+
             var user = new UserEntity
                 {
                     Name = model.Name,
                     Email = model.Email,
-                    Partner = partner
+                    Partner = partner,
+                    Role = role
                 };
 
             this.Manager.Create(user, model.Login, model.Password);
@@ -151,12 +164,49 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
             var model = new UserModel
                 {
+                    UserId = user.Id,
                     Name = user.Name,
                     Email = user.Email,
                     Login = user.UserPasswordCredential != null ? user.UserPasswordCredential.Login : string.Empty,
+                    PartnerId = user.Partner != null ? user.Partner.Id : (long?)null,
+                    RoleId = user.Role.Id
                 };
 
+            this.FillUserModel(model);
+
             return model;
+        }
+
+        public long EditUser(UserModel model)
+        {
+            Contract.Assert(model.UserId.HasValue);
+
+            var user = this.Manager.Load(model.UserId.Value);
+            var role = this.RoleManager.Load(model.RoleId);
+
+            PartnerEntity partner = null;
+            if (model.PartnerId.HasValue)
+            {
+                partner = this.PartnerManager.Load(model.PartnerId.Value);
+            }
+
+            user.Name = model.Name;
+            user.Email = model.Email;
+            user.UserPasswordCredential.Login = model.Login;
+            user.Role = role;
+            user.Partner = partner;
+
+            
+                using (var tx = new Transaction())
+                {
+                    this.Manager.Update(user);
+
+                    tx.Complete();
+                }
+            
+            
+
+            return user.Id;
         }
     }
 }

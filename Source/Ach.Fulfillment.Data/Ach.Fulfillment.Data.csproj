@@ -149,6 +149,7 @@
     <Compile Include="Common\ISpecification.cs" />
     <Compile Include="Common\SpecificationBase.cs" />
     <Compile Include="Common\SpecificationInstanceBase.cs" />
+    <Compile Include="Specifications\UserPasswordCredentialUniqness.cs" />
     <Compile Include="UserEntity.cs" />
     <Compile Include="UserPasswordCredentialEntity.cs" />
   </ItemGroup>

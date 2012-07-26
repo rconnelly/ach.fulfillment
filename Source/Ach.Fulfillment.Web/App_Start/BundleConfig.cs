@@ -21,7 +21,8 @@
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.unobtrusive*",
                 "~/Scripts/jquery.validate*",
-                "~/Scripts/site.bootstrap.validate.js"));
+                "~/Scripts/site.bootstrap.validate.js",
+                "~/Scripts/mvcfoolproof.unobtrusive.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css/general").Include(
                 "~/Content/bootstrap.css",

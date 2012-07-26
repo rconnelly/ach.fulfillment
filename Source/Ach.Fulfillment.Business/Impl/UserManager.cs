@@ -120,6 +120,13 @@ namespace Ach.Fulfillment.Business.Impl
             }
         }
 
+        public override void Update(UserEntity instance)
+        {
+            Contract.Assert(instance != null);
+            this.DemandValid<UserValidator>(instance);
+            base.Update(instance);
+        }
+
         private static string GetSaltedPassword(string password, string salt)
         {
             return salt + password;
@@ -134,6 +141,7 @@ namespace Ach.Fulfillment.Business.Impl
                 return Convert.ToBase64String(buff);
             }
         }
+
 
         #endregion
     }

@@ -8,27 +8,17 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
     using Lib.Web.Mvc.JQuery.JqGrid.DataAnnotations;
 
     [DataServiceKey("Id")]
-    public class UserGridModel
+    public class PartnerGridModel
     {
         [HiddenInput]
         [JqGridColumnSortable(true)]
         [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
         public long Id { get; set; }
 
-        [DisplayName("User Name")]
+        [DisplayName("Partner Name")]
         [JqGridColumnSortable(true)]
         [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
-        [JqGridColumnFormatter("'showlink'", BaseLinkUrl = "/Manage/User/Edit/", IdName = "Id")]
+        [JqGridColumnFormatter("'showlink'", BaseLinkUrl = "/Manage/Partner/Edit/", IdName = "Id")]
         public string Name { get; set; }
-
-        [DisplayName("Login")]
-        [JqGridColumnSortable(true)]
-        [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
-        public string Login { get; set; }
-
-        [DisplayName("Email")]
-        [JqGridColumnSortable(true)]
-        [JqGridColumnLayout(Alignment = JqGridAlignments.Center)]
-        public string Email { get; set; }
     }
 }
