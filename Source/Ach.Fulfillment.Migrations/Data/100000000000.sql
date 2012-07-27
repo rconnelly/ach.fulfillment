@@ -2,7 +2,7 @@
 /* User: ach                                                    */
 /*==============================================================*/
 create schema ach authorization dbo
-go
+GO
 
 /*==============================================================*/
 /* Table: Partner                                               */
@@ -15,7 +15,7 @@ create table ach.Partner (
    Modified             datetime             null,
    constraint PK_PARTNER primary key (PartnerId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Index: UX_PARTNER                                            */
@@ -23,7 +23,7 @@ go
 create unique index UX_PARTNER on ach.Partner (
    Name ASC
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: PartnerUser                                           */
@@ -34,7 +34,7 @@ create table ach.PartnerUser (
    UserId               int                  not null,
    constraint PK_PARTNERUSER primary key (PartnerUserId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Index: UX_USER                                               */
@@ -42,7 +42,7 @@ go
 create unique index UX_USER on ach.PartnerUser (
    UserId ASC
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: Permission                                            */
@@ -55,7 +55,7 @@ create table ach.Permission (
    Modified             datetime             null,
    constraint PK_PERMISSION primary key (PermissionId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Index: UX_PERMISSION                                         */
@@ -64,7 +64,7 @@ create unique index UX_PERMISSION on ach.Permission (
    Name ASC,
    RoleId ASC
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: Role                                                  */
@@ -76,7 +76,7 @@ create table ach.Role (
    Modified             datetime             null,
    constraint PK_ROLE primary key (RoleId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: "User"                                                */
@@ -91,7 +91,7 @@ create table ach."User" (
    Modified             datetime             null,
    constraint PK_USER primary key (UserId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: UserPasswordCredential                                */
@@ -106,7 +106,7 @@ create table ach.UserPasswordCredential (
    Modified             datetime             null,
    constraint PK_USERPASSWORDCREDENTIAL primary key (UserPasswordCredentialId)
 )
-go
+GO
 
 /*==============================================================*/
 /* Index: UX_LOGIN                                              */
@@ -114,7 +114,7 @@ go
 create unique index UX_LOGIN on ach.UserPasswordCredential (
    Login ASC
 )
-go
+GO
 
 /*==============================================================*/
 /* Index: UX_USER                                               */
@@ -122,30 +122,30 @@ go
 create unique index UX_USER on ach.UserPasswordCredential (
    UserId ASC
 )
-go
+GO
 
 alter table ach.PartnerUser
    add constraint FK_PARTNERUSER_USER foreign key (UserId)
       references ach."User" (UserId)
-go
+GO
 
 alter table ach.PartnerUser
    add constraint FK_PARTNERUSER_PARTNER foreign key (PartnerId)
       references ach.Partner (PartnerId)
-go
+GO
 
 alter table ach.Permission
    add constraint FK_PERMISSION_ROLE foreign key (RoleId)
       references ach.Role (RoleId)
-go
+GO
 
 alter table ach."User"
    add constraint FK_USER_ROLE foreign key (RoleId)
       references ach.Role (RoleId)
-go
+GO
 
 alter table ach.UserPasswordCredential
    add constraint FK_USERPASSWORDCREDENTI_USER foreign key (UserId)
       references ach."User" (UserId)
-go
+GO
 

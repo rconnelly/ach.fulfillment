@@ -101,11 +101,8 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ECM7.Common">
-      <HintPath>..\..\_libBinary\ECM7Migrator.2.6.0.0\lib\net40\ECM7.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ECM7.Migrator.Framework">
-      <HintPath>..\..\_libBinary\ECM7Migrator.2.6.0.0\lib\net40\ECM7.Migrator.Framework.dll</HintPath>
+    <Reference Include="FluentMigrator">
+      <HintPath>..\..\_libBinary\FluentMigrator.1.0.3.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -123,7 +120,6 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourcesSqlMigration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Common\Dictionary.xml">
@@ -141,14 +137,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <PropertyGroup>
-      <GeneratedMigrationFile>$(IntermediateOutputPath)\Migrations.Generated.cs</GeneratedMigrationFile>
+      <GeneratedMigrationFile>$(IntermediateOutputPath)Migrations.Generated.cs</GeneratedMigrationFile>
     </PropertyGroup>
     <ItemGroup>
       <SqlFiles Include="Data\*.sql" />
       <Compile Include="$(GeneratedMigrationFile)" />
-      <EmbeddedResource Include="%(SqlFiles.Identity)">
-        <LogicalName>$(RootNamespace).Resources.%(SqlFiles.Filename)%(Extension)</LogicalName>
-      </EmbeddedResource>
+      <EmbeddedResource Include="@(SqlFiles)" />
     </ItemGroup>
     <MakeDir Directories="$(IntermediateOutputPath)" />
     <Delete Files="$(GeneratedMigrationFile)" />
@@ -167,14 +161,18 @@
 var content = @"
 namespace {0}
 {{
-    using ECM7.Migrator.Framework;
-    using System;
+    using FluentMigrator;
     [Migration({1})]
-    public class Migrate{1} : ResourcesSqlMigration
+    public class Migration{1} : ForwardOnlyMigration
     {{
+        public override void Up()
+        {{
+            this.Execute.EmbeddedScript(""{1}.sql"");
+        }}
     }}
 }}
 ";
+
 System.IO.File.AppendAllText(Output, string.Format(content, Namespace, Id));
 ]]></Code>
     </Task>
@@ -184,6 +182,8 @@ System.IO.File.AppendAllText(Output, string.Format(content, Namespace, Id));
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)..\..\_libBinary\ECM7Migrator.2.6.0.0\tools $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /S /Q "$(ProjectDir)..\..\_libBinary\FluentMigrator.1.0.3.0\tools\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
+
+

@@ -19,7 +19,7 @@ set errorMessage=
 echo Setup Started...................................................
 
     echo        DB Install Started.......................................
-    Database\ECM7.Migrator.Console SqlServer "${DatabaseConnection}" Database\Ach.Fulfillment.Migrations.dll
+    Database\Migrate -db SqlServer2008 -conn "${DatabaseConnection}" -a Database\Ach.Fulfillment.Migrations.dll
         if %ERRORLEVEL% NEQ 0 (
             set /A error=%error%+1
             set errorMessage=%errorMessage% Cannot update database structure.
