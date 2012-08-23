@@ -1,4 +1,0 @@
-<parameters xmlns:xmu="urn:msbuildcommunitytasks-xmlmassupdate">
-    <setParameter xmu:key="name" name="IIS Web Application Name" value="Default Web Site/Ach.Fulfillment.Web" />
-    <setParameter xmu:key="name" name="Default-Web.config Connection String" value="${DatabaseConnection};Application Name=Ach.Fulfillment.Web;" />
-</parameters>

@@ -1,1 +1,0 @@
-Migrate -db SqlServer2008 -conn "Data Source=(local);Initial Catalog=Ach;Integrated Security=True" -a Ach.Fulfillment.Migrations.dll
