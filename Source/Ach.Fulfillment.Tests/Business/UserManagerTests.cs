@@ -185,7 +185,7 @@ namespace Ach.Fulfillment.Tests.Business
             var user = new UserEntity
             {
                 Name = name ?? this.NormalStringGenerator.GetRandomValue(),
-                Email = email ?? this.NormalStringGenerator.GetRandomValue(),
+                Email = email ?? "aaa@gmail.com",
                 Role = role
             };
 

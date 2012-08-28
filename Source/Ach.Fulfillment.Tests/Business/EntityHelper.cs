@@ -37,7 +37,7 @@ namespace Ach.Fulfillment.Tests.Business
             var u = new UserEntity
                 {
                     Name = ShortStringGenerator.GetRandomValue(),
-                    Email = ShortStringGenerator.GetRandomValue(),
+                    Email = "aaa@gmail.com",
                 };
 
             var r = CreateTestRole(testBase);

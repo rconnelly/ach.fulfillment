@@ -14,18 +14,13 @@
     </ItemGroup>
 
      <ItemGroup>
-        <BeforePackSubstitutionFiles Include="Ach.Fulfillment.Api.Web.config">
-            <ContentFile>Ach.Fulfillment.Api\Web.config</ContentFile>
-        </BeforePackSubstitutionFiles>
     </ItemGroup>
     
     <ItemGroup>
         <ProjectToPackage Include="Ach.Fulfillment.Web\Ach.Fulfillment.Web.csproj">
             <Path>Packages</Path>
         </ProjectToPackage>
-        <ProjectToPackage Include="Ach.Fulfillment.Api\Ach.Fulfillment.Api.csproj">
-            <Path>Packages</Path>
-        </ProjectToPackage>
+      
         <FileToPublish Include="Ach.Fulfillment.Migrations\bin\Migrate.exe;
                                 Ach.Fulfillment.Migrations\bin\Migrate.exe.config;
                                 Ach.Fulfillment.Migrations\bin\FluentMigrator.Runner.dll;
