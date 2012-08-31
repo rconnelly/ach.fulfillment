@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{027B4FC0-4838-4CA9-A950-63962480AD01}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ach.Fulfillment.Nacha</RootNamespace>
+    <AssemblyName>Ach.Fulfillment.Nacha</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attribute\FieldAttribute.cs" />
+    <Compile Include="Attribute\RecordAttribute.cs" />
+    <Compile Include="Enumeration\DataType.cs" />
+    <Compile Include="Enumeration\PaddingType.cs" />
+    <Compile Include="Enumeration\ServiceClassCode.cs" />
+    <Compile Include="Enumeration\StandardEntryClassCode.cs" />
+    <Compile Include="Enumeration\TransactionCode.cs" />
+    <Compile Include="Exception\FieldNullException.cs" />
+    <Compile Include="Exception\FieldOutOfRangeException.cs" />
+    <Compile Include="Message\GeneralBatch.cs" />
+    <Compile Include="Message\File.cs" />
+    <Compile Include="Serialization\SerializableBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Record\BatchControlRecord.cs" />
+    <Compile Include="Record\BatchHeaderGeneralRecord.cs" />
+    <Compile Include="Record\EntryDetailGeneralRecord.cs" />
+    <Compile Include="Record\FileControlRecord.cs" />
+    <Compile Include="Record\FileHeaderRecord.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ach.Fulfillment.Common\Ach.Fulfillment.Common.csproj">
+      <Project>{148eb4d4-4df2-4452-be6e-34dc77351e53}</Project>
+      <Name>Ach.Fulfillment.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.SharedReflection\Ach.Fulfillment.Shared.Reflection.csproj">
+      <Project>{0A8D8155-F950-4D64-9060-2A95CF093265}</Project>
+      <Name>Ach.Fulfillment.Shared.Reflection</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
