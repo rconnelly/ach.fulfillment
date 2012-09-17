@@ -127,6 +127,7 @@
     </Content>
     <Content Include="Data\100000000000.sql" />
     <Content Include="Data\100000000001.sql" />
+    <Content Include="Data\201209172135.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -185,5 +186,3 @@ System.IO.File.AppendAllText(Output, string.Format(content, Namespace, Id));
     <PostBuildEvent>xcopy /Y /S /Q "$(ProjectDir)..\..\_libBinary\FluentMigrator.1.0.3.0\tools\*.*" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
-
-

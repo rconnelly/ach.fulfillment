@@ -17,6 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -261,11 +265,14 @@
     <Compile Include="Areas\Main\MainAreaRegistration.cs" />
     <Compile Include="Areas\Main\Models\ChangePasswordModel.cs" />
     <Compile Include="Areas\Main\Models\LoginModel.cs" />
+    <Compile Include="Areas\Manage\Controllers\AchManager.cs" />
     <Compile Include="Areas\Manage\Controllers\PartnerController.cs" />
     <Compile Include="Areas\Manage\Controllers\PartnerManager.cs" />
+    <Compile Include="Areas\Manage\Controllers\AchTransactionController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserManager.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
+    <Compile Include="Areas\Manage\Models\AchTransactionModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerGridModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />

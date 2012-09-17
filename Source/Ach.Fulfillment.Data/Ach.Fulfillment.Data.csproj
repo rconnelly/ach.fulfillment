@@ -127,6 +127,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AccessRight.tt</DependentUpon>
     </Compile>
+    <Compile Include="AchTransactionEntity.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Specifications\UserAll.cs" />
     <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />

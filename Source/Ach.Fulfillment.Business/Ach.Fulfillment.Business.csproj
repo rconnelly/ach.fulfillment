@@ -151,7 +151,9 @@
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
+    <Compile Include="IAchTransactionManager.cs" />
     <Compile Include="IManager.cs" />
+    <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
