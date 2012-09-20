@@ -12,7 +12,7 @@
 
         public virtual string CallbackUrl { get; set; }
 
-        public virtual string Amount { get; set; }
+        public virtual decimal Amount { get; set; }
 
         public virtual string AccountId { get; set; }
 

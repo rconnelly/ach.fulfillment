@@ -67,13 +67,13 @@ namespace Ach.Fulfillment.Nacha.Record
 		/// Number of bytes per record-always 94.
 		/// </summary>
 		[Field(Position = 6, DataType = DataType.Numeric, Length = 3, IsRequired = true, MaskOnAudit = false, PaddingType = PaddingType.Default)]
-		internal int RecordSize = 94;
+		internal long RecordSize = 94;
 
 		/// <summary>
 		/// Number of records per block
 		/// </summary>
 		[Field(Position = 7, DataType = DataType.Numeric, Length = 2, IsRequired = true, MaskOnAudit = false, PaddingType = PaddingType.Default)]
-		internal int BlockingFactor = 10;
+		internal long BlockingFactor = 10;
 
 		/// <summary>
 		/// Currently only "1" is used

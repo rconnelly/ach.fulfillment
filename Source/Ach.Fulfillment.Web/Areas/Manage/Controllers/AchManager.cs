@@ -1,4 +1,5 @@
 ﻿using Ach.Fulfillment.Business.Impl;
+using Ach.Fulfillment.Common.Transactions;
 using Ach.Fulfillment.Data;
 using Ach.Fulfillment.Web.Areas.Manage.Models;
 using Microsoft.Practices.Unity;
@@ -22,13 +23,25 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                                       Amount = model.Amount,
                                       RoutingNumber = model.RoutingNumber,
                                       CallbackUrl = model.CallbackUrl,
-                                      User = new UserEntity(){Id = 1},
+                                      User = new UserEntity{Id = 1},//TODO remove or change to proper one
                                       IsQueued = true
                                   };
 
             this.Manager.Create(transaction);
 
             return transaction.Id;
+        }
+
+        public string GenerateAchFiles()
+        {
+            var achfile= Manager.Generate();
+            //using (var tx = new Transaction())
+            //{
+                
+            //                tx.Complete();
+            //}
+
+            return achfile;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Ach.Fulfillment.Nacha.Record
 		/// Total number of Entry Detail Records plus addenda records (Record Types "6" and "7") in the batch
 		/// </summary>
 		[Field(Position = 2, DataType = DataType.Numeric, Length = 6, IsRequired = true, MaskOnAudit = false)]
-		public int EntryAndAddendaCount;
+		public long EntryAndAddendaCount;
 
 		/// <summary>
 		/// Total of eight-character Transit Routing/ABA numbers in the batch (field 3 of the Entry Detail Record). 
@@ -96,6 +96,6 @@ namespace Ach.Fulfillment.Nacha.Record
 		/// </summary>
 		/// <remarks>Must match the value you used in the Batch Header Record</remarks>
 		[Field(Position = 10, DataType = DataType.Numeric, Length = 7, IsRequired = true, MaskOnAudit = false)]
-		public int BatchNumber;
+		public long BatchNumber;
 	}
 }

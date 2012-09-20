@@ -9,13 +9,21 @@ create table ach."AchTransaction" (
    MerchantName         nvarchar(16)         not null,
    MerchantDescription  nvarchar(10)         not null,
    CallbackUrl			nvarchar(255)        not null,
-   Amount				nvarchar(10)		 not null,
+   Amount				decimal(10,2)		 not null,
    AccountId			nvarchar(15)         not null,
    RoutingNumber		nvarchar(9)          not null,
    IsQueued				bit					 not null default 0,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_ACHTRANSACTION primary key (AchTransactionId)
+)
+GO
+
+/*==============================================================*/
+/* Index: UX_ACHTRANSACTION                                     */
+/*==============================================================*/
+create unique index UX_ACHTRANSACTION on ach.AchTransaction (
+   AchTransactionId ASC
 )
 GO
 

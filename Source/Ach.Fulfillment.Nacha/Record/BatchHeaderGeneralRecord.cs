@@ -105,6 +105,6 @@ namespace Ach.Fulfillment.Nacha.Record
 		/// Assign batch numbers in ascending order	within each file.
 		/// </summary>
 		[Field(Position = 12, DataType = DataType.Numeric, Length = 7, IsRequired = true, MaskOnAudit = false)]
-		public int BatchNumber;
+		public long BatchNumber;
 	}
 }

@@ -189,6 +189,10 @@
       <Project>{9167FA6C-34C0-4D74-8184-4D52D29CDADB}</Project>
       <Name>Ach.Fulfillment.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Nacha\Ach.Fulfillment.Nacha.csproj">
+      <Project>{027b4fc0-4838-4ca9-a950-63962480ad01}</Project>
+      <Name>Ach.Fulfillment.Nacha</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ach.Fulfillment.Persistence\Ach.Fulfillment.Persistence.csproj">
       <Project>{5AB0AE05-BBCB-4337-8390-3A06E4776932}</Project>
       <Name>Ach.Fulfillment.Persistence</Name>

@@ -25,7 +25,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
         public string CallbackUrl { get; set; }
 
         [Required]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [Required]
         public string AccountId { get; set; }

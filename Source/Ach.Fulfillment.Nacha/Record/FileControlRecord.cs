@@ -18,19 +18,19 @@ namespace Ach.Fulfillment.Nacha.Record
 		/// Total number of Company/Batch Header Records (Record Type "5") in the file.
 		/// </summary>
 		[Field(Position = 1, DataType = DataType.Numeric, Length = 6, IsRequired = true, MaskOnAudit = false)]
-		public int BatchCount;
+		public long BatchCount;
 
 		/// <summary>
 		/// Total number of physical blocks (records) in the file, including the File Header and File Control Records.
 		/// </summary>
 		[Field(Position = 2, DataType = DataType.Numeric, Length = 6, IsRequired = true, MaskOnAudit = false)]
-		public int BlockCount;
+		public long BlockCount;
 
 		/// <summary>
 		/// Total number of Entry Detail and Addenda Records (Record Types "6" and "7") in the file.
 		/// </summary>
 		[Field(Position = 3, DataType = DataType.Numeric, Length = 8, IsRequired = true, MaskOnAudit = false)]
-		public int EntryAndAddendaCount;
+		public long EntryAndAddendaCount;
 
 		/// <summary>
 		/// Total of eight-character Transit Routing/ABA numbers in the file (field 3 of the Entry Detail Record). 
