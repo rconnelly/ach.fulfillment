@@ -167,6 +167,10 @@
       <Project>{5AB0AE05-BBCB-4337-8390-3A06E4776932}</Project>
       <Name>Ach.Fulfillment.Persistence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Scheduler\Ach.Fulfillment.Scheduler.csproj">
+      <Project>{5ce82594-bda6-4cdd-b97e-a915357d57b1}</Project>
+      <Name>Ach.Fulfillment.Scheduler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

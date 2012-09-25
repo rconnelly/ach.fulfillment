@@ -87,7 +87,6 @@ namespace Ach.Fulfillment.Business.Impl
             }
         }
 
-
         private FileHeaderRecord CreateFileControlRecord()
         {
             return new FileHeaderRecord

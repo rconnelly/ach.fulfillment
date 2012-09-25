@@ -1,5 +1,5 @@
-﻿using Ach.Fulfillment.Business.Impl;
-using Ach.Fulfillment.Common.Transactions;
+﻿using System;
+using System.Configuration;
 using Ach.Fulfillment.Data;
 using Ach.Fulfillment.Web.Areas.Manage.Models;
 using Microsoft.Practices.Unity;
@@ -32,15 +32,20 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return transaction.Id;
         }
 
+        //TODO this method is for testing only
         public string GenerateAchFiles()
         {
             var achfile= Manager.Generate();
-            //using (var tx = new Transaction())
-            //{
-                
-            //                tx.Complete();
-            //}
 
+            var achfilesStore = ConfigurationManager.AppSettings["AchFilesStore"];
+                
+            var newFileName = DateTime.UtcNow.ToString();
+            var newPath = System.IO.Path.Combine(achfilesStore, "achfile.txt");
+
+            var file = new System.IO.StreamWriter(newPath);
+            file.Write("achfile");
+            file.Flush();
+            file.Close();
             return achfile;
         }
     }

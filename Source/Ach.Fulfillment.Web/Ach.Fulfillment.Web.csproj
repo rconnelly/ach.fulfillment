@@ -471,10 +471,6 @@
       <Project>{24E18145-C312-4628-99B6-5703CB223297}</Project>
       <Name>Ach.Fulfillment.Initialization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Ach.Fulfillment.Jobs\Ach.Fulfillment.Jobs.csproj">
-      <Project>{5ce82594-bda6-4cdd-b97e-a915357d57b1}</Project>
-      <Name>Ach.Fulfillment.Jobs</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Main\Views\Home\About.cshtml" />
