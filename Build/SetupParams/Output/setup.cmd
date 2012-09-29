@@ -32,11 +32,6 @@ echo Setup Started...................................................
             set /A error=%error%+2
             set errorMessage=%errorMessage% Cannot install Ach.Fulfillment.Web.
         )
-    cmd /C Packages\Ach.Fulfillment.Api.deploy.cmd /Y %packageDest%
-        if %ERRORLEVEL% NEQ 0 (
-            set /A error=%error%+4
-            set errorMessage=%errorMessage% Cannot install Ach.Fulfillment.Api.
-        )
     echo        .......................................Site Install Ended
     
 echo Setup Ended...................................................

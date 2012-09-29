@@ -5,3 +5,5 @@ ECHO START Install
 CMD /u /c Setup.CMD > Setup.log
 ECHO END Install, SEE Setup.log
 chcp %cp%>nul
+
+@pause

@@ -1,9 +1,12 @@
-﻿namespace Ach.Fulfillment.Initialization.Configuration
+﻿
+
+namespace Ach.Fulfillment.Initialization.Configuration
 {
     using System.Diagnostics;
 
     using Ach.Fulfillment.Business.Impl.Configuration;
     using Ach.Fulfillment.Persistence.Impl.Configuration;
+    using Ach.Fulfillment.Scheduler.Configuration;
 
     using Common.Logging.EntLib;
 
@@ -20,8 +23,9 @@
         {
             this.Container
                 .AddNewExtension<PersistenceContainerExtension>()
-                .AddNewExtension<BusinessContainerExtension>();
-        
+                .AddNewExtension<BusinessContainerExtension>()
+                .AddNewExtension<QuartzContainerExtension>();
+               
             this.ConfigureLogging();
         }
 

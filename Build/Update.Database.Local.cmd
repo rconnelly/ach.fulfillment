@@ -5,7 +5,9 @@ c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild ..\Source\Ach.Fulfillment.
         )
 
 PUSHD ..\Source\Ach.Fulfillment.Migrations\bin\
-     Migrate -db SqlServer2008 -conn "Data Source=(local);Initial Catalog=Ach;Integrated Security=True" -a Ach.Fulfillment.Migrations.dll
+     Migrate -db SqlServer2008 -conn "Data Source=_\SQLEXPRESS;Initial Catalog=Ach;Integrated Security=True" -a Ach.Fulfillment.Migrations.dll
 POPD
 :end
+
+
 

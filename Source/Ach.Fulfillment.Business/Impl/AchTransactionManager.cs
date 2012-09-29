@@ -32,7 +32,6 @@ namespace Ach.Fulfillment.Business.Impl
             var transactionses = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
             if (transactionses.Any())
             {
-
                     var achfile = new File
                                       {
                                           Header = CreateFileControlRecord(),
