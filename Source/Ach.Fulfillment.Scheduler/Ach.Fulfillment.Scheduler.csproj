@@ -70,12 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\QuartzContainerExtension.cs" />
-    <Compile Include="UnityJobFactory.cs" />
     <Compile Include="GenerateAchFilesJob.cs" />
+    <Compile Include="UnityJobFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="quartz.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

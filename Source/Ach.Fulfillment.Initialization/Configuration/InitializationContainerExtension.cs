@@ -6,7 +6,6 @@ namespace Ach.Fulfillment.Initialization.Configuration
 
     using Ach.Fulfillment.Business.Impl.Configuration;
     using Ach.Fulfillment.Persistence.Impl.Configuration;
-    using Ach.Fulfillment.Scheduler.Configuration;
 
     using Common.Logging.EntLib;
 
@@ -14,6 +13,8 @@ namespace Ach.Fulfillment.Initialization.Configuration
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel.Unity;
     using Microsoft.Practices.EnterpriseLibrary.Logging.Formatters;
     using Microsoft.Practices.Unity;
+    using Ach.Fulfillment.Scheduler.Configuration;
+
 
     public class InitializationContainerExtension : UnityContainerExtension
     {

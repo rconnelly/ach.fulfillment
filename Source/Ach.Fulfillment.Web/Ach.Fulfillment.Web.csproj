@@ -115,6 +115,10 @@
     <Reference Include="AutoMapper">
       <HintPath>..\..\_libBinary\AutoMapper.2.1.267\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="C5, Version=1.1.0.0, Culture=neutral, PublicKeyToken=06a1b38866503b69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_libBinary\Quartz.2.0.1\lib\net40\C5.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\..\_libBinary\Common.Logging.2.1.1\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
@@ -155,6 +159,10 @@
     </Reference>
     <Reference Include="Mvc.JQuery.Datatables">
       <HintPath>..\..\_libBinary\Mvc.JQuery.Datatables.1.2.21\lib\net40\Mvc.JQuery.Datatables.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=2.0.1.100, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_libBinary\Quartz.2.0.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="RouteDebug">
       <HintPath>..\..\_libBinary\RouteDebug.1.0.0\RouteDebug.dll</HintPath>
@@ -299,10 +307,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\AchService.cs" />
     <Compile Include="Services\ApiContext.cs" />
     <Compile Include="Services\ClientApi.svc.cs">
       <DependentUpon>ClientApi.svc</DependentUpon>
     </Compile>
+    <Compile Include="Services\IAchService.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">
@@ -470,6 +480,10 @@
     <ProjectReference Include="..\Ach.Fulfillment.Initialization\Ach.Fulfillment.Initialization.csproj">
       <Project>{24E18145-C312-4628-99B6-5703CB223297}</Project>
       <Name>Ach.Fulfillment.Initialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Scheduler\Ach.Fulfillment.Scheduler.csproj">
+      <Project>{5ce82594-bda6-4cdd-b97e-a915357d57b1}</Project>
+      <Name>Ach.Fulfillment.Scheduler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

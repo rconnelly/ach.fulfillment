@@ -37,8 +37,8 @@
         <!--<start-time>2012-09-24T13:00:00.0Z</start-time>
         <end-time>2020-05-04T18:13:51.0Z</end-time>-->
         <misfire-instruction>SmartPolicy</misfire-instruction>
-        <repeat-count>-1</repeat-count>
-        <repeat-interval>10000</repeat-interval>
+        <repeat-count>5</repeat-count>
+        <repeat-interval>300000</repeat-interval>
         <!--<cron-expression>0 0/30 8-20 * * ?</cron-expression>-->
       </simple>
     </trigger>

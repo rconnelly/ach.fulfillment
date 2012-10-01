@@ -16,11 +16,6 @@ namespace Ach.Fulfillment.Scheduler
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(UnityJobFactory));
 
-        //public UnityJobFactory()
-        //{
-            
-        //}
-
         public UnityJobFactory(IUnityContainer container)
         {
             Container = container;

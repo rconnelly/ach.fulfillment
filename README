@@ -1,1 +1,5 @@
-test
+Deployment
+1.	Download sorces from github repository.
+2.	Make release build.
+3.	Create Database on your Database Server.
+4.	Go to ~/Build/Assembly folder, open setup.cmd and change connection string to your one.
