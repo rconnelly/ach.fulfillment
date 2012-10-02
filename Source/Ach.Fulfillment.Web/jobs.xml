@@ -27,20 +27,17 @@
     </job>
 
     <trigger>
-      <simple>
+      <cron>
         <name>AchFilesTrigger</name>
         <group>AchFulfillmentGroup</group>
         <description>AchFiles trigger to fire GenerateAchFilesJob</description>
         <job-name>GenerateAchFilesJob</job-name>
         <job-group>AchFulfillmentGroup</job-group>
-        <!--<calendar-name>achcalendar</calendar-name>-->
-        <!--<start-time>2012-09-24T13:00:00.0Z</start-time>
-        <end-time>2020-05-04T18:13:51.0Z</end-time>-->
-        <misfire-instruction>SmartPolicy</misfire-instruction>
-        <repeat-count>5</repeat-count>
-        <repeat-interval>300000</repeat-interval>
-        <!--<cron-expression>0 0/30 8-20 * * ?</cron-expression>-->
-      </simple>
+        <!--every 5 minutes  -->
+        <cron-expression>*/5 * * * *</cron-expression>
+        <!--Every 2 hours at :30 
+        <cron-expression>30 0/2 * * ? *</cron-expression>-->
+      </cron>
     </trigger>
   </schedule>
 </job-scheduling-data>
