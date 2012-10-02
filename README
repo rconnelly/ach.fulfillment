@@ -2,14 +2,12 @@
 1.Download sorces from github repository.
 2.Create Database on your Database Server.
 3.Make release build.
-4.Copy \Build\Assembly\ folder to your web folder
+4.Go to \Build\ folder and run Build.Local.cmd
 5.Go to ~\Assembly\ folder, open setup.cmd and change connection string to proper one.
-6.Go to ~\Assembly\Packages see Ach.Fulfillment.Web.deploy-readme.txt for further instractions
+6.Go to ~\Assembly\Packages see Ach.Fulfillment.Web.deploy-readme.txt for further instructions
 
 
-
-
-Job configuration
+##Job configuration
 1. Go to jobs.xml file
 2. Open "job-data-map" section - there in section "value" you should put path to the directory where 
 genarated files will be stored.
