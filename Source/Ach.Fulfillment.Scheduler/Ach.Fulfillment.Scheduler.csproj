@@ -78,11 +78,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="jobs.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Ach.Fulfillment.Business\Ach.Fulfillment.Business.csproj">
       <Project>{280b33ca-07e1-40aa-a159-2080dd3529ed}</Project>
       <Name>Ach.Fulfillment.Business</Name>

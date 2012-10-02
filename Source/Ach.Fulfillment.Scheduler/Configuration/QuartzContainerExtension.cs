@@ -17,11 +17,10 @@ namespace Ach.Fulfillment.Scheduler.Configuration
         private ISchedulerFactory schedulerfactory;
 
         protected override void Initialize()
-        {
-            //var container = ServiceLocator.Current.GetInstance<IUnityContainer>();
+        {            
             Container.RegisterType<IJobFactory, UnityJobFactory>();
             Container.RegisterInstance<ISchedulerFactory>(new StdSchedulerFactory());
-            ISchedulerFactory schedulerfactory = Container.Resolve<ISchedulerFactory>();
+            schedulerfactory = Container.Resolve<ISchedulerFactory>();
             scheduler = schedulerfactory.GetScheduler();
             scheduler.JobFactory = Container.Resolve<IJobFactory>();
             scheduler.Start();
