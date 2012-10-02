@@ -19,15 +19,18 @@ namespace Ach.Fulfillment.Scheduler
             this.unitOfWork = new UnitOfWork();
             var achFile = Manager.Generate();
 
-            var dataMap = context.JobDetail.JobDataMap;
-            var achfilesStore = dataMap.GetString("AchFilesStore");
-            var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".txt");
+            if (achFile != null & achFile.Length > 0)
+            {
+                var dataMap = context.JobDetail.JobDataMap;
+                var achfilesStore = dataMap.GetString("AchFilesStore");
+                var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".txt");
 
-            var file = new System.IO.StreamWriter(newPath);
-            file.Write(achFile);
-            file.Flush();
-            file.Close();
+                var file = new System.IO.StreamWriter(newPath);
+                file.Write(achFile);
+                file.Flush();
+                file.Close();
+            }
             this.unitOfWork.Dispose();
 
         }

@@ -1,5 +1,17 @@
-Deployment
-1.	Download sorces from github repository.
-2.	Make release build.
-3.	Create Database on your Database Server.
-4.	Go to ~/Build/Assembly folder, open setup.cmd and change connection string to your one.
+##Deployment
+1.Download sorces from github repository.
+2.Create Database on your Database Server.
+3.Make release build.
+4.Copy \Build\Assembly\ folder to your web folder
+5.Go to ~\Assembly\ folder, open setup.cmd and change connection string to proper one.
+6.Go to ~\Assembly\Packages see Ach.Fulfillment.Web.deploy-readme.txt for further instractions
+
+
+
+
+Job configuration
+1. Go to jobs.xml file
+2. Open "job-data-map" section - there in section "value" you should put path to the directory where 
+genarated files will be stored.
+3. Open "trigger" section - there you can configure when your job will be run. For more information
+look at http://en.wikipedia.org/wiki/Cron
