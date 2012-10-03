@@ -27,9 +27,6 @@
     using Microsoft.Practices.ServiceLocation;
 
     using Mvc.JQuery.Datatables;
-    using Quartz;
-    using Quartz.Impl;
-    using Quartz.Spi;
     using Microsoft.Practices.Unity;
     using System.Collections.Specialized;
     using Ach.Fulfillment.Scheduler;
@@ -60,8 +57,7 @@
 
             ModelBinders.Binders.Add(typeof(DataTablesParam), new DataTablesModelBinder());
             MvcHandler.DisableMvcResponseHeader = true;
-
-           
+                       
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
@@ -105,19 +101,6 @@
         protected void Application_End()
         {
             Shell.Shutdown();
-        }
-
-        protected void InitialiseJobScheduler()
-        {
-            // Quartz.NET scheduler
-
-            var container = ServiceLocator.Current.GetInstance<IUnityContainer>();
-            container.RegisterType<IJobFactory, UnityJobFactory>();
-            container.RegisterInstance<ISchedulerFactory>(new StdSchedulerFactory());
-            ISchedulerFactory factory = container.Resolve<ISchedulerFactory>();            
-            var scheduler = factory.GetScheduler();
-            scheduler.JobFactory = container.Resolve<IJobFactory>();         
-            scheduler.Start();
         }
 
         private IPrincipal GetPrincipal()

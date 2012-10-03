@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -20,6 +19,7 @@ namespace Ach.Fulfillment.Scheduler
         {
             Container = container;
         }
+
         [Dependency]
         public IUnityContainer Container { get; set; }
 

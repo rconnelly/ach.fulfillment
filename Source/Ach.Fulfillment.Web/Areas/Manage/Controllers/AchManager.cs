@@ -32,21 +32,5 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return transaction.Id;
         }
 
-        //TODO this method is for testing only
-        public string GenerateAchFiles()
-        {
-            var achfile= Manager.Generate();
-
-            var achfilesStore = ConfigurationManager.AppSettings["AchFilesStore"];
-                
-            var newFileName = DateTime.UtcNow.ToString();
-            var newPath = System.IO.Path.Combine(achfilesStore, "achfile.txt");
-
-            var file = new System.IO.StreamWriter(newPath);
-            file.Write("achfile");
-            file.Flush();
-            file.Close();
-            return achfile;
-        }
     }
 }

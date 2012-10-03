@@ -35,17 +35,5 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
         #endregion Create
 
-        #region Generate
-
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Generate() //TODO remove, only for testing
-        {
-            var achFile = Manager.GenerateAchFiles();
-            return Json(achFile,JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion
-
     }
 }

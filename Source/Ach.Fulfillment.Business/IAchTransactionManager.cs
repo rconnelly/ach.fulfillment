@@ -6,6 +6,6 @@ namespace Ach.Fulfillment.Business
     public interface IAchTransactionManager : IManager<AchTransactionEntity>
     {
         string Generate();
-        void RemoveFromQueue(List<AchTransactionEntity> transactions);
+        void RemoveTransactionFromQueue(List<AchTransactionEntity> transactions);
     }
 }

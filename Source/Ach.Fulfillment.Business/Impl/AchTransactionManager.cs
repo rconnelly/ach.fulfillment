@@ -14,6 +14,20 @@ namespace Ach.Fulfillment.Business.Impl
 {
     internal class AchTransactionManager : ManagerBase<AchTransactionEntity>, IAchTransactionManager
     {
+        #region Constants and Fields
+
+        private const string originOrCompanyName = "PriorityPaymentSystems";
+        private const string companyName = "PPS";
+        private const string immediateOrigin = "1234567890";
+        private const string immediateDestination = "b111000025";
+        private const string originatingDFIIdentification = "11100002";
+        private const string destination = "Bank of America RIC";
+        private const string companyIdentification = "1234567890";
+        
+        #endregion
+
+        #region Public Methods and Operators
+
         public override AchTransactionEntity Create(AchTransactionEntity transaction)
         {
             Contract.Assert(transaction != null);
@@ -64,7 +78,7 @@ namespace Ach.Fulfillment.Business.Impl
                                           };
                     var result = achfile.Serialize();
 
-                    RemoveFromQueue(achTransactionEntities);
+                    RemoveTransactionFromQueue(achTransactionEntities);
                     
                 return result;
                 
@@ -73,10 +87,12 @@ namespace Ach.Fulfillment.Business.Impl
             return null;
         }
 
-        public void RemoveFromQueue(List<AchTransactionEntity> transactions)
+        public void RemoveTransactionFromQueue(List<AchTransactionEntity> transactions)
+        {
+            Contract.Assert(transactions != null);
+
+            using (var tx = new Transaction())
             {
-                using (var tx = new Transaction())
-                {
                 foreach (var achTransactionEntity in transactions)
                 {
                     achTransactionEntity.IsQueued = false;
@@ -86,16 +102,18 @@ namespace Ach.Fulfillment.Business.Impl
             }
         }
 
+        #endregion
+
         private FileHeaderRecord CreateFileControlRecord()
         {
             return new FileHeaderRecord
                        {
-                           Destination = "Bank of America RIC", //Bank name
+                           Destination = destination,
                            FileCreationDateTime = DateTime.Now,
                            FileIdModifier = "0",
-                           ImmediateDestination = "b111000025",
-                           ImmediateOrigin = "1234567890",
-                           OriginOrCompanyName = "PriorityPaymentSystems"
+                           ImmediateDestination = immediateDestination,
+                           ImmediateOrigin = immediateOrigin,
+                           OriginOrCompanyName = originOrCompanyName
                        };
         }
 
@@ -121,10 +139,10 @@ namespace Ach.Fulfillment.Business.Impl
                 {
                     BatchNumber = batchNumber,
                     CompanyEntryDescription = description,
-                    CompanyIdentification = "1234567890",
-                    CompanyName = "PPS",
+                    CompanyIdentification = companyIdentification,
+                    CompanyName = companyName,
                     EffectiveEntryDate = DateTime.Now,
-                    OriginatingDFIIdentification = "11100002",
+                    OriginatingDFIIdentification = originatingDFIIdentification,
                     ServiceClassCode = ServiceClassCode.CreditOnly,
                     StandardEntryClassCode = StandardEntryClassCode.PPD
                 },
@@ -142,10 +160,10 @@ namespace Ach.Fulfillment.Business.Impl
             batch.Control = new BatchControlRecord
             {
                 BatchNumber = batchNumber,
-                CompanyIdentification = "PPS",
+                CompanyIdentification = companyIdentification,
                 EntryAndAddendaCount = batch.Entries.Count,
                 EntryHash = entryHash,
-                OriginatingDFIIdentification = "11100002",
+                OriginatingDFIIdentification = originatingDFIIdentification,
                 ServiceClassCode = ServiceClassCode.CreditOnly,
                 TotalCreditAmount = batch.Entries.Select(e => e.Amount).Sum(),
                 TotalDebitAmount = batch.Entries.Select(e => e.Amount).Sum(),

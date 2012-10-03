@@ -24,8 +24,7 @@ namespace Ach.Fulfillment.Initialization.Configuration
         {
             this.Container
                 .AddNewExtension<PersistenceContainerExtension>()
-                .AddNewExtension<BusinessContainerExtension>()
-                .AddNewExtension<QuartzContainerExtension>();
+                .AddNewExtension<BusinessContainerExtension>();
                
             this.ConfigureLogging();
         }

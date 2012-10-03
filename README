@@ -3,8 +3,8 @@
 2.Create Database on your Database Server.
 3.Make release build.
 4.Go to \Build\ folder and run Build.Local.cmd
-5.Go to ~\Assembly\ folder, open setup.cmd and change connection string to proper one, change 
-deploymentTransport put there destination server name or Service URL
+5.Go to ~\Assembly\ folder, open setup.cmd and change connection string to proper one. You can change IIS 
+Application name, path, connectionstring and other parameters in file Ach.Fulfillment.Web.SetParameters.xml
 6.Run RunSetup.cmd
 
 
