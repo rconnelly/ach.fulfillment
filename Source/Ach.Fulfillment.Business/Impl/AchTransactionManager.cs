@@ -41,7 +41,7 @@ namespace Ach.Fulfillment.Business.Impl
             var trs = Repository.FindAll(new AchTransactionInQueue());
             var achTransactionEntities = trs as List<AchTransactionEntity> ?? trs.ToList();
 
-            var transactionGroups = achTransactionEntities.GroupBy(tt => tt.MerchantDescription);
+            var transactionGroups = achTransactionEntities.GroupBy(tt => tt.EntryDescription);
 
             var transactionses = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
             if (transactionses.Any())
@@ -95,7 +95,7 @@ namespace Ach.Fulfillment.Business.Impl
             {
                 foreach (var achTransactionEntity in transactions)
                 {
-                    achTransactionEntity.IsQueued = false;
+                    achTransactionEntity.TransactionStatus = TransactionStatus.Batched;
                     base.Update(achTransactionEntity);
                 }
                 tx.Complete();
@@ -123,10 +123,10 @@ namespace Ach.Fulfillment.Business.Impl
             {
                 AddendaRecordIndicator = "0",
                 Amount = transaction.Amount,
-                RDFIRoutingTransitNumber = transaction.RoutingNumber.Substring(0, 8),
-                CheckDigit = transaction.RoutingNumber.Substring(8, 1),
-                IndividualOrCompanyName = transaction.MerchantName,
-                RDFIAccountNumber = transaction.AccountId,
+                RDFIRoutingTransitNumber = transaction.TransitRoutingNumber.Substring(0, 8),
+                CheckDigit = transaction.TransitRoutingNumber.Substring(8, 1),
+                IndividualOrCompanyName = transaction.ReceiverName,
+                RDFIAccountNumber = transaction.DFIAccountId,
                 TransactionCode = TransactionCode.CheckingPrenoteDebit
             };
         }

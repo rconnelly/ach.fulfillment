@@ -31,7 +31,7 @@
         protected override void Initialize()
         {
             base.Initialize();
-            this.Container.AddNewExtension<QuartzContainerExtension>();
+           // this.Container.AddNewExtension<QuartzContainerExtension>();
 
             this.Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
             this.Container.RegisterType<IAchService,AchService>();

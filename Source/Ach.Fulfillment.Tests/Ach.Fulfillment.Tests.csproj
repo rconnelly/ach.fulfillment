@@ -157,8 +157,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\AchTransactionManagerTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Business\BusinessIntegrationTestBase.cs" />
     <Compile Include="Business\EntityHelper.cs" />
+    <Compile Include="Business\GenerateAchFilesJobTests.cs" />
     <Compile Include="Business\PartnerManagerTests.cs" />
     <Compile Include="Business\RoleManagerTests.cs" />
     <Compile Include="Business\UserManagerTests.cs" />

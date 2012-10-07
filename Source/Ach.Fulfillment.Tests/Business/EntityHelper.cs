@@ -45,5 +45,22 @@ namespace Ach.Fulfillment.Tests.Business
 
             return u;
         }
+
+        public static AchTransactionEntity CreateTestTransaction(this BusinessIntegrationTestBase testBase)
+        {
+            var transaction = new AchTransactionEntity
+            {
+                DFIAccountId = new StringGenerator(5, 15).GetRandomValue(),
+                Amount = (decimal)123.00,
+                CallbackUrl = "test.com",
+                TransactionStatus = TransactionStatus.Received,
+                EntryDescription = "description",
+                IndividualIdNumber = "1234567890",
+                ReceiverName = "SomeName",
+                TransitRoutingNumber = "1230987645"
+            };
+            return transaction;
+
+        }
     }
 }

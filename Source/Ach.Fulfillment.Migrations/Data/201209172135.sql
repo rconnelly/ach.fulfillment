@@ -4,15 +4,21 @@
 /*==============================================================*/
 create table ach."AchTransaction" (
    AchTransactionId     int                  identity,
-   UserId               int                  not null,
-   MerchantId			nvarchar(10)         not null,
-   MerchantName         nvarchar(16)         not null,
-   MerchantDescription  nvarchar(10)         not null,
-   CallbackUrl			nvarchar(255)        not null,
+   PartnerId            int                  not null,
+   IndividualIdNumber	nvarchar(15)         not null,
+   ReceiverName         nvarchar(22)         not null,
+   EntryDescription		nvarchar(10)         not null,  
+   EntryDate			datetime			 null,   
+   TransactionCode		nvarchar(2)			 not null,
+   TransitRoutingNumber	nvarchar(9)          not null,
+   DFIAccountId			nvarchar(17)         not null,
    Amount				decimal(10,2)		 not null,
-   AccountId			nvarchar(15)         not null,
-   RoutingNumber		nvarchar(9)          not null,
-   IsQueued				bit					 not null default 0,
+   ServiceClassCode		nvarchar(3)			 not null, default "200",
+   EntryClassCode		nvarchar(3)			 not null,
+   PaymentRelatedInfo   nvarchar(80)		 null,
+   CallbackUrl			nvarchar(255)        not null,
+   TransactionStatus	int					 null,   
+   Locked				bit					 not null default 0,
    Created              datetime             not null,
    Modified             datetime             null,
    constraint PK_ACHTRANSACTION primary key (AchTransactionId)
@@ -28,6 +34,63 @@ create unique index UX_ACHTRANSACTION on ach.AchTransaction (
 GO
 
 alter table ach.AchTransaction
-   add constraint FK_ACHTRANSACTION_USER foreign key (UserId)
-      references ach."User" (UserId)
+   add constraint FK_ACHTRANSACTION_PARTNER foreign key (PartnerId)
+      references ach."Partner" (PartnerId)
 GO
+
+
+/*==============================================================*/
+/* Table: "File"                                                */
+/*==============================================================*/
+create table ach."File" (
+   FileId				int                  identity,
+   Name					nvarchar(16)         not null,
+   FileIdModifier		nvarchar(1)			 not null,
+   FileStatus			int					 null,
+   Locked				bit					 not null default 0,
+   Created              datetime             not null,
+   Modified             datetime             null,
+   constraint PK_FILE primary key (FileId))
+GO
+
+
+/*==============================================================*/
+/* Table: "FileTransaction"                                     */
+/*==============================================================*/
+create table ach."FileTransaction" (
+   FileTransactionId int				 identity,
+   FileId			 int                 not null,
+   AchTransactionId	 int				 not null,
+   constraint PK_FILETRANSACTION primary key (FileTransactionId)
+)
+
+alter table ach.FileTransaction
+   add constraint FK_ACHFILETRANSACTION_TRANSACTION foreign key (AchTransactionId)
+      references ach."AchTransaction" (AchTransactionId)
+
+alter table ach.FileTransaction
+   add constraint FK_ACHFILETRANSACTION_FILE foreign key (FileId)
+      references ach."File" (FileId)
+GO
+
+/*==============================================================*/
+/* Table: "PartnerDetail"                                       */
+/*==============================================================*/
+create table ach."PartnerDetail" (
+   PartnerDetailId		 int                  identity,
+   PartnerId			 int				  not null,
+   ImmediateDestination	 nvarchar(10)         not null,
+   CompanyIdentification nvarchar(10)         not null,
+   Destination			 nvarchar(23)         not null,
+   OriginOrCompanyName	 nvarchar(23)		  not null,
+   CompanyName			 nvarchar(16)		  not null,
+   DiscretionaryData	 nvarchar(20)		  not null,
+   DFIIdentification	 nvarchar(8)		  not null,
+   Created               datetime             not null,
+   Modified              datetime             null,
+   constraint PK_PARTNERDETAIL primary key (PartnerDetailId)
+)
+GO
+alter table ach.PartnerDetail
+   add constraint FK_PARTNERDETAIL_PARTNER foreign key (PartnerId)
+      references ach."Partner" (PartnerId)

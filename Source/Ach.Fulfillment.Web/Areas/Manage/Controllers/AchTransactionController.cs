@@ -7,6 +7,7 @@ using Ach.Fulfillment.Business.Exceptions;
 using Ach.Fulfillment.Web.Areas.Manage.Models;
 using Ach.Fulfillment.Web.Common;
 using Ach.Fulfillment.Web.Common.Controllers;
+using Ach.Fulfillment.Business.Impl.Enumeration;
 
 namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
@@ -18,6 +19,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
        // [BusinessValidationFilter]
         public ActionResult Create(AchTransactionModel value)
         {
+
             if (this.ModelState.IsValid)
             {
                 try
@@ -29,8 +31,8 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                     this.ModelState.FillFrom(exc);
                 }
             }
-            var response = new HttpResponseMessage(HttpStatusCode.Created);
-            return new JsonResult() { Data = response };//TODO put here some result
+            //var response = new HttpResponseMessage(HttpStatusCode.Accepted);
+            return new JsonResult() { Data = AchTransactionStatus.Received };
         }
 
         #endregion Create

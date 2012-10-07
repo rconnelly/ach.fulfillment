@@ -14,18 +14,17 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
         public long CreateAchTransaction(AchTransactionModel model)
         {
-            var transaction = new AchTransactionEntity
-                                  {
-                                      MerchantName = model.Name,
-                                      MerchantId = model.Id,
-                                      MerchantDescription = model.Description,
-                                      AccountId = model.AccountId,
-                                      Amount = model.Amount,
-                                      RoutingNumber = model.RoutingNumber,
-                                      CallbackUrl = model.CallbackUrl,
-                                      User = new UserEntity{Id = 1},//TODO remove or change to proper one
-                                      IsQueued = true
-                                  };
+            var transaction = new AchTransactionEntity();
+                                  //{
+                                  //    MerchantName = model.Name,
+                                  //    MerchantId = model.Id,
+                                  //    MerchantDescription = model.Description,
+                                  //    AccountId = model.AccountId,
+                                  //    Amount = model.Amount,
+                                  //    RoutingNumber = model.RoutingNumber,
+                                  //    CallbackUrl = model.CallbackUrl,
+                                  //    IsQueued = true
+                                  //};
 
             this.Manager.Create(transaction);
 
