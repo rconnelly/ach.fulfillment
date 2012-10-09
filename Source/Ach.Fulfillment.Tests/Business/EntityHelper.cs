@@ -1,3 +1,5 @@
+using System;
+
 namespace Ach.Fulfillment.Tests.Business
 {
     using System.Collections.ObjectModel;
@@ -28,7 +30,7 @@ namespace Ach.Fulfillment.Tests.Business
         public static PartnerEntity CreateTestPartner(this BusinessIntegrationTestBase testBase)
         {
             var p = new PartnerEntity { Name = ShortStringGenerator.GetRandomValue() };
-
+           // p.Details = new PartnerDetailEntity(p);
             return p;
         }
 
@@ -57,8 +59,17 @@ namespace Ach.Fulfillment.Tests.Business
                 EntryDescription = "description",
                 IndividualIdNumber = "1234567890",
                 ReceiverName = "SomeName",
-                TransitRoutingNumber = "1230987645"
+                TransitRoutingNumber = "1230987645",
+                EntryClassCode = "PPD",
+                ServiceClassCode = "200",
+                TransactionCode = "22",
+                PaymentRelatedInfo = "dsdfdsfsdf",
+                EntryDate = DateTime.UtcNow
             };
+
+            var partner = CreateTestPartner(testBase);
+            transaction.Partner = partner;
+
             return transaction;
 
         }

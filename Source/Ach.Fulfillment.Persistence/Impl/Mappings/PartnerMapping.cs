@@ -14,6 +14,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
                 .ChildKeyColumn("UserId")
                 .ParentKeyColumn("PartnerId")
                 .LazyLoad();
+            mapping.HasOne(i => i.Details).Cascade.All();
         }
     }
 }

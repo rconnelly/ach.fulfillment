@@ -28,8 +28,8 @@ namespace Ach.Fulfillment.Tests.Business
         [Test]
         public void GenerateAchFileTest()
         {
-            var manager = this.Locator.GetInstance<IAchTransactionManager>();
-            var achfile = manager.Generate();
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            manager.Generate();
         }
 
 

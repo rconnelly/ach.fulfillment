@@ -9,6 +9,6 @@ namespace Ach.Fulfillment.Web.Services
     public interface IAchService
     {
         IAchTransactionManager Manager { get; set; }
-        string Generate();
+        void Generate();
     }
 }

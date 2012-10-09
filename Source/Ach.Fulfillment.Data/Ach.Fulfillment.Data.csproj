@@ -129,6 +129,8 @@
     </Compile>
     <Compile Include="AchTransactionEntity.cs" />
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="FileEntity.cs" />
+    <Compile Include="PartnerDetailEntity.cs" />
     <Compile Include="Specifications\AchTransactionInQueue.cs" />
     <Compile Include="Specifications\UserAll.cs" />
     <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />

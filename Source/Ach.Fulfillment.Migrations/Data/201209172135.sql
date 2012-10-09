@@ -44,6 +44,7 @@ GO
 /*==============================================================*/
 create table ach."File" (
    FileId				int                  identity,
+   PartnerId			int                 not null,
    Name					nvarchar(16)         not null,
    FileIdModifier		nvarchar(1)			 not null,
    FileStatus			int					 null,
@@ -52,7 +53,9 @@ create table ach."File" (
    Modified             datetime             null,
    constraint PK_FILE primary key (FileId))
 GO
-
+alter table ach."File"
+   add constraint FK_FILE_PARTNER foreign key (PartnerId)
+      references ach."Partner" (PartnerId)
 
 /*==============================================================*/
 /* Table: "FileTransaction"                                     */
@@ -79,13 +82,13 @@ GO
 create table ach."PartnerDetail" (
    PartnerDetailId		 int                  identity,
    PartnerId			 int				  not null,
-   ImmediateDestination	 nvarchar(10)         not null,
-   CompanyIdentification nvarchar(10)         not null,
-   Destination			 nvarchar(23)         not null,
-   OriginOrCompanyName	 nvarchar(23)		  not null,
-   CompanyName			 nvarchar(16)		  not null,
-   DiscretionaryData	 nvarchar(20)		  not null,
-   DFIIdentification	 nvarchar(8)		  not null,
+   ImmediateDestination	 nvarchar(10)         null,
+   CompanyIdentification nvarchar(10)         null,
+   Destination			 nvarchar(23)         null,
+   OriginOrCompanyName	 nvarchar(23)		  null,
+   CompanyName			 nvarchar(16)		  null,
+   DiscretionaryData	 nvarchar(20)		  null,
+   DFIIdentification	 nvarchar(8)		  null,
    Created               datetime             not null,
    Modified              datetime             null,
    constraint PK_PARTNERDETAIL primary key (PartnerDetailId)

@@ -5,7 +5,11 @@ namespace Ach.Fulfillment.Business
 {
     public interface IAchTransactionManager : IManager<AchTransactionEntity>
     {
-        string Generate();
+        void Generate();
+
         void RemoveTransactionFromQueue(List<AchTransactionEntity> transactions);
+
+        void CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities);
+
     }
 }

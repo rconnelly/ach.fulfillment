@@ -8,7 +8,8 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
     {
         public void Override(AutoMapping<AchTransactionEntity> mapping)
         {
-            mapping.References(x => x.Partner, "PartnerId").Cascade.None(); 
+            mapping.References(x => x.Partner, "PartnerId").Cascade.None();
+            mapping.Map(x => x.TransactionStatus).CustomType<int>().Column("TransactionStatus").Not.Nullable();
         }
     }
 }

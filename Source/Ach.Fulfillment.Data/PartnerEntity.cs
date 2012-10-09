@@ -8,6 +8,8 @@ namespace Ach.Fulfillment.Data
 
         public virtual bool Disabled { get; set; }
 
-        public virtual ICollection<UserEntity> Users { get; set; } 
+        public virtual ICollection<UserEntity> Users { get; set; }
+
+        public virtual PartnerDetailEntity Details { get; protected set; }
     }
 }

@@ -148,15 +148,16 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="BaseModel.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
     <Compile Include="IAchTransactionManager.cs" />
+    <Compile Include="IFileManager.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\Enumeration\AchTransactionStatus.cs" />
+    <Compile Include="Impl\FileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
     <Compile Include="Impl\RoleManager.cs" />

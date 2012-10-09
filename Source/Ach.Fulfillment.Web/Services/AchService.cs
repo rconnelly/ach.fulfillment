@@ -19,9 +19,9 @@ namespace Ach.Fulfillment.Web.Services
 
         #region Public Methods and Operators
 
-        public string Generate()
+        public void Generate()
         {
-            return Manager.Generate();
+            Manager.Generate();
         }
 
         #endregion
