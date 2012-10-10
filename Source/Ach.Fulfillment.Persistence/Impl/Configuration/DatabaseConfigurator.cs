@@ -1,4 +1,6 @@
-﻿namespace Ach.Fulfillment.Persistence.Impl.Configuration
+﻿using Ach.Fulfillment.Data.Common;
+
+namespace Ach.Fulfillment.Persistence.Impl.Configuration
 {
     using System;
     using System.Configuration;
@@ -118,7 +120,12 @@
                                   .AssemblyOf<BaseEntity>(cfg)
                                   .UseOverridesFromAssemblyOf<TableNameConvention>()
                                   .Conventions
-                                  .AddFromAssemblyOf<TableNameConvention>()))
+                                  .AddFromAssemblyOf<TableNameConvention>())
+                                  .Add(
+                        () => AutoMap
+                                  .AssemblyOf<BaseEntity>(cfg)
+                                  .Conventions.Add<DefaultStringLengthConvention>()))
+                                 
                 .Cache(
                     c => c
                         .ProviderClass<NHibernate.Cache.HashtableCacheProvider>()

@@ -29,8 +29,11 @@ namespace Ach.Fulfillment.Tests.Business
 
         public static PartnerEntity CreateTestPartner(this BusinessIntegrationTestBase testBase)
         {
-            var p = new PartnerEntity { Name = ShortStringGenerator.GetRandomValue() };
-           // p.Details = new PartnerDetailEntity(p);
+            var p = new PartnerEntity
+                        {
+                            Name = ShortStringGenerator.GetRandomValue(),
+                        };
+            p.Details = new PartnerDetailEntity(p);
             return p;
         }
 
@@ -52,7 +55,7 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var transaction = new AchTransactionEntity
             {
-                DFIAccountId = new StringGenerator(5, 15).GetRandomValue(),
+                DFIAccountId = "gfhfg67567",
                 Amount = (decimal)123.00,
                 CallbackUrl = "test.com",
                 TransactionStatus = TransactionStatus.Received,

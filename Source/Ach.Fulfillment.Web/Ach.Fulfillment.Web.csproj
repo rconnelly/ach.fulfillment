@@ -299,12 +299,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Services\AchService.cs" />
-    <Compile Include="Services\ApiContext.cs" />
-    <Compile Include="Services\ClientApi.svc.cs">
-      <DependentUpon>ClientApi.svc</DependentUpon>
-    </Compile>
-    <Compile Include="Services\IAchService.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">
@@ -421,7 +415,6 @@
     <Content Include="Scripts\MvcFoolproofJQueryValidation.min.js" />
     <Content Include="Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Scripts\site.bootstrap.validate.js" />
-    <Content Include="Services\ClientApi.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -441,6 +434,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Logs\Web.config" />

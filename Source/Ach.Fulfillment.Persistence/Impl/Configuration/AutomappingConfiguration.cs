@@ -8,6 +8,8 @@ namespace Ach.Fulfillment.Persistence.Impl.Configuration
 
     internal class AutomappingConfiguration : DefaultAutomappingConfiguration
     {
+
+
         public override bool ShouldMap(Type type)
         {
             return typeof(IEntity).IsAssignableFrom(type);

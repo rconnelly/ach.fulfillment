@@ -11,7 +11,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
         {
             mapping.Id(Reveal.Member<PartnerDetailEntity>("PartnerId"))
                 .GeneratedBy.Foreign("Partner");
-            mapping.HasOne(Reveal.Member<PartnerDetailEntity>("Partner"))
+            mapping.HasOne(Reveal.Member<PartnerDetailEntity, PartnerEntity>("Partner"))
                 .Constrained()
                 .ForeignKey();
         }

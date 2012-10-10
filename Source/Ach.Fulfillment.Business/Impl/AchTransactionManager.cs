@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Ach.Fulfillment.Business.Impl
     internal class AchTransactionManager : ManagerBase<AchTransactionEntity>, IAchTransactionManager
     {
         [Dependency]
-        public FileManager FileManager { get; set; }
+        public IFileManager FileManager { get; set; }
 
         #region Public Methods and Operators
 
@@ -29,30 +30,34 @@ namespace Ach.Fulfillment.Business.Impl
 
         public void Generate()
         {
-            var achTransactionEntities = Repository.FindAll(new AchTransactionInQueue()).ToList();
-           
-            var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
-            var transactions = transactionGroups as List<IGrouping<PartnerEntity, AchTransactionEntity>> ?? transactionGroups.ToList();
             
-            if(transactions.Any())
+        }
+
+        public void Generate(string achfilesStore)
+        {
+            var achTransactionEntities = Repository.FindAll(new AchTransactionInQueue()).ToList();
+           //TODO add locking
+            var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
+            var partnerTransactions = transactionGroups as List<IGrouping<PartnerEntity, AchTransactionEntity>> ?? transactionGroups.ToList();
+
+            if (partnerTransactions.Any())
             {
-                foreach (var transaction in transactions)
+                foreach (var transactions in partnerTransactions)
                 {
-                    var trns = transaction.ToList();
-                    var achFile = GenerateAchFileForPartner(transaction.Key, trns);
-                    var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    var trns = transactions.ToList();
+                    var partner = transactions.Key;
+                    var achFile = GenerateAchFileForPartner(partner, trns);
                     
-                    CreateFileForPartnerTransactions(transaction.Key, trns);
-
-                    if (achFile != null & achFile.Length > 0)
+                    
+                    if (!string.IsNullOrEmpty(achFile))
                     {
-                        var achfilesStore = @"D:\"; //TODO put here real path
+                        var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
                         var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".txt");
-
                         var file = new System.IO.StreamWriter(newPath);
                         file.Write(achFile);
                         file.Flush();
                         file.Close();
+                        var fileEntiry = CreateFileForPartnerTransactions(partner, trns, newFileName);
                     }
 
                     RemoveTransactionFromQueue(trns);
@@ -75,16 +80,17 @@ namespace Ach.Fulfillment.Business.Impl
             }
         }
 
-        public void CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities)
+        public FileEntity CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities, string filename)
         {
             var fileEntity = new FileEntity
             {
-                FileStatus = "Created",
+                Name = filename,
+                FileStatus = "0",//TODO make an Enum
                 Partner = partner,
                 Transactions = transactionEntities,
                 FileIdModifier = "" //TODO calculate modifier
             };
-            FileManager.Create(fileEntity);
+            return FileManager.Create(fileEntity);
         }
 
         #endregion

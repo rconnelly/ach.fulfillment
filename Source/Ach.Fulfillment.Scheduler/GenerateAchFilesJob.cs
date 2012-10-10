@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Ach.Fulfillment.Business;
 using Common.Logging;
 using Quartz;
@@ -16,23 +17,12 @@ namespace Ach.Fulfillment.Scheduler
         {
             using (new UnitOfWork())
             {
-                Manager.Generate();
+                var dataMap = context.JobDetail.JobDataMap;
+                var achfilesStore = dataMap.GetString("AchFilesStore");
+                Manager.Generate(achfilesStore);
 
-                //if (achFile != null & achFile.Length > 0)
-                //{
-                //    var dataMap = context.JobDetail.JobDataMap;
-                //    var achfilesStore = dataMap.GetString("AchFilesStore");
-                //    var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                //    var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".txt");
-
-                    //var file = new System.IO.StreamWriter(newPath);
-                    //file.Write(achFile);
-                    //file.Flush();
-                    //file.Close();
-               // }
             }
-
-        }
+       }
         
     }
 }

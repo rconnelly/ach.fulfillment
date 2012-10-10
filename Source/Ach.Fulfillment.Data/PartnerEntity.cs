@@ -10,6 +10,6 @@ namespace Ach.Fulfillment.Data
 
         public virtual ICollection<UserEntity> Users { get; set; }
 
-        public virtual PartnerDetailEntity Details { get; protected set; }
+        public virtual PartnerDetailEntity Details { get; set; }
     }
 }

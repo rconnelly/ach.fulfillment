@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Practices.Unity;
 using NUnit.Framework;
 using Ach.Fulfillment.Business;
-using Ach.Fulfillment.Data;  
+using Ach.Fulfillment.Data;
+using Rhino.Mocks;
 
 namespace Ach.Fulfillment.Tests.Business
 {
@@ -12,7 +14,7 @@ namespace Ach.Fulfillment.Tests.Business
     public class AchTransactionManagerTests : BusinessIntegrationTestBase
     {
         #region Public Methods and Operators
-
+        [Ignore]
         [Test]
         public void CreateAchTransactionTest()
         {
@@ -24,7 +26,7 @@ namespace Ach.Fulfillment.Tests.Business
 
             Assert.That(instance.Id, Is.GreaterThan(0));         
         }
-
+        [Ignore]
         [Test]
         public void GenerateAchFileTest()
         {
@@ -32,7 +34,7 @@ namespace Ach.Fulfillment.Tests.Business
             manager.Generate();
         }
 
-
+        [Ignore]
         [Test]
         public void RemoveTransactionFromQueueTest()
         {
@@ -45,6 +47,31 @@ namespace Ach.Fulfillment.Tests.Business
 
             var changedTransaction = manager.Load(instance.Id);
             Assert.AreEqual(changedTransaction.TransactionStatus,TransactionStatus.Batched);
+        }
+
+        [Ignore]
+        [Test]
+        public void CreateFileForPartnerTransactionsTest()
+        {
+            var mocks = new MockRepository();
+            var container = mocks.StrictMock<IUnityContainer>();
+            var fileManager = mocks.StrictMock<IFileManager>();
+            container.RegisterInstance(fileManager);
+            container.RegisterType<IAchTransactionManager>();
+            var manager = container.Resolve<IAchTransactionManager>();
+            
+            var fileEntity = new FileEntity();
+            var createFileWasCalled = false;
+            var transaction = this.CreateTestTransaction();
+            transaction.Partner.Id = 1;
+            var trList = new List<AchTransactionEntity> { transaction };
+
+            Expect.Call(fileManager.Create(fileEntity)).Return(fileEntity).WhenCalled(delegate{ createFileWasCalled = true;});
+            mocks.ReplayAll();
+            
+            manager.CreateFileForPartnerTransactions(transaction.Partner,trList,"achfile");
+
+            Assert.IsTrue(createFileWasCalled);
         }
 
         #endregion

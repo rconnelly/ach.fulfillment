@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ach.Fulfillment.Data
 {
-    public class PartnerDetailEntity
+    public class PartnerDetailEntity : BaseEntity
     {
         private int PartnerId { get; set; }
         private PartnerEntity Partner { get; set; }

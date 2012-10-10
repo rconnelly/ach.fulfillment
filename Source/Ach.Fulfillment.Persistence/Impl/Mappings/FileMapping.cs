@@ -8,6 +8,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
     {
         public void Override(AutoMapping<FileEntity> mapping)
         {
+            mapping.Table("AchFile");
                  mapping.HasMany(i => i.Transactions)
                 .Table("FileTransaction")
                 .LazyLoad();
