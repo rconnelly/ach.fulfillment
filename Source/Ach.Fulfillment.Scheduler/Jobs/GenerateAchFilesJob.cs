@@ -10,6 +10,7 @@
 
     using Quartz;
 
+    [DisallowConcurrentExecution]
     public class GenerateAchFilesJob : IJob
     {
         #region Public Properties
@@ -23,21 +24,28 @@
 
         public void Execute(IJobExecutionContext context)
         {
-            using (new UnitOfWork())
+            try
             {
-                var achFileData = this.Manager.Generate();
-                if (!string.IsNullOrEmpty(achFileData))
+                using (new UnitOfWork())
                 {
-                    var dataMap = context.JobDetail.JobDataMap;
-                    var achfilesStore = dataMap.GetString("AchFilesStore");
-                    var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                    var newPath = Path.Combine(achfilesStore, newFileName + ".txt");
-
-                    using (var file = new StreamWriter(newPath))
+                    var achFileData = this.Manager.Generate();
+                    if (!string.IsNullOrEmpty(achFileData))
                     {
-                        file.Write(achFileData);
+                        var dataMap = context.JobDetail.JobDataMap;
+                        var achfilesStore = dataMap.GetString("AchFilesStore");
+                        var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                        var newPath = Path.Combine(achfilesStore, newFileName + ".txt");
+
+                        using (var file = new StreamWriter(newPath))
+                        {
+                            file.Write(achFileData);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new JobExecutionException(ex);
             }
         }
 
