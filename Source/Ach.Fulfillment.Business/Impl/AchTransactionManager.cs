@@ -27,14 +27,10 @@
             return base.Create(transaction);
         }
 
-        public void Generate()
-        {
-            
-        }
-
         public void Generate(string achfilesStore)
         {
             var achTransactionEntities = Repository.FindAll(new AchTransactionInQueue()).ToList();
+
            //TODO add locking
             var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
             var partnerTransactions = transactionGroups as List<IGrouping<PartnerEntity, AchTransactionEntity>> ?? transactionGroups.ToList();
@@ -169,7 +165,7 @@
                                                              CompanyIdentification = partner.Details.CompanyIdentification,
                                                              CompanyName = partner.Details.CompanyName,
                                                              EffectiveEntryDate = DateTime.Now,
-                                                             OriginatingDFIIdentification = partner.Details.DfiIdentification,
+                                                             OriginatingDfiIdentification = partner.Details.DfiIdentification,
                                                              ServiceClassCode = ServiceClassCode.CreditAndDebit,
                                                              StandardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), trn.Key)
                                                          },
@@ -192,7 +188,7 @@
                                                 CompanyIdentification = batch.Header.CompanyIdentification,
                                                 EntryAndAddendaCount = batch.Entries.Count,
                                                 EntryHash = entryHash,
-                                                OriginatingDFIIdentification = batch.Header.OriginatingDFIIdentification,
+                                                OriginatingDFIIdentification = batch.Header.OriginatingDfiIdentification,
                                                 ServiceClassCode = batch.Header.ServiceClassCode,
                                                 TotalCreditAmount = batch.Entries.Select(e => e.Amount).Sum(),
                                                 TotalDebitAmount = batch.Entries.Select(e => e.Amount).Sum(),
@@ -217,6 +213,5 @@
                 TransactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode),transaction.TransactionCode)
             };
         }
-
      }
 }

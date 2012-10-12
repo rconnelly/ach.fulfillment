@@ -1,11 +1,9 @@
-﻿using System;
-namespace Ach.Fulfillment.Web.Areas.Manage.Models
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-
-namespace Ach.Fulfillment.Web.Areas.Manage.Models
+﻿namespace Ach.Fulfillment.Web.Areas.Manage.Models
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+    
     public class AchTransactionModel
     {
         [HiddenInput]
@@ -46,7 +44,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
 
         [Required]
         public string CallbackUrl { get; set; }
-
 
     }
 

@@ -4,7 +4,7 @@
     using FluentNHibernate.Automapping;
     using FluentNHibernate.Automapping.Alterations;
     
-    public class FileMapping:IAutoMappingOverride<FileEntity>
+    public class FileMapping : IAutoMappingOverride<FileEntity>
     {
         public void Override(AutoMapping<FileEntity> mapping)
         {

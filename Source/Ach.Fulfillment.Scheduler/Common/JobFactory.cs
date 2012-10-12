@@ -22,7 +22,6 @@
         {
             this.serviceLocator = serviceLocator;
         }
-
         #endregion
 
         #region Public Methods and Operators
@@ -30,7 +29,7 @@
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             try
-            {
+            {                
                 var job = this.serviceLocator.GetInstance(bundle.JobDetail.JobType) as IJob;
                 Contract.Assert(job != null);
                 return job;

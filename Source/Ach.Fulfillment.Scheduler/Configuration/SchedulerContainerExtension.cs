@@ -1,7 +1,8 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Configuration
 {
-    using Ach.Fulfillment.Initialization.Configuration;
-    using Ach.Fulfillment.Scheduler.Common;
+    using Ach.Fulfillment.Business;
+    using Initialization.Configuration;
+    using Common;
 
     using Microsoft.Practices.Unity;
 
@@ -14,8 +15,9 @@
 
         protected override void Initialize()
         {
-            this.Container.RegisterType<ISchedulerFactory, SchedulerFactory>(new ContainerControlledLifetimeManager());
-            this.Container.RegisterType<IJobFactory, JobFactory>(new ContainerControlledLifetimeManager());
+            this.Container.AddNewExtension<InitializationContainerExtension>();
+            Container.RegisterType<ISchedulerFactory, SchedulerFactory>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IJobFactory, JobFactory>(new ContainerControlledLifetimeManager());             
         }
 
         #endregion

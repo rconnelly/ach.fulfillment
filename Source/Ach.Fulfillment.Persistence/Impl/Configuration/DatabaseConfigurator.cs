@@ -118,12 +118,7 @@
                                   .AssemblyOf<BaseEntity>(cfg)
                                   .UseOverridesFromAssemblyOf<TableNameConvention>()
                                   .Conventions
-                                  .AddFromAssemblyOf<TableNameConvention>())
-                                  .Add(
-                        () => AutoMap
-                                  .AssemblyOf<BaseEntity>(cfg)
-                                  .Conventions.Add<DefaultStringLengthConvention>()))
-                                 
+                                  .AddFromAssemblyOf<TableNameConvention>()))
                 .Cache(
                     c => c
                         .ProviderClass<NHibernate.Cache.HashtableCacheProvider>()

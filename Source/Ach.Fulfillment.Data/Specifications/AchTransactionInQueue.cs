@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq.Expressions;
-using Ach.Fulfillment.Data.Common;
-
-namespace Ach.Fulfillment.Data.Specifications
+﻿namespace Ach.Fulfillment.Data.Specifications
 {
-    public class AchTransactionInQueue: SpecificationBase<AchTransactionEntity>
+    using System;
+    using System.Linq.Expressions;
+    using Common;
+
+    public class AchTransactionInQueue : SpecificationBase<AchTransactionEntity>
     {
         public override Expression<Func<AchTransactionEntity, bool>> IsSatisfiedBy()
         {
-            return m => m.TransactionStatus == AchTransactionStatus.Received;
+            return m => m.TransactionStatus == AchTransactionStatus.Received && !m.Locked;
         }
     }
 

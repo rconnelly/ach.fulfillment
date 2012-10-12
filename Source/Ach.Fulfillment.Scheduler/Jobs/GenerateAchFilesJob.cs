@@ -1,10 +1,8 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
     using System;
-    using System.IO;
-
-    using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Common;
+    using Business;
+    using Fulfillment.Common;
 
     using Microsoft.Practices.Unity;
 
@@ -28,19 +26,9 @@
             {
                 using (new UnitOfWork())
                 {
-                    var achFileData = this.Manager.Generate();
-                    if (!string.IsNullOrEmpty(achFileData))
-                    {
-                        var dataMap = context.JobDetail.JobDataMap;
-                        var achfilesStore = dataMap.GetString("AchFilesStore");
-                        var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        var newPath = Path.Combine(achfilesStore, newFileName + ".txt");
-
-                        using (var file = new StreamWriter(newPath))
-                        {
-                            file.Write(achFileData);
-                        }
-                    }
+                    var dataMap = context.JobDetail.JobDataMap;
+                    var achfilesStore = dataMap.GetString("AchFilesStore");
+                    Manager.Generate(achfilesStore);                
                 }
             }
             catch (Exception ex)

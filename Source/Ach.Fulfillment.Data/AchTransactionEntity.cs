@@ -3,7 +3,16 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class AchTransactionEntity:BaseEntity
+    public enum AchTransactionStatus
+    {
+        Received = 0,
+        Batched = 1,
+        InProgress = 2,
+        Complete = 3,
+        Error = 4
+    } 
+
+    public class AchTransactionEntity : BaseEntity
     {
         public virtual PartnerEntity Partner { get; set; }
 
@@ -43,15 +52,5 @@
         public virtual AchTransactionStatus TransactionStatus { get; set; }
 
         public virtual bool Locked { get; set; }
-
-    }
-
-    public enum AchTransactionStatus
-    {
-        Received = 0,
-        Batched = 1,
-        InProgress = 2,
-        Complete = 3,
-        Error = 4
     }
 }

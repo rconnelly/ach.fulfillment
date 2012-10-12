@@ -10,7 +10,6 @@
         {
             mapping.References(x => x.Partner, "PartnerId").Cascade.None();
             mapping.Map(x => x.TransactionStatus).CustomType<int>().Column("TransactionStatus").Not.Nullable();
-
         }
     }
 }

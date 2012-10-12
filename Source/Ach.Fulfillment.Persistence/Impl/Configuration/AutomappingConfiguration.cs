@@ -2,14 +2,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Configuration
 {
     using System;
 
-    using Ach.Fulfillment.Data;
+    using Data;
 
     using FluentNHibernate.Automapping;
 
     internal class AutomappingConfiguration : DefaultAutomappingConfiguration
     {
-
-
         public override bool ShouldMap(Type type)
         {
             return typeof(IEntity).IsAssignableFrom(type);

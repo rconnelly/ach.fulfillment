@@ -123,6 +123,10 @@
       <Project>{148eb4d4-4df2-4452-be6e-34dc77351e53}</Project>
       <Name>Ach.Fulfillment.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Data\Ach.Fulfillment.Data.csproj">
+      <Project>{9167FA6C-34C0-4D74-8184-4D52D29CDADB}</Project>
+      <Name>Ach.Fulfillment.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ach.Fulfillment.Initialization\Ach.Fulfillment.Initialization.csproj">
       <Project>{24E18145-C312-4628-99B6-5703CB223297}</Project>
       <Name>Ach.Fulfillment.Initialization</Name>

@@ -2,9 +2,9 @@
 {
     using System;
 
-    using Ach.Fulfillment.Nacha.Attribute;
-    using Ach.Fulfillment.Nacha.Enumeration;
-    using Ach.Fulfillment.Nacha.Serialization;
+    using Attribute;
+    using Enumeration;
+    using Serialization;
 
     [Serializable]
     public class BatchHeaderGeneralRecord : SerializableBase
@@ -100,7 +100,7 @@
         /// </list>
         /// </value>
         [Field(Position = 11, DataType = DataType.Numeric, Length = 8, IsRequired = true, MaskOnAudit = false)]
-        public string OriginatingDFIIdentification;
+        public string OriginatingDfiIdentification;
 
         /// <summary>
         /// Assign batch numbers in ascending order    within each file.
