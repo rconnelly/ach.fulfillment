@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{614EC757-5279-4727-816E-020D318855B3}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>Ach.Fulfillment.Scheduler</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressPdbOutput>True</SuppressPdbOutput>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Product.Clean.xslt" />
+    <Content Include="service.install.transform.xsl" />
+    <Content Include="service.uninstall.transform.xsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ach.Fulfillment.Scheduler\Ach.Fulfillment.Scheduler.csproj">
+      <Name>Ach.Fulfillment.Scheduler</Name>
+      <Project>{5ce82594-bda6-4cdd-b97e-a915357d57b1}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <RevisionNumber Condition=" '$(RevisionNumber)' == '' ">0</RevisionNumber>
+    <DefineConstants>ProductVersion=1.0.$(RevisionNumber)</DefineConstants>
+    <ExtensionTasksPath>.\</ExtensionTasksPath>
+  </PropertyGroup>
+  <Import Project="..\..\Build\Tasks\MSBuild.ExtensionPack.Tasks\MSBuild.ExtensionPack.tasks" />
+  <Target Name="BeforeBuild">
+    <CreateItem Include="%(ProjectReference.RootDir)%(ProjectReference.Directory)bin\$(Configuration)\" AdditionalMetadata="DirectoryRefId=%(ProjectReference.RefTargetDir);KeepEmptyDirectories=false;SuppressRootDirectory=true;SuppressRegistry=true;SuppressCom=true;ComponentGroupName=%(ProjectReference.Name);PreprocessorVariable=var.%(ProjectReference.Name).TargetDir;Transforms=Product.Clean.xslt">
+      <Output TaskParameter="Include" ItemName="HarvestDirectory" />
+    </CreateItem>
+  </Target>
+  <Target Name="AfterBuild">
+    <MSBuild.ExtensionPack.Xml.XmlTask TaskAction="Transform" XmlFile="Product.wxs" XslTransformFile="service.install.transform.xsl" OutputFile="$(OutputPath)Ach.Fulfillment.Scheduler.install.cmd">
+    </MSBuild.ExtensionPack.Xml.XmlTask>
+    <MSBuild.ExtensionPack.Xml.XmlTask TaskAction="Transform" XmlFile="Product.wxs" XslTransformFile="service.uninstall.transform.xsl" OutputFile="$(OutputPath)Ach.Fulfillment.Scheduler.uninstall.cmd">
+    </MSBuild.ExtensionPack.Xml.XmlTask>
+  </Target>
+</Project>

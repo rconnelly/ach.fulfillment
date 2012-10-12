@@ -20,13 +20,17 @@
         <ProjectToPackage Include="Ach.Fulfillment.Web\Ach.Fulfillment.Web.csproj">
             <Path>Packages</Path>
         </ProjectToPackage>
-      
         <FileToPublish Include="Ach.Fulfillment.Migrations\bin\Migrate.exe;
                                 Ach.Fulfillment.Migrations\bin\Migrate.exe.config;
                                 Ach.Fulfillment.Migrations\bin\FluentMigrator.Runner.dll;
                                 Ach.Fulfillment.Migrations\bin\FluentMigrator.dll;
                                 Ach.Fulfillment.Migrations\bin\Ach.Fulfillment.Migrations.dll;">
             <Path>Database</Path>
+        </FileToPublish>
+        <FileToPublish Include="Ach.Fulfillment.Scheduler.Setup\bin\Ach.Fulfillment.Scheduler.msi;
+                                Ach.Fulfillment.Scheduler.Setup\bin\Ach.Fulfillment.Scheduler.install.cmd;
+                                Ach.Fulfillment.Scheduler.Setup\bin\Ach.Fulfillment.Scheduler.uninstall.cmd;">
+            <Path>Service</Path>
         </FileToPublish>
     </ItemGroup>
     

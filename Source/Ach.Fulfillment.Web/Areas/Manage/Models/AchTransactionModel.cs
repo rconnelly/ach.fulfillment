@@ -1,12 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using Ach.Fulfillment.Data;
-using System.ComponentModel.DataAnnotations;
-
-namespace Ach.Fulfillment.Web.Areas.Manage.Models
+﻿namespace Ach.Fulfillment.Web.Areas.Manage.Models
 {
- 
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public class AchTransactionModel
     {
         [HiddenInput]
