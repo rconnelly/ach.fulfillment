@@ -12,5 +12,18 @@
 3. Open "trigger" section - there you can configure when your job will be run. Change cron-expression for your one. For more information look at http://en.wikipedia.org/wiki/Cron
 
 ##Request
-We are wating for request in Json format
-{ "Name": "ReceiverName", "Description":"PAYMENT", "Amount":"123,00","AccountId":"123Account", "RoutingNumber":"123487234","CallbackUrl":"send.callback.here"}
+We are wating for request in Json format, for example
+{
+"IndividualIdNumber" : "123456789012345",
+"ReceiverName" : "ReceiverName",
+"EntryDescription":"PAYROLL",
+"EntryDate":"01.01.2012",
+"TransactionCode":"22", 
+"TransitRoutingNumber":"123456789",
+"DfiAccountId":"12345678901234567", 
+"Amount":"123,00", 
+"EntryClassCode":"PPD", 
+"CallbackUrl":"send.callback.here",
+"PaymentRelatedInfo":" ",
+"ServiceClassCode":"200"
+}
