@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <?ifndef ProductVersion ?>
+    <?define ProductVersion="1.0.0"?>
+  <?endif?>
+  <?ifndef Platform ?>
+    <?define Platform=x64?>
+  <?endif?>
+  <?if $(var.Platform) = x64 ?>
+    <?define ProductName = "Ach.Fulfillment.Scheduler (64 bit)" ?>
+    <?define Win64 = "yes" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+  <?else ?>
+    <?define ProductName = "Ach.Fulfillment.Scheduler" ?>
+    <?define Win64 = "no" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+  <?endif ?>
+  <Product
+        Id="*" UpgradeCode="12D995A8-D7C6-4229-8641-1BC7D79BE23B"
+        Name="$(var.ProductName)" Language="1033" Version="$(var.ProductVersion)"
+        Manufacturer="Pps">
+    <Package InstallerVersion="200" Compressed="yes"  Platform="$(var.Platform)" Description="$(var.ProductName)" />
+
+    <MajorUpgrade
+        DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable" />
+    
+    <Property Id="DATABASECONNECTION" Value="Data Source=(local);Initial Catalog=Ach;Integrated Security=SSPI" />
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.PlatformProgramFilesFolder)">
+        <Directory Id="INSTALLLOCATION" Name="Ach.Fulfillment.Scheduler" >
+          <Component Id="ServiceInstall" Guid="{4742188A-4824-49DA-A4AE-8E90AF2760F4}" >
+            <File 
+                    Id="SSFile" 
+                    Name="Ach.Fulfillment.Scheduler.exe"
+                    Source="$(var.Ach.Fulfillment.Scheduler.TargetDir)\Ach.Fulfillment.Scheduler.exe"
+                    KeyPath="yes" 
+                    Vital="yes" />
+            <ServiceInstall 
+                    Id="SSInstall"
+                    Type="ownProcess"
+                    Vital="yes"
+                    Name="AchFulfillmentScheduler"
+                    DisplayName="Ach Fulfillment Scheduler"
+                    Description="Ach Fulfillment Scheduling Server"
+                    Start="auto"
+                    Account="LocalSystem"
+                    ErrorControl="critical" 
+                    Interactive="no" />
+            <ServiceControl 
+                    Id="SSControl"
+                    Start="install"
+                    Stop="both"
+                    Remove="uninstall"
+                    Name="AchFulfillmentScheduler"
+                    Wait="no"/>
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+    
+    <Component Id="UpdateConfig" Guid="EFD51FAC-A00E-468E-9ECA-CE56EF8AD760" Directory="INSTALLLOCATION">
+      <CreateFolder Directory="INSTALLLOCATION" />
+      <util:XmlFile Id="DbEntry" Action="setValue" Permanent="yes"
+            File="[INSTALLLOCATION]Ach.Fulfillment.Scheduler.exe.config"
+            ElementPath="/configuration/connectionStrings/add[\[]@name='Default'[\]]"
+            Name="connectionString"
+            Value="[DATABASECONNECTION];Enlist=false;Application Name=Ach.Fulfillment.Scheduler" />
+    </Component>
+
+    <Feature Id="ProductFeature" Title="Pps.MerchantCrawler" Level="1">
+      <ComponentGroupRef Id="Ach.Fulfillment.Scheduler" />
+      <ComponentRef Id="UpdateConfig" />
+      <ComponentRef Id="ServiceInstall" />
+    </Feature>
+
+  </Product>
+</Wix>

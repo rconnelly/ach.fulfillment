@@ -387,9 +387,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\images\header_logo.png" />
-    <Content Include="jobs.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.dataTables-1.9.2.paging.js" />
@@ -469,10 +466,6 @@
     <ProjectReference Include="..\Ach.Fulfillment.Initialization\Ach.Fulfillment.Initialization.csproj">
       <Project>{24E18145-C312-4628-99B6-5703CB223297}</Project>
       <Name>Ach.Fulfillment.Initialization</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ach.Fulfillment.Scheduler\Ach.Fulfillment.Scheduler.csproj">
-      <Project>{5ce82594-bda6-4cdd-b97e-a915357d57b1}</Project>
-      <Name>Ach.Fulfillment.Scheduler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

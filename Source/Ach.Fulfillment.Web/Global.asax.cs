@@ -27,9 +27,6 @@
     using Microsoft.Practices.ServiceLocation;
 
     using Mvc.JQuery.Datatables;
-    using Microsoft.Practices.Unity;
-    using System.Collections.Specialized;
-    using Ach.Fulfillment.Scheduler;
 
     public class MvcApplication : HttpApplication
     {
@@ -57,13 +54,11 @@
 
             ModelBinders.Binders.Add(typeof(DataTablesParam), new DataTablesModelBinder());
             MvcHandler.DisableMvcResponseHeader = true;
-                       
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             this.Context.Items.Add(UnitOfWorkKey, new UnitOfWork());
-            
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

@@ -15,7 +15,6 @@ namespace Ach.Fulfillment.Web.Configuration
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel.Unity;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.Unity;
-    using Scheduler.Configuration;
 
     public class WebContainerExtension : InitializationContainerExtension
     {
@@ -32,9 +31,9 @@ namespace Ach.Fulfillment.Web.Configuration
         protected override void Initialize()
         {
             base.Initialize();
-            Container.AddNewExtension<QuartzContainerExtension>();
-            Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
-            ConfigureExceptionHandling();
+
+            this.Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
+            this.ConfigureExceptionHandling();
         }
 
         private void ConfigureExceptionHandling()
