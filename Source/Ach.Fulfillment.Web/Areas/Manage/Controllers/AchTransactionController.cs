@@ -1,16 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Helpers;
-using System.Web.Mvc;
-using Ach.Fulfillment.Business.Exceptions;
-using Ach.Fulfillment.Web.Areas.Manage.Models;
-using Ach.Fulfillment.Web.Common;
-using Ach.Fulfillment.Web.Common.Controllers;
-using Ach.Fulfillment.Business.Impl.Enumeration;
-
-namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
+﻿namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
+    using System.Web.Mvc;
+    using Business.Exceptions;
+    using Data;
+    using Models;
+    using Common;
+    using Common.Controllers;
+
     public class AchTransactionController : Controller<AchManager>
     {
         #region Create
@@ -20,19 +16,18 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
         public ActionResult Create(AchTransactionModel value)
         {
 
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    var id = this.Manager.CreateAchTransaction(value);
+                    Manager.CreateAchTransaction(value);
                 }
                 catch (BusinessValidationException exc)
                 {
-                    this.ModelState.FillFrom(exc);
+                    ModelState.FillFrom(exc);
                 }
             }
-            //var response = new HttpResponseMessage(HttpStatusCode.Accepted);
-            return new JsonResult() { Data = AchTransactionStatus.Received };
+            return new JsonResult { Data = AchTransactionStatus.Received };
         }
 
         #endregion Create

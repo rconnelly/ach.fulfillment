@@ -3,7 +3,7 @@ using FluentNHibernate.Conventions.AcceptanceCriteria;
 using FluentNHibernate.Conventions.Inspections;
 using FluentNHibernate.Conventions.Instances;
 
-namespace Ach.Fulfillment.Data.Common
+namespace Ach.Fulfillment.Persistence.Impl.Configuration.Conventions
 {
     public class DefaultStringLengthConvention : IPropertyConvention, IPropertyConventionAcceptance
     {

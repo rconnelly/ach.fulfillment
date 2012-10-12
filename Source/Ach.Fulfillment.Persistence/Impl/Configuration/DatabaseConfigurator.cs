@@ -1,13 +1,11 @@
-﻿using Ach.Fulfillment.Data.Common;
-
-namespace Ach.Fulfillment.Persistence.Impl.Configuration
+﻿namespace Ach.Fulfillment.Persistence.Impl.Configuration
 {
     using System;
     using System.Configuration;
     using System.Diagnostics.Contracts;
 
-    using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Persistence.Impl.Configuration.Conventions;
+    using Data;
+    using Conventions;
 
     using global::Common.Logging;
 

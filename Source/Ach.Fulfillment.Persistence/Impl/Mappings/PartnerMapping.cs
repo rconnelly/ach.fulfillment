@@ -1,6 +1,6 @@
 namespace Ach.Fulfillment.Persistence.Impl.Mappings
 {
-    using Ach.Fulfillment.Data;
+    using Data;
 
     using FluentNHibernate.Automapping;
     using FluentNHibernate.Automapping.Alterations;
@@ -14,7 +14,8 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
                 .ChildKeyColumn("UserId")
                 .ParentKeyColumn("PartnerId")
                 .LazyLoad();
-            mapping.HasOne(i => i.Details).Cascade.All();
+            mapping.HasOne(i => i.Details).PropertyRef(r=>r.Partner).Cascade.All();
+            
         }
     }
 }

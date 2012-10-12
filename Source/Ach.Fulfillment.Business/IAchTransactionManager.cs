@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using Ach.Fulfillment.Business.Impl;
-using Ach.Fulfillment.Data;
-
-namespace Ach.Fulfillment.Business
+﻿namespace Ach.Fulfillment.Business
 {
+    using System.Collections.Generic;
+    using Data;
+
     public interface IAchTransactionManager : IManager<AchTransactionEntity>
     {
-       // IFileManager FileManager { get; set; }
-
         void Generate();
 
         void Generate(string achfilesStore);

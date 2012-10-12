@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Practices.Unity;
-using NUnit.Framework;
-using Ach.Fulfillment.Business;
-using Ach.Fulfillment.Data;
-using Rhino.Mocks;
-
-namespace Ach.Fulfillment.Tests.Business
+﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using System.Collections.Generic;
+    using Microsoft.Practices.Unity;
+    using NUnit.Framework;
+    using Fulfillment.Business;
+    using Data;
+    using Rhino.Mocks;
+
     [TestFixture]
     public class AchTransactionManagerTests : BusinessIntegrationTestBase
     {
@@ -18,9 +15,11 @@ namespace Ach.Fulfillment.Tests.Business
         [Test]
         public void CreateAchTransactionTest()
         {
-            var manager = this.Locator.GetInstance<IAchTransactionManager>();
+            var manager = Locator.GetInstance<IAchTransactionManager>();
             
             var transaction = this.CreateTestTransaction();
+            var partner = this.CreateTestPartner();
+            transaction.Partner = partner;
 
             var instance = manager.Create(transaction);
 
@@ -38,7 +37,7 @@ namespace Ach.Fulfillment.Tests.Business
         [Test]
         public void RemoveTransactionFromQueueTest()
         {
-            var manager = this.Locator.GetInstance<IAchTransactionManager>();
+            var manager = Locator.GetInstance<IAchTransactionManager>();
             var transaction = this.CreateTestTransaction();
             var instance = manager.Create(transaction);
 
@@ -46,7 +45,7 @@ namespace Ach.Fulfillment.Tests.Business
             manager.RemoveTransactionFromQueue(transactions);
 
             var changedTransaction = manager.Load(instance.Id);
-            Assert.AreEqual(changedTransaction.TransactionStatus,TransactionStatus.Batched);
+            Assert.AreEqual(changedTransaction.TransactionStatus,AchTransactionStatus.Batched);
         }
 
         [Ignore]
@@ -55,7 +54,7 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var mocks = new MockRepository();
             var container = mocks.StrictMock<IUnityContainer>();
-            var fileManager = mocks.StrictMock<IFileManager>();
+            var fileManager = mocks.DynamicMock<IFileManager>();
             container.RegisterInstance(fileManager);
             container.RegisterType<IAchTransactionManager>();
             var manager = container.Resolve<IAchTransactionManager>();

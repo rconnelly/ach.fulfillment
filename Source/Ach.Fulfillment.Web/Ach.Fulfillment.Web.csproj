@@ -387,7 +387,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\images\header_logo.png" />
-    <Content Include="jobs.xml" />
+    <Content Include="jobs.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.dataTables-1.9.2.paging.js" />

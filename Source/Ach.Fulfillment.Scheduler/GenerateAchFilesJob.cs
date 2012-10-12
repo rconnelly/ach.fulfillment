@@ -1,13 +1,10 @@
-﻿using System;
-using System.Globalization;
-using Ach.Fulfillment.Business;
-using Common.Logging;
-using Quartz;
-using Microsoft.Practices.Unity;
-using Ach.Fulfillment.Common;
-
-namespace Ach.Fulfillment.Scheduler
+﻿namespace Ach.Fulfillment.Scheduler
 {
+    using Business;
+    using Quartz;
+    using Microsoft.Practices.Unity;
+    using Common;
+
     public class GenerateAchFilesJob : IJob
     {
         [Dependency]
@@ -23,6 +20,6 @@ namespace Ach.Fulfillment.Scheduler
 
             }
        }
-        
+
     }
 }

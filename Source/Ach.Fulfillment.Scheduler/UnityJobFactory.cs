@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using Common.Logging;
 using Microsoft.Practices.Unity;
 using Quartz;
 using Quartz.Spi;
-using Quartz.Util;
 
 namespace Ach.Fulfillment.Scheduler
 {

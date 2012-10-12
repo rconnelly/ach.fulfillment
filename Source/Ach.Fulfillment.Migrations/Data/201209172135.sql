@@ -13,7 +13,7 @@ create table ach."AchTransaction" (
    TransitRoutingNumber	nvarchar(9)          not null,
    DFIAccountId			nvarchar(17)         not null,
    Amount				decimal(10,2)		 not null,
-   ServiceClassCode		nvarchar(3)			 not null, default "200",
+   ServiceClassCode		nvarchar(3)			 not null,
    EntryClassCode		nvarchar(3)			 not null,
    PaymentRelatedInfo   nvarchar(80)		 null,
    CallbackUrl			nvarchar(255)        not null,
@@ -42,38 +42,38 @@ GO
 /*==============================================================*/
 /* Table: "File"                                                */
 /*==============================================================*/
-create table ach."File" (
-   FileId				int                  identity,
-   PartnerId			int                 not null,
+create table ach."AchFile" (
+   AchFileId			int                  identity,
+   PartnerId			int                  not null,
    Name					nvarchar(16)         not null,
    FileIdModifier		nvarchar(1)			 not null,
    FileStatus			int					 null,
    Locked				bit					 not null default 0,
    Created              datetime             not null,
    Modified             datetime             null,
-   constraint PK_FILE primary key (FileId))
+   constraint PK_ACHFILE primary key (AchFileId))
 GO
-alter table ach."File"
-   add constraint FK_FILE_PARTNER foreign key (PartnerId)
+alter table ach."AchFile"
+   add constraint FK_ACHFILE_PARTNER foreign key (PartnerId)
       references ach."Partner" (PartnerId)
 
 /*==============================================================*/
 /* Table: "FileTransaction"                                     */
 /*==============================================================*/
-create table ach."FileTransaction" (
-   FileTransactionId int				 identity,
-   FileId			 int                 not null,
+create table ach."AchFileTransaction" (
+   AchFileTransactionId int				 identity,
+   AchFileId			 int             not null,
    AchTransactionId	 int				 not null,
-   constraint PK_FILETRANSACTION primary key (FileTransactionId)
+   constraint PK_ACHFILETRANSACTION primary key (AchFileTransactionId)
 )
 
-alter table ach.FileTransaction
+alter table ach.AchFileTransaction
    add constraint FK_ACHFILETRANSACTION_TRANSACTION foreign key (AchTransactionId)
       references ach."AchTransaction" (AchTransactionId)
 
-alter table ach.FileTransaction
-   add constraint FK_ACHFILETRANSACTION_FILE foreign key (FileId)
-      references ach."File" (FileId)
+alter table ach.AchFileTransaction
+   add constraint FK_ACHFILETRANSACTION_FILE foreign key (AchFileId)
+      references ach."AchFile" (AchFileId)
 GO
 
 /*==============================================================*/

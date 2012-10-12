@@ -1,31 +1,31 @@
-﻿using System;
-using System.Configuration;
-using Ach.Fulfillment.Data;
-using Ach.Fulfillment.Web.Areas.Manage.Models;
-using Microsoft.Practices.Unity;
-using Ach.Fulfillment.Business;
-
-namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
+﻿namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
+    using Data;
+    using Models;
+    using Microsoft.Practices.Unity;
+    using Business;
+    using System.Configuration;
+
     public class AchManager 
     {
         [Dependency]
         public IAchTransactionManager Manager { get; set; }
 
         [Dependency]
-        public IPartnerManager PartnerManager { get; set;}
-    
+        public IUserManager UserManager { get; set;}
 
         public long CreateAchTransaction(AchTransactionModel model)
         {
-            var partner = PartnerManager.Load(1);//TODO test version, change this
-
+            var login = ConfigurationManager.AppSettings["DefaultUser"];
+            var user = UserManager.FindByLogin(login);
+            var partner = user.Partner;
+           
             var transaction = new AchTransactionEntity
                                   {
                                       ReceiverName = model.ReceiverName,
                                       IndividualIdNumber = model.IndividualIdNumber,
                                       EntryDescription = model.EntryDescription,
-                                      DFIAccountId = model.DFIAccountId,
+                                      DfiAccountId = model.DfiAccountId,
                                       Amount = model.Amount,
                                       TransitRoutingNumber = model.TransitRoutingNumber,
                                       CallbackUrl = model.CallbackUrl,
@@ -35,10 +35,10 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
                                       ServiceClassCode = model.ServiceClassCode,
                                       PaymentRelatedInfo = model.PaymentRelatedInfo,
                                       Partner = partner,
-                                      TransactionStatus = TransactionStatus.Received
+                                      TransactionStatus = AchTransactionStatus.Received
                                   };
 
-            this.Manager.Create(transaction);
+            Manager.Create(transaction);
 
             return transaction.Id;
         }

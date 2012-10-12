@@ -3,9 +3,7 @@ using System;
 namespace Ach.Fulfillment.Tests.Business
 {
     using System.Collections.ObjectModel;
-
-    using Ach.Fulfillment.Data;
-
+    using Data;
     using QuickGenerate.Primitives;
 
     internal static class EntityHelper
@@ -33,7 +31,6 @@ namespace Ach.Fulfillment.Tests.Business
                         {
                             Name = ShortStringGenerator.GetRandomValue(),
                         };
-            p.Details = new PartnerDetailEntity(p);
             return p;
         }
 
@@ -55,23 +52,20 @@ namespace Ach.Fulfillment.Tests.Business
         {
             var transaction = new AchTransactionEntity
             {
-                DFIAccountId = "gfhfg67567",
+                DfiAccountId = "12345678901234567",
                 Amount = (decimal)123.00,
                 CallbackUrl = "test.com",
-                TransactionStatus = TransactionStatus.Received,
-                EntryDescription = "description",
+                TransactionStatus = AchTransactionStatus.Received,
+                EntryDescription = "PAYROLL",
                 IndividualIdNumber = "1234567890",
                 ReceiverName = "SomeName",
-                TransitRoutingNumber = "1230987645",
+                TransitRoutingNumber = "123456789",
                 EntryClassCode = "PPD",
                 ServiceClassCode = "200",
                 TransactionCode = "22",
                 PaymentRelatedInfo = "dsdfdsfsdf",
-                EntryDate = DateTime.UtcNow
+                EntryDate = DateTime.Now
             };
-
-            var partner = CreateTestPartner(testBase);
-            transaction.Partner = partner;
 
             return transaction;
 

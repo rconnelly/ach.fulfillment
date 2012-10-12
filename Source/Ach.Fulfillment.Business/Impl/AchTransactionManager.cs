@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Linq;
-using Ach.Fulfillment.Common.Transactions;
-using Ach.Fulfillment.Data;
-using Ach.Fulfillment.Data.Specifications;
-using Ach.Fulfillment.Nacha.Enumeration;
-using Ach.Fulfillment.Nacha.Message;
-using Ach.Fulfillment.Nacha.Record;
-using Microsoft.Practices.Unity;
-
-namespace Ach.Fulfillment.Business.Impl
+﻿namespace Ach.Fulfillment.Business.Impl
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Linq;
+    using Common.Transactions;
+    using Data;
+    using Data.Specifications;
+    using Nacha.Enumeration;
+    using Nacha.Message;
+    using Nacha.Record;
+    using Microsoft.Practices.Unity;
+
     internal class AchTransactionManager : ManagerBase<AchTransactionEntity>, IAchTransactionManager
     {
         [Dependency]
@@ -48,7 +47,6 @@ namespace Ach.Fulfillment.Business.Impl
                     var partner = transactions.Key;
                     var achFile = GenerateAchFileForPartner(partner, trns);
                     
-                    
                     if (!string.IsNullOrEmpty(achFile))
                     {
                         var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -57,7 +55,7 @@ namespace Ach.Fulfillment.Business.Impl
                         file.Write(achFile);
                         file.Flush();
                         file.Close();
-                        var fileEntiry = CreateFileForPartnerTransactions(partner, trns, newFileName);
+                        CreateFileForPartnerTransactions(partner, trns, newFileName);
                     }
 
                     RemoveTransactionFromQueue(trns);
@@ -73,7 +71,7 @@ namespace Ach.Fulfillment.Business.Impl
             {
                 foreach (var achTransactionEntity in transactions)
                 {
-                    achTransactionEntity.TransactionStatus = TransactionStatus.Batched;
+                    achTransactionEntity.TransactionStatus = AchTransactionStatus.Batched;
                     base.Update(achTransactionEntity);
                 }
                 tx.Complete();
@@ -85,7 +83,7 @@ namespace Ach.Fulfillment.Business.Impl
             var fileEntity = new FileEntity
             {
                 Name = filename,
-                FileStatus = "0",//TODO make an Enum
+                FileStatus = 0,//TODO make an Enum
                 Partner = partner,
                 Transactions = transactionEntities,
                 FileIdModifier = "" //TODO calculate modifier
@@ -95,7 +93,7 @@ namespace Ach.Fulfillment.Business.Impl
 
         #endregion
 
-        private string GenerateAchFileForPartner(PartnerEntity partner, List<AchTransactionEntity> transactions)
+        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions)
         {
             var transactionGroups = transactions.GroupBy(tt => tt.EntryDescription);
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
@@ -103,7 +101,7 @@ namespace Ach.Fulfillment.Business.Impl
             {
                 var achfile = new File
                 {
-                    Header = CreateFileControlRecord(partner, ""),//TODO put real fileIdModifier
+                    Header = CreateFileControlRecord(partner, "0"),//TODO put real fileIdModifier
                     Batches = new List<GeneralBatch>()
                 };
                 var batchNumber = 0;
@@ -116,7 +114,7 @@ namespace Ach.Fulfillment.Business.Impl
 
                 var entryCount = achfile.Batches.Select(b => b.Control.EntryAndAddendaCount).Sum();
                 var entryHash =
-                    achfile.Batches.Select(o => Convert.ToInt32(o.Control.EntryHash)).Sum().ToString();
+                    achfile.Batches.Select(o => Convert.ToInt32(o.Control.EntryHash)).Sum().ToString(CultureInfo.InvariantCulture);
                 if (entryHash.Length > 10)
                     entryHash = entryHash.Substring(entryHash.Length - 10, 10);
                 achfile.Control = new FileControlRecord
@@ -125,10 +123,8 @@ namespace Ach.Fulfillment.Business.Impl
                     BlockCount = batchNumber + 1,
                     EntryAndAddendaCount = entryCount,
                     EntryHash = entryHash, //TODO calculate right EntryHash
-                    TotalCreditAmount =
-                        achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
-                    TotalDebitAmount =
-                        achfile.Batches.Select(b => b.Control.TotalDebitAmount).Sum()
+                    TotalCreditAmount = achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
+                    TotalDebitAmount = achfile.Batches.Select(b => b.Control.TotalDebitAmount).Sum()
                 };
                 var result = achfile.Serialize();
                 return result;
@@ -138,6 +134,9 @@ namespace Ach.Fulfillment.Business.Impl
 
         private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, string fileIdModifier)
         {
+            Contract.Assert(partner != null);
+            Contract.Assert(partner.Details != null);
+
             return new FileHeaderRecord
                        {
                            Destination = partner.Details.Destination,
@@ -149,53 +148,57 @@ namespace Ach.Fulfillment.Business.Impl
                        };
         }
 
-        private List<GeneralBatch> CreateBatch(PartnerEntity partner, string description, IEnumerable<AchTransactionEntity> transactions, int batchNumber)
+        private IEnumerable<GeneralBatch> CreateBatch(PartnerEntity partner, string description, IEnumerable<AchTransactionEntity> transactions, int batchNumber)
         {
             var batches = new List<GeneralBatch>();
-            var trnsGroupedByClassCode = transactions.GroupBy(t => t.EntryClassCode).ToList();
-
-            if (trnsGroupedByClassCode.Any())
+            if (transactions != null)
             {
-                foreach (var trn in trnsGroupedByClassCode)
+                var achTransactionEntities = transactions as List<AchTransactionEntity> ?? transactions.ToList();
+                var trnsGroupedByClassCode = achTransactionEntities.GroupBy(t => t.EntryClassCode).ToList();
+
+                if (trnsGroupedByClassCode.Any())
                 {
-                    var batch = new GeneralBatch
-                                    {
-                                        Header = new BatchHeaderGeneralRecord
-                                                     {
-                                                         BatchNumber = batchNumber,
-                                                         CompanyEntryDescription = description,
-                                                         CompanyIdentification = partner.Details.CompanyIdentification,
-                                                         CompanyName = partner.Details.CompanyName,
-                                                         EffectiveEntryDate = DateTime.Now,
-                                                         OriginatingDFIIdentification = partner.Details.DFIIdentification,
-                                                         ServiceClassCode = ServiceClassCode.CreditAndDebit,
-                                                         StandardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), trn.Key)
-                                                     },
-                                        Entries = new List<EntryDetailGeneralRecord>()
-                                    };
-
-                    foreach (var entry in transactions.Select(CreateEntryDetailRecord))
+                    foreach (var trn in trnsGroupedByClassCode)
                     {
-                        batch.Entries.Add(entry);
-                    }
-                    var entryHash =
-                        batch.Entries.Select(e => Convert.ToInt32(e.RDFIRoutingTransitNumber)).Sum().ToString(
-                            CultureInfo.InvariantCulture);
-                    if (entryHash.Length > 10)
-                        entryHash = entryHash.Substring(entryHash.Length - 10, 10);
-
-                    batch.Control = new BatchControlRecord
+                        var batch = new GeneralBatch
                                         {
-                                            BatchNumber = batchNumber,
-                                            CompanyIdentification = batch.Header.CompanyIdentification,
-                                            EntryAndAddendaCount = batch.Entries.Count,
-                                            EntryHash = entryHash,
-                                            OriginatingDFIIdentification = batch.Header.OriginatingDFIIdentification,
-                                            ServiceClassCode = batch.Header.ServiceClassCode,
-                                            TotalCreditAmount = batch.Entries.Select(e => e.Amount).Sum(),
-                                            TotalDebitAmount = batch.Entries.Select(e => e.Amount).Sum(),
+                                            Header = new BatchHeaderGeneralRecord
+                                                         {
+                                                             BatchNumber = batchNumber,
+                                                             CompanyEntryDescription = description,
+                                                             CompanyIdentification = partner.Details.CompanyIdentification,
+                                                             CompanyName = partner.Details.CompanyName,
+                                                             EffectiveEntryDate = DateTime.Now,
+                                                             OriginatingDFIIdentification = partner.Details.DfiIdentification,
+                                                             ServiceClassCode = ServiceClassCode.CreditAndDebit,
+                                                             StandardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), trn.Key)
+                                                         },
+                                            Entries = new List<EntryDetailGeneralRecord>()
                                         };
-                    batches.Add(batch);
+
+                        foreach (var entry in achTransactionEntities.Select(CreateEntryDetailRecord))
+                        {
+                            batch.Entries.Add(entry);
+                        }
+                        var entryHash =
+                            batch.Entries.Select(e => Convert.ToInt32(e.RDFIRoutingTransitNumber)).Sum().ToString(
+                                CultureInfo.InvariantCulture);
+                        if (entryHash.Length > 10)
+                            entryHash = entryHash.Substring(entryHash.Length - 10, 10);
+
+                        batch.Control = new BatchControlRecord
+                                            {
+                                                BatchNumber = batchNumber,
+                                                CompanyIdentification = batch.Header.CompanyIdentification,
+                                                EntryAndAddendaCount = batch.Entries.Count,
+                                                EntryHash = entryHash,
+                                                OriginatingDFIIdentification = batch.Header.OriginatingDFIIdentification,
+                                                ServiceClassCode = batch.Header.ServiceClassCode,
+                                                TotalCreditAmount = batch.Entries.Select(e => e.Amount).Sum(),
+                                                TotalDebitAmount = batch.Entries.Select(e => e.Amount).Sum(),
+                                            };
+                        batches.Add(batch);
+                    }
                 }
             }
             return batches;
@@ -210,7 +213,7 @@ namespace Ach.Fulfillment.Business.Impl
                 RDFIRoutingTransitNumber = transaction.TransitRoutingNumber.Substring(0, 8),
                 CheckDigit = transaction.TransitRoutingNumber.Substring(8, 1),
                 IndividualOrCompanyName = transaction.ReceiverName,
-                RDFIAccountNumber = transaction.DFIAccountId,
+                RDFIAccountNumber = transaction.DfiAccountId,
                 TransactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode),transaction.TransactionCode)
             };
         }

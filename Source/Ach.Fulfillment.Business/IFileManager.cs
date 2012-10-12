@@ -1,7 +1,7 @@
-﻿using Ach.Fulfillment.Data;
-
-namespace Ach.Fulfillment.Business
+﻿namespace Ach.Fulfillment.Business
 {
+    using Data;
+
     public interface IFileManager : IManager<FileEntity>
     {
     }

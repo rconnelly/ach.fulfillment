@@ -3,8 +3,8 @@ namespace Ach.Fulfillment.Business.Impl
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
 
-    using Ach.Fulfillment.Business.Impl.Validation;
-    using Ach.Fulfillment.Data;
+    using Validation;
+    using Data;
 
     internal class PartnerManager : ManagerBase<PartnerEntity>, IPartnerManager
     {
@@ -12,14 +12,14 @@ namespace Ach.Fulfillment.Business.Impl
         {
             Contract.Assert(partner != null);
 
-            this.DemandValid<PartnerValidator>(partner);
+            DemandValid<PartnerValidator>(partner);
             return base.Create(partner);
         }
 
         public override void Delete(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
-            this.Repository.Delete(partner);
+            Repository.Delete(partner);
         }
 
         public void Disable(PartnerEntity partner)
@@ -29,13 +29,13 @@ namespace Ach.Fulfillment.Business.Impl
 
             partner.Disabled = true;
 
-            this.Repository.Update(partner);
+            Repository.Update(partner);
         }
 
         public override void Update(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
-            this.DemandValid<PartnerValidator>(partner);
+            DemandValid<PartnerValidator>(partner);
             base.Update(partner);
         }
 
@@ -54,7 +54,7 @@ namespace Ach.Fulfillment.Business.Impl
                     };
             }
 
-            this.Repository.Update(partner);
+            Repository.Update(partner);
 
             return partner;
         }

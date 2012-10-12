@@ -1,19 +1,21 @@
-﻿namespace Ach.Fulfillment.Web.Configuration
+﻿using Ach.Fulfillment.Common.Security;
+
+namespace Ach.Fulfillment.Web.Configuration
 {
     using System;
     using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Runtime.Caching;
 
-    using Ach.Fulfillment.Business.Exceptions;
-    using Ach.Fulfillment.Common.Exceptions;
-    using Ach.Fulfillment.Initialization.Configuration;
+    using Business.Exceptions;
+    using Fulfillment.Common.Exceptions;
+    using Initialization.Configuration;
 
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel.Unity;
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
     using Microsoft.Practices.Unity;
-    using Ach.Fulfillment.Scheduler.Configuration;
+    using Scheduler.Configuration;
 
     public class WebContainerExtension : InitializationContainerExtension
     {
@@ -30,10 +32,9 @@
         protected override void Initialize()
         {
             base.Initialize();
-            this.Container.AddNewExtension<QuartzContainerExtension>();
-
-            this.Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
-            this.ConfigureExceptionHandling();
+            Container.AddNewExtension<QuartzContainerExtension>();
+            Container.RegisterInstance<ObjectCache>(MemoryCache.Default);
+            ConfigureExceptionHandling();
         }
 
         private void ConfigureExceptionHandling()
@@ -61,7 +62,7 @@
                         .ThenThrowNewException();
             builder.UpdateConfigurationWithReplace(configurationSource);
 
-            var configurator = new UnityContainerConfigurator(this.Container);
+            var configurator = new UnityContainerConfigurator(Container);
             EnterpriseLibraryContainer.ConfigureContainer(configurator, configurationSource);
         }
 

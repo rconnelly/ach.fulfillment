@@ -1,9 +1,9 @@
-﻿using Ach.Fulfillment.Data;
-using FluentNHibernate.Automapping;
-using FluentNHibernate.Automapping.Alterations;
-
-namespace Ach.Fulfillment.Persistence.Impl.Mappings
+﻿namespace Ach.Fulfillment.Persistence.Impl.Mappings
 {
+    using Data;
+    using FluentNHibernate.Automapping;
+    using FluentNHibernate.Automapping.Alterations;
+
     public class AchTransactionMapping : IAutoMappingOverride<AchTransactionEntity>
     {
         public void Override(AutoMapping<AchTransactionEntity> mapping)

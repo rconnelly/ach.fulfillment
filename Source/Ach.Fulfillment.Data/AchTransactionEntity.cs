@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace Ach.Fulfillment.Data
+﻿namespace Ach.Fulfillment.Data
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class AchTransactionEntity:BaseEntity
     {
         public virtual PartnerEntity Partner { get; set; }
@@ -25,7 +25,7 @@ namespace Ach.Fulfillment.Data
         public virtual string TransitRoutingNumber { get; set; }
 
         [StringLength(17)]
-        public virtual string DFIAccountId { get; set; }
+        public virtual string DfiAccountId { get; set; }
 
         public virtual decimal Amount { get; set; }
 
@@ -40,13 +40,13 @@ namespace Ach.Fulfillment.Data
 
         public virtual string CallbackUrl { get; set; }
         
-        public virtual TransactionStatus TransactionStatus { get; set; }
+        public virtual AchTransactionStatus TransactionStatus { get; set; }
 
         public virtual bool Locked { get; set; }
 
     }
 
-    public enum TransactionStatus
+    public enum AchTransactionStatus
     {
         Received = 0,
         Batched = 1,

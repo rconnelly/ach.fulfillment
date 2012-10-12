@@ -1,19 +1,14 @@
-﻿using Ach.Fulfillment.Data;
-using FluentNHibernate;
-using FluentNHibernate.Automapping;
-using FluentNHibernate.Automapping.Alterations;
-
-namespace Ach.Fulfillment.Persistence.Impl.Mappings
+﻿namespace Ach.Fulfillment.Persistence.Impl.Mappings
 {
+    using Data;
+    using FluentNHibernate.Automapping;
+    using FluentNHibernate.Automapping.Alterations;
+
     public class PartnerDetailMapping : IAutoMappingOverride<PartnerDetailEntity>
     {
         public void Override(AutoMapping<PartnerDetailEntity> mapping)
-        {
-            mapping.Id(Reveal.Member<PartnerDetailEntity>("PartnerId"))
-                .GeneratedBy.Foreign("Partner");
-            mapping.HasOne(Reveal.Member<PartnerDetailEntity, PartnerEntity>("Partner"))
-                .Constrained()
-                .ForeignKey();
+        {          
+            mapping.References(x => x.Partner).Column("PartnerId");
         }
     }
 }

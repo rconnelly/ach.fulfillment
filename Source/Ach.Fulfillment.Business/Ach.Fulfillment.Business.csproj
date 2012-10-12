@@ -156,7 +156,6 @@
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
-    <Compile Include="Impl\Enumeration\AchTransactionStatus.cs" />
     <Compile Include="Impl\FileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
@@ -203,6 +202,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Impl\Enumeration\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

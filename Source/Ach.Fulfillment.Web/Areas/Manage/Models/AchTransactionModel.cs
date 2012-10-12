@@ -30,18 +30,16 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Models
         public string TransitRoutingNumber { get; set; }
 
         [Required]
-        public string DFIAccountId { get; set; }
+        public string DfiAccountId { get; set; }
 
         [Required]
         public decimal Amount { get; set; }
 
-        [Required]
         public string ServiceClassCode { get; set; }
 
         [Required]
         public string EntryClassCode { get; set; }
-
-        [Required]
+        
         public string PaymentRelatedInfo { get; set; }
 
         [Required]
