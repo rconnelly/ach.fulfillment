@@ -1,4 +1,4 @@
-﻿namespace Ach.Fulfillment.Scheduler
+﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
     using System;
     using System.IO;
