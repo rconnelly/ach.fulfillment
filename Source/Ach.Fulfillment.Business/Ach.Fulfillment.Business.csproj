@@ -163,6 +163,7 @@
     <Compile Include="Impl\UserManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Impl\Validation\AchTransactionValidator.cs" />
     <Compile Include="Impl\Validation\PasswordValidator.cs" />
     <Compile Include="Impl\Validation\PartnerValidator.cs" />
     <Compile Include="Impl\Validation\RoleValidator.cs" />

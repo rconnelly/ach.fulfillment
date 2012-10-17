@@ -1,4 +1,6 @@
-﻿namespace Ach.Fulfillment.Business.Impl
+﻿using Ach.Fulfillment.Business.Impl.Validation;
+
+namespace Ach.Fulfillment.Business.Impl
 {
     using System;
     using System.Collections.Generic;
@@ -24,11 +26,15 @@
         {
             Contract.Assert(transaction != null);
 
+            DemandValid<AchTransactionValidator>(transaction);
+
             return base.Create(transaction);
         }
 
         public void Generate(string achfilesStore)
         {
+            Contract.Assert(!String.IsNullOrEmpty(achfilesStore));
+
             var achTransactionEntities = Repository.FindAll(new AchTransactionInQueue()).ToList();
 
            //TODO add locking
@@ -46,20 +52,37 @@
                     if (!string.IsNullOrEmpty(achFile))
                     {
                         var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".txt");
-                        var file = new System.IO.StreamWriter(newPath);
-                        file.Write(achFile);
-                        file.Flush();
-                        file.Close();
+                        var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".ach");
+                         
+                        using (var file = new System.IO.StreamWriter(newPath))
+                        {
+                            file.Write(achFile);
+                            file.Flush();
+                            file.Close();
+                        }
                         CreateFileForPartnerTransactions(partner, trns, newFileName);
                     }
-
-                    RemoveTransactionFromQueue(trns);
+                    ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
                 }
             }
         }
         
-        public void RemoveTransactionFromQueue(List<AchTransactionEntity> transactions)
+        public void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status)
+        {
+            Contract.Assert(transactions != null);
+
+            using (var tx = new Transaction())
+            {
+                foreach (var achTransactionEntity in transactions)
+                {
+                    achTransactionEntity.TransactionStatus = status;
+                    base.Update(achTransactionEntity);
+                }
+                tx.Complete();
+            }
+        }
+
+        public void SendAchNotification(List<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
 
@@ -72,6 +95,7 @@
                 }
                 tx.Complete();
             }
+
         }
 
         public FileEntity CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities, string filename)
@@ -88,6 +112,8 @@
         }
 
         #endregion
+
+        #region Private Methods
 
         private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions)
         {
@@ -213,5 +239,7 @@
                 TransactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode),transaction.TransactionCode)
             };
         }
-     }
+
+        #endregion
+    }
 }

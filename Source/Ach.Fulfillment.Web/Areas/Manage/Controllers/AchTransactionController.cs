@@ -15,7 +15,6 @@
        // [BusinessValidationFilter]
         public ActionResult Create(AchTransactionModel value)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -26,8 +25,9 @@
                 {
                     ModelState.FillFrom(exc);
                 }
+                return new JsonResult { Data = AchTransactionStatus.Received };
             }
-            return new JsonResult { Data = AchTransactionStatus.Received };
+            return new JsonResult { Data = ModelState };
         }
 
         #endregion Create

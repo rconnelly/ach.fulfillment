@@ -5,13 +5,20 @@
 4. Go to \Build\Assembly\ folder, open setup.cmd and change connection string to proper one. 
 5. Go to \Build\Assembly\Packages\ folder, open Ach.Fulfillment.Web.SetParameters.xml and change connection string to proper one.
 6. Run RunSetup.cmd
+7. Go to Web folder, open Web.config - here in section AppSettings we have   <add key ="DefaultUser" value="admin"/> - 
+it is login for default user. It will be used for non-authentificated requests. We get company payment information from PartnerDetails for this user. 
 
 ##Job configuration
 1. Go to quartz_jobs.config file 
 2. Open "job-data-map" section - there for entry with key "AchFilesStore" you should put path to the directory where genarated files will be stored.
 3. Open "trigger" section - there you can configure when your job will be run. Change cron-expression for your one. For more information look at http://en.wikipedia.org/wiki/Cron
 
+
 ##Request
+Url : http://yourhost/achtransaction/create
+Accept: application/json
+Content-Type: application/json
+
 We are wating for request in Json format, for example
 {
 "IndividualIdNumber" : "123456789012345",
@@ -24,6 +31,6 @@ We are wating for request in Json format, for example
 "Amount":"123,00", 
 "EntryClassCode":"PPD", 
 "CallbackUrl":"send.callback.here",
-"PaymentRelatedInfo":" ",
+"PaymentRelatedInfo":"",
 "ServiceClassCode":"200"
 }

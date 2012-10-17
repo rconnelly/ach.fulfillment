@@ -57,7 +57,7 @@ namespace Ach.Fulfillment.Tests.Business
                 CallbackUrl = "test.com",
                 TransactionStatus = AchTransactionStatus.Received,
                 EntryDescription = "PAYROLL",
-                IndividualIdNumber = "1234567890",
+                IndividualIdNumber = "123456789012345",
                 ReceiverName = "SomeName",
                 TransitRoutingNumber = "123456789",
                 EntryClassCode = "PPD",
