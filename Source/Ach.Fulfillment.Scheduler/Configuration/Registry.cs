@@ -18,7 +18,7 @@ namespace Ach.Fulfillment.Scheduler.Configuration
 
         static Registry()
         {
-            Configuration = (NameValueCollection) ConfigurationManager.GetSection("quartz");
+            Configuration = (NameValueCollection)ConfigurationManager.GetSection("quartz");
         }
 
         public static string ServiceName

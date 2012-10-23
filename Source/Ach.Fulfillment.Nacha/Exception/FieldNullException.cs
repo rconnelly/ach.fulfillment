@@ -1,19 +1,24 @@
-﻿using System;
-
-namespace Ach.Fulfillment.Nacha.Exception
+﻿namespace Ach.Fulfillment.Nacha.Exception
 {
-	public class FieldNullException : ArgumentNullException
-	{ 
-		public FieldNullException() : base()
-		{}
+    using System;
 
-		public FieldNullException(string fieldName) : base(fieldName)
-		{}
+    public class FieldNullException : ArgumentNullException
+    {
+        public FieldNullException()
+        {
+        }
 
-		public FieldNullException(string fieldName, string message) : base(fieldName, message)
-		{}
+        public FieldNullException(string fieldName)
+            : base(fieldName)
+        {
+        }
 
-		public FieldNullException(string message, System.Exception innerException) : base(message, innerException)
-		{}
-	}
+        public FieldNullException(string fieldName, string message) : base(fieldName, message)
+        {
+        }
+
+        public FieldNullException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
 }

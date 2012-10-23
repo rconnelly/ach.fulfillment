@@ -1,23 +1,26 @@
-﻿using System;
-using Ach.Fulfillment.Shared.Reflection;
-
-namespace Ach.Fulfillment.Nacha.Attribute
+﻿namespace Ach.Fulfillment.Nacha.Attribute
 {
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-	public sealed class RecordAttribute : System.Attribute, IReflectAttribute
-	{
-	    public bool IsRequired { get; set; }
+    using System;
 
-		public string RecordType { get; set; }
-		public string ControlPrefix { get; set; }
+    using Ach.Fulfillment.Shared.Reflection;
 
-		public string Prefix { get; set; }
-		public string Postfix { get; set; }
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+    public sealed class RecordAttribute : Attribute, IReflectAttribute
+    {
+        public bool IsRequired { get; set; }
 
-		#region IReflectAttribute Members
+        public string RecordType { get; set; }
 
-		public int Position { get; set; }
+        public string ControlPrefix { get; set; }
 
-		#endregion
-	}
+        public string Prefix { get; set; }
+
+        public string Postfix { get; set; }
+
+        #region IReflectAttribute Members
+
+        public int Position { get; set; }
+
+        #endregion
+    }
 }

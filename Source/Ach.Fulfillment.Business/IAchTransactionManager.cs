@@ -7,8 +7,6 @@
     {
         void Generate(string achfilesStore);
 
-        void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status);
-
-        FileEntity CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities, string filename);
+        void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status);      
     }
 }

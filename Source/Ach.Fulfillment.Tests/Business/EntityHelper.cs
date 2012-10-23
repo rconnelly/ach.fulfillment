@@ -1,9 +1,10 @@
-using System;
-
 namespace Ach.Fulfillment.Tests.Business
 {
+    using System;
     using System.Collections.ObjectModel;
-    using Data;
+
+    using Ach.Fulfillment.Data;
+
     using QuickGenerate.Primitives;
 
     internal static class EntityHelper
@@ -68,7 +69,6 @@ namespace Ach.Fulfillment.Tests.Business
             };
 
             return transaction;
-
         }
     }
 }

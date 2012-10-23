@@ -1,13 +1,14 @@
-﻿using System;
-using QuickGenerate.Primitives;
-
-namespace Ach.Fulfillment.Tests.Persistence
+﻿namespace Ach.Fulfillment.Tests.Persistence
 {
-    using Data;
+    using System;
+
+    using Ach.Fulfillment.Data;
 
     using FluentNHibernate.Testing;
 
     using NUnit.Framework;
+
+    using QuickGenerate.Primitives;
 
     [TestFixture]
     public class SpecificationTests : PersistenseTestBase
@@ -182,9 +183,8 @@ namespace Ach.Fulfillment.Tests.Persistence
             .VerifyTheMappings();
 
             new PersistenceSpecification<FileEntity>(Session)
-                .CheckProperty(c=>c.FileIdModifier, "A")
-                .CheckProperty(c=>c.FileStatus, 0)
-                .CheckProperty(c => c.Locked, false)
+                .CheckProperty(c => c.FileIdModifier, "A")
+                .CheckProperty(c => c.FileStatus, AchFileStatus.Created).CheckProperty(c => c.Locked, false)
                 .CheckProperty(c => c.Name, new StringGenerator(16, 16).GetRandomValue())
                 .CheckEntity(c => c.Partner, partner)
             .VerifyTheMappings();
@@ -211,7 +211,7 @@ namespace Ach.Fulfillment.Tests.Persistence
             var transaction = new PersistenceSpecification<AchTransactionEntity>(Session)
                 .CheckProperty(c => c.IndividualIdNumber, new StringGenerator(15, 15).GetRandomValue())
                 .CheckProperty(c => c.ReceiverName, new StringGenerator(22, 22).GetRandomValue())
-                .CheckProperty(c => c.Amount, (decimal) 123.45)
+                .CheckProperty(c => c.Amount, (decimal)123.45)
                 .CheckProperty(c => c.CallbackUrl, new StringGenerator(20, 255).GetRandomValue())
                 .CheckProperty(c => c.DfiAccountId, new StringGenerator(17, 17).GetRandomValue())
                 .CheckProperty(c => c.EntryClassCode, new StringGenerator(3, 3).GetRandomValue())
@@ -227,7 +227,7 @@ namespace Ach.Fulfillment.Tests.Persistence
 
             var file = new PersistenceSpecification<FileEntity>(Session)
                 .CheckProperty(c => c.FileIdModifier, "A")
-                .CheckProperty(c => c.FileStatus, 0)
+                .CheckProperty(c => c.FileStatus, AchFileStatus.Uploaded)
                 .CheckProperty(c => c.Locked, false)
                 .CheckProperty(c => c.Name, new StringGenerator(16, 16).GetRandomValue())
                 .CheckEntity(c => c.Partner, partner)
@@ -260,11 +260,10 @@ namespace Ach.Fulfillment.Tests.Persistence
                 .CheckProperty(c => c.DiscretionaryData, new StringGenerator(5, 20).GetRandomValue())
                 .CheckProperty(c => c.ImmediateDestination, new StringGenerator(5, 10).GetRandomValue())
                 .CheckProperty(c => c.OriginOrCompanyName, new StringGenerator(5, 23).GetRandomValue())
-                .CheckEntity(c=>c.Partner,partner)
-                .VerifyTheMappings();
+                .CheckEntity(c => c.Partner, partner).VerifyTheMappings();
 
-            //var partner = new PartnerEntity{ Name = "Test"};
-            //partner.Details = new PartnerDetailEntity
+            // var partner = new PartnerEntity{ Name = "Test"};
+            // partner.Details = new PartnerDetailEntity
             //                      {
             //                          CompanyIdentification = new StringGenerator(10, 10).GetRandomValue(),
             //                          CompanyName = new StringGenerator(5, 16).GetRandomValue(),
@@ -275,15 +274,12 @@ namespace Ach.Fulfillment.Tests.Persistence
             //                          OriginOrCompanyName = new StringGenerator(5, 23).GetRandomValue(),
             //                          Partner = partner
             //                      };
-            //Session.Save(partner);
-
+            // Session.Save(partner);
             Session.Evict(partner);
 
             partner = Session.Load<PartnerEntity>(partner.Id);
 
             Assert.That(partner.Details, Is.Not.Null);
-
-
         }
 
         #endregion

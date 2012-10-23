@@ -1,12 +1,40 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
+    using System;
+
+    using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Common;
+
+    using Microsoft.Practices.Unity;
+
     using Quartz;
 
-    public class CleanUpTransactionsJob:IJob
+    public class CleanUpTransactionsJob : IJob
     {
+        #region Public Properties
+
+        [Dependency]
+        public IFileManager FileManager { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
         public void Execute(IJobExecutionContext context)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                using (new UnitOfWork())
+                {
+                    this.FileManager.CleanUpCompletedFiles();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new JobExecutionException(ex);
+            }
         }
+
+        #endregion 
     }
 }

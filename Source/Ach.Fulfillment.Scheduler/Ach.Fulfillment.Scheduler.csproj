@@ -58,6 +58,10 @@
     <Reference Include="Common.Logging.Log4Net">
       <HintPath>..\..\_libBinary\Quartz.2.0.1\server\4.0\Common.Logging.Log4Net.dll</HintPath>
     </Reference>
+    <Reference Include="LinqSpecs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ach.Fulfillment.Initialization\bin\Debug\LinqSpecs.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_libBinary\Quartz.2.0.1\server\4.0\log4net.dll</HintPath>

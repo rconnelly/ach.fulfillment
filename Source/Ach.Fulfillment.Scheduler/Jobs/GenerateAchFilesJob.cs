@@ -28,7 +28,7 @@
                 {
                     var dataMap = context.JobDetail.JobDataMap;
                     var achfilesStore = dataMap.GetString("AchFilesStore");
-                    Manager.Generate(achfilesStore);                
+                    this.Manager.Generate(achfilesStore);
                 }
             }
             catch (Exception ex)

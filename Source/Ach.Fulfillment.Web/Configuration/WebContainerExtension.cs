@@ -1,6 +1,4 @@
-﻿using Ach.Fulfillment.Common.Security;
-
-namespace Ach.Fulfillment.Web.Configuration
+﻿namespace Ach.Fulfillment.Web.Configuration
 {
     using System;
     using System.Collections.Specialized;

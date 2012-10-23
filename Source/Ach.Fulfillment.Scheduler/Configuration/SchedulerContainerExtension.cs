@@ -1,8 +1,7 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Configuration
 {
-    using Ach.Fulfillment.Business;
-    using Initialization.Configuration;
-    using Common;
+    using Ach.Fulfillment.Initialization.Configuration;
+    using Ach.Fulfillment.Scheduler.Common;
 
     using Microsoft.Practices.Unity;
 

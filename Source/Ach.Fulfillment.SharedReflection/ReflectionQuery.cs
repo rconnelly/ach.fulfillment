@@ -1,63 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace Ach.Fulfillment.Shared.Reflection
+﻿namespace Ach.Fulfillment.Shared.Reflection
 {
-	public class ReflectionQuery<T> where T : Attribute
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Reflection;
+
+    public class ReflectionQuery<T> where T : Attribute
     {
-        private static Dictionary<string, ReflectionQueryResult<T>> _reflectionCache = new Dictionary<string, ReflectionQueryResult<T>>();
+        private static Dictionary<string, ReflectionQueryResult<T>> reflectionCache = new Dictionary<string, ReflectionQueryResult<T>>();
 
         public ReflectionQueryResult<T> Reflect(Type type)
         {
-			if ( type == null )
-				throw new ArgumentNullException( "type" );
-			
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
             ReflectionQueryResult<T> reflectorCacheEntry;
 
-            if (!_reflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry)) //check
+            // check
+            Debug.Assert(type.FullName != null, "type.FullName != null");
+            if (!reflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
             {
-                lock (_reflectionCache) //lock
+                // lock
+                lock (reflectionCache) 
                 {
-                    //double-check
-					if ( !_reflectionCache.TryGetValue( type.FullName, out reflectorCacheEntry ) )
-					{
-						Dictionary<string, ReflectMember<T>> reflectorEntries = new Dictionary<string, ReflectMember<T>>( );
-						QueryType( type, reflectorEntries );
+                    // double-check
+                    if (!reflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
+                    {
+                        var reflectorEntries = new Dictionary<string, ReflectMember<T>>();
+                        this.QueryType(type, reflectorEntries);
 
-						reflectorCacheEntry = new ReflectionQueryResult<T>( type, reflectorEntries ); //add to cache for all future requests
+                        reflectorCacheEntry = new ReflectionQueryResult<T>(type, reflectorEntries); // add to cache for all future requests
 
-						_reflectionCache.Add(type.FullName, reflectorCacheEntry);
-					}
+                        reflectionCache.Add(type.FullName, reflectorCacheEntry);
+                    }
                 }
             }
+
             return reflectorCacheEntry;
         }
 
-		private void QueryType( Type type, Dictionary<string, ReflectMember<T>> catalog )
-		{
-			if ( type.BaseType != null )
-				QueryType( type.BaseType, catalog );
+        private void QueryType(Type type, IDictionary<string, ReflectMember<T>> catalog)
+        {
+            if (type.BaseType != null)
+            {
+                this.QueryType(type.BaseType, catalog);
+            }
 
-			var reflectableMembers =
-				from memberInfo in type.FindMembers( MemberTypes.Field | MemberTypes.Property,
-				BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly |
-				BindingFlags.Instance | BindingFlags.Static | BindingFlags.Default, null, null )
-				where ((memberInfo.GetCustomAttributes( typeof( T ), false ) as T[])).Count( ) > 0
-				//orderby ((memberInfo.GetCustomAttributes(typeof(T), false) as T[])[0] as IReflectAttribute).Position ascending
-				select new { MemberInfo = memberInfo, ReflectAttributes = (memberInfo.GetCustomAttributes(typeof(T), false) as T[]) };
+            var reflectableMembers =
+                from memberInfo in
+                    type.FindMembers(
+                        MemberTypes.Field | MemberTypes.Property,
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Default,
+                        null,
+                        null)
+                where (memberInfo.GetCustomAttributes(typeof(T), false) as T[]).Any()
 
-			if (reflectableMembers.Count() > 0 && reflectableMembers.First().ReflectAttributes.First() is IReflectAttribute)
-				reflectableMembers = reflectableMembers.OrderBy(x => (x.ReflectAttributes.First() as IReflectAttribute).Position);
+                // orderby ((memberInfo.GetCustomAttributes(typeof(T), false) as T[])[0] as IReflectAttribute).Position ascending
+                select
+                    new
+                        {
+                            MemberInfo = memberInfo,
+                            ReflectAttributes = memberInfo.GetCustomAttributes(typeof(T), false) as T[]
+                        };
 
-			foreach ( var entry in reflectableMembers )
-			{
-				if ( entry.MemberInfo.MemberType == MemberTypes.Property )
-					catalog.Add( entry.MemberInfo.Name, new ReflectProperty<T>( entry.ReflectAttributes.First( ), entry.MemberInfo ) );
-				else if ( entry.MemberInfo.MemberType == MemberTypes.Field )
-					catalog.Add( entry.MemberInfo.Name, new ReflectField<T>( entry.ReflectAttributes.First( ), entry.MemberInfo ) );
-			}
-		}
+            if (reflectableMembers.Any() && reflectableMembers.First().ReflectAttributes.First() is IReflectAttribute)
+            {
+                reflectableMembers =
+                    reflectableMembers.OrderBy(x => (x.ReflectAttributes.First() as IReflectAttribute).Position);
+            }
+
+            foreach (var entry in reflectableMembers)
+            {
+                if (entry.MemberInfo.MemberType == MemberTypes.Property)
+                {
+                    catalog.Add(
+                        entry.MemberInfo.Name, new ReflectProperty<T>(entry.ReflectAttributes.First(), entry.MemberInfo));
+                }
+                else if (entry.MemberInfo.MemberType == MemberTypes.Field)
+                {
+                    catalog.Add(
+                        entry.MemberInfo.Name, new ReflectField<T>(entry.ReflectAttributes.First(), entry.MemberInfo));
+                }
+            }
+        }
     }
 }

@@ -132,7 +132,13 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="FileEntity.cs" />
     <Compile Include="PartnerDetailEntity.cs" />
+    <Compile Include="Specifications\AchFile.cs" />
+    <Compile Include="Specifications\AchFileAccepted.cs" />
+    <Compile Include="Specifications\AchFileRejected.cs" />
+    <Compile Include="Specifications\AchFileUploaded.cs" />
     <Compile Include="Specifications\AchTransactionInQueue.cs" />
+    <Compile Include="Specifications\BatchedAchTransaction.cs" />
+    <Compile Include="Specifications\CompletedAchTransaction.cs" />
     <Compile Include="Specifications\UserAll.cs" />
     <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />
     <Compile Include="Specifications\PartnerAll.cs" />

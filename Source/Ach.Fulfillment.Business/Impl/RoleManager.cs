@@ -1,6 +1,5 @@
 namespace Ach.Fulfillment.Business.Impl
 {
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Business.Impl.Validation;

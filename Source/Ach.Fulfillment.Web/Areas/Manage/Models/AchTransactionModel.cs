@@ -59,10 +59,7 @@
 
         [Required(ErrorMessage = "CallbackUrl is required.")]
         [StringLength(255)]
-        [DataType(DataType.Url, ErrorMessage="CallbackUrl format is wrong")]
-        //[Url(ErrorMessage="CallbackUrl format is wrong")] added in fw 4.5
+        [DataType(DataType.Url, ErrorMessage = "CallbackUrl format is wrong")]
         public string CallbackUrl { get; set; }
-
     }
-
 }

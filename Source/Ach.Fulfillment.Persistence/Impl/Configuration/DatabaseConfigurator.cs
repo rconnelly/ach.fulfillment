@@ -4,8 +4,8 @@
     using System.Configuration;
     using System.Diagnostics.Contracts;
 
-    using Data;
-    using Conventions;
+    using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Persistence.Impl.Configuration.Conventions;
 
     using global::Common.Logging;
 

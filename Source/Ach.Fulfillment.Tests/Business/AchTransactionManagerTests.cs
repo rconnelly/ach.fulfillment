@@ -1,19 +1,21 @@
-﻿using System;
-
-namespace Ach.Fulfillment.Tests.Business
+﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using System;
     using System.Collections.Generic;
-    using Microsoft.Practices.Unity;
-    using NUnit.Framework;
-    using Fulfillment.Business;
-    using Data;
-    using Rhino.Mocks;
-
     using System.Diagnostics;
     using System.Linq;
-    using Fulfillment.Business.Exceptions;
+
+    using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Data;
+
     using FluentNHibernate.Testing;
 
+    using Microsoft.Practices.Unity;
+
+    using NUnit.Framework;
+
+    using Rhino.Mocks;
     [TestFixture]
     public class AchTransactionManagerTests : BusinessIntegrationTestBase
     {
@@ -27,7 +29,6 @@ namespace Ach.Fulfillment.Tests.Business
             
             var partner = this.CreateTestPartner();
             partnerManager.Create(partner);
-
             var transaction = this.CreateTestTransaction();
             transaction.Partner = partner;
             
@@ -44,17 +45,14 @@ namespace Ach.Fulfillment.Tests.Business
 
             var partner = this.CreateTestPartner();
             partnerManager.Create(partner);
-
             var transaction = this.CreateTestTransaction();
             transaction.Partner = partner;
-
             var instance = manager.Create(transaction);
 
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance.Id, Is.GreaterThan(0));
            
-
-            ClearSession(instance);
+            this.ClearSession(instance);
 
             transaction = manager.Load(instance.Id);
             Assert.That(transaction, Is.Not.Null);
@@ -85,62 +83,62 @@ namespace Ach.Fulfillment.Tests.Business
         public void CreateAchTransactionUsingInvalidDataTest()
         {
             Trace.WriteLine("EntryClassCode test");
-            var ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(entryClassCode:"QQQq"));
+            var ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(entryClassCode: "QQQq"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(callbackUrl: ""));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(string.Empty));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(1));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(callbackUrl: new string('&', MetadataInfo.StringLong)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(new string('&', MetadataInfo.StringLong)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(1));
 
             Trace.WriteLine("DfiAccountId test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(entryClassCode: "QQqq#$&"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(entryClassCode: "QQqq#$&"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("EntryDescription test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(entryDescription: "aass^7_@#bnm"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(entryDescription: "aass^7_@#bnm"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("IndividualIdNumber test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(individualIdNumber: new string('&', MetadataInfo.StringShort)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(individualIdNumber: new string('&', MetadataInfo.StringShort)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("IndividualIdNumber test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(individualIdNumber: new string('&', MetadataInfo.StringTiny)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(individualIdNumber: new string('&', MetadataInfo.StringTiny)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("PaymentRelatedInfo test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(paymentRelatedInfo: new string('$', MetadataInfo.StringNormal)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(paymentRelatedInfo: new string('$', MetadataInfo.StringNormal)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("ReceiverName test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(receiverName: new string('$', MetadataInfo.StringShort+3)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(receiverName: new string('$', MetadataInfo.StringShort + 3)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("ServiceClassCode test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(serviceClassCode: "2211"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(serviceClassCode: "2211"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("TransactionCode test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(transactionCode: "3333"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(transactionCode: "3333"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("TransitRoutingNumber test");
-            ex = Assert.Throws<BusinessValidationException>(() => CreateAchTransaction(transitRoutingNumber: new string('&', MetadataInfo.StringShort)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(transitRoutingNumber: new string('&', MetadataInfo.StringShort)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
         }
@@ -158,9 +156,9 @@ namespace Ach.Fulfillment.Tests.Business
             var transaction = this.CreateTestTransaction();
             transaction.Partner = partner;
 
-            var instance = manager.Create(transaction);
+            manager.Create(transaction);
 
-            //manager.Generate();
+            // manager.Generate();
         }
 
         [Ignore]
@@ -172,19 +170,19 @@ namespace Ach.Fulfillment.Tests.Business
             var fileManager = mocks.DynamicMock<IFileManager>();
             container.RegisterInstance(fileManager);
             container.RegisterType<IAchTransactionManager>();
-            var manager = container.Resolve<IAchTransactionManager>();
-            
+
+            // var manager = container.Resolve<IAchTransactionManager>();            
             var fileEntity = new FileEntity();
             var createFileWasCalled = false;
             var transaction = this.CreateTestTransaction();
             transaction.Partner.Id = 1;
-            var trList = new List<AchTransactionEntity> { transaction };
 
-            Expect.Call(fileManager.Create(fileEntity)).Return(fileEntity).WhenCalled(delegate{ createFileWasCalled = true;});
+            // var trnList = new List<AchTransactionEntity> { transaction };
+            Expect.Call(fileManager.Create(fileEntity)).Return(fileEntity).WhenCalled(
+                delegate { createFileWasCalled = true; });
             mocks.ReplayAll();
-            
-            manager.CreateFileForPartnerTransactions(transaction.Partner,trList,"achfile");
 
+            // manager.CreateFileForPartnerTransactions(transaction.Partner, trnList, "achfile");
             Assert.IsTrue(createFileWasCalled);
         }
 

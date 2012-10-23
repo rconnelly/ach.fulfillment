@@ -1,10 +1,12 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
-    using Data;
-    using Models;
-    using Microsoft.Practices.Unity;
-    using Business;
     using System.Configuration;
+
+    using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Web.Areas.Manage.Models;
+
+    using Microsoft.Practices.Unity;
 
     public class AchManager 
     {
@@ -12,12 +14,12 @@
         public IAchTransactionManager Manager { get; set; }
 
         [Dependency]
-        public IUserManager UserManager { get; set;}
+        public IUserManager UserManager { get; set; }
 
         public long CreateAchTransaction(AchTransactionModel model)
         {
             var login = ConfigurationManager.AppSettings["DefaultUser"];
-            var user = UserManager.FindByLogin(login);
+            var user = this.UserManager.FindByLogin(login);
             var partner = user.Partner;
            
             var transaction = new AchTransactionEntity
@@ -38,10 +40,9 @@
                                       TransactionStatus = AchTransactionStatus.Received
                                   };
 
-            Manager.Create(transaction);
+            this.Manager.Create(transaction);
 
             return transaction.Id;
         }
-
     }
 }

@@ -1,19 +1,27 @@
-﻿using System;
-using System.Reflection;
-
-namespace Ach.Fulfillment.Shared.Reflection
+﻿namespace Ach.Fulfillment.Shared.Reflection
 {
+    using System;
+    using System.Reflection;
+
     internal class ReflectProperty<T> : ReflectMember<T> where T : Attribute
     {
-        public PropertyInfo PropertyInfo { get { return base._memberInfo as PropertyInfo; } }
-        
-        public ReflectProperty(T reflectAttribute, MemberInfo memberInfo ) : 
-            base(reflectAttribute, memberInfo) { }
+        public ReflectProperty(T reflectAttribute, MemberInfo memberInfo)
+            : base(reflectAttribute, memberInfo)
+        {
+        }
 
-		public override Type Type
-		{
-			get { return PropertyInfo.PropertyType; }
-		}
+        public PropertyInfo PropertyInfo
+        {
+            get
+            {
+                return this.MemberInfo as PropertyInfo;
+            }
+        }
+
+        public override Type Type
+        {
+            get { return PropertyInfo.PropertyType; }
+        }
 
         public override void SetValue(object instance, object value)
         {

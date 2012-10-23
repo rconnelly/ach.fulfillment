@@ -11,12 +11,4 @@
             return m => m.TransactionStatus == AchTransactionStatus.Received && !m.Locked;
         }
     }
-
-    public class BatchedAchTransaction : SpecificationBase<AchTransactionEntity>
-    {
-        public override Expression<Func<AchTransactionEntity, bool>> IsSatisfiedBy()
-        {
-            return m => m.TransactionStatus == AchTransactionStatus.Batched;
-        }
-    }
 }

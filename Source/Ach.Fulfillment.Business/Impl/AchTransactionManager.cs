@@ -1,18 +1,19 @@
-﻿using Ach.Fulfillment.Business.Impl.Validation;
-
-namespace Ach.Fulfillment.Business.Impl
+﻿namespace Ach.Fulfillment.Business.Impl
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
-    using Common.Transactions;
-    using Data;
-    using Data.Specifications;
-    using Nacha.Enumeration;
-    using Nacha.Message;
-    using Nacha.Record;
+
+    using Ach.Fulfillment.Business.Impl.Validation;
+    using Ach.Fulfillment.Common.Transactions;
+    using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Nacha.Enumeration;
+    using Ach.Fulfillment.Nacha.Message;
+    using Ach.Fulfillment.Nacha.Record;
+
     using Microsoft.Practices.Unity;
 
     internal class AchTransactionManager : ManagerBase<AchTransactionEntity>, IAchTransactionManager
@@ -26,18 +27,18 @@ namespace Ach.Fulfillment.Business.Impl
         {
             Contract.Assert(transaction != null);
 
-            DemandValid<AchTransactionValidator>(transaction);
+            this.DemandValid<AchTransactionValidator>(transaction);
 
             return base.Create(transaction);
         }
 
         public void Generate(string achfilesStore)
         {
-            Contract.Assert(!String.IsNullOrEmpty(achfilesStore));
+            Contract.Assert(!string.IsNullOrEmpty(achfilesStore));
 
             var achTransactionEntities = Repository.FindAll(new AchTransactionInQueue()).ToList();
 
-           //TODO add locking
+            // TODO add locking
             var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
             var partnerTransactions = transactionGroups as List<IGrouping<PartnerEntity, AchTransactionEntity>> ?? transactionGroups.ToList();
 
@@ -47,7 +48,7 @@ namespace Ach.Fulfillment.Business.Impl
                 {
                     var trns = transactions.ToList();
                     var partner = transactions.Key;
-                    var achFile = GenerateAchFileForPartner(partner, trns);
+                    var achFile = this.GenerateAchFileForPartner(partner, trns);
                     
                     if (!string.IsNullOrEmpty(achFile))
                     {
@@ -60,9 +61,11 @@ namespace Ach.Fulfillment.Business.Impl
                             file.Flush();
                             file.Close();
                         }
-                        CreateFileForPartnerTransactions(partner, trns, newFileName);
+                        
+                        this.FileManager.CreateFileForPartnerTransactions(partner, trns, newFileName);
                     }
-                    ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
+
+                    this.ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
                 }
             }
         }
@@ -76,8 +79,9 @@ namespace Ach.Fulfillment.Business.Impl
                 foreach (var achTransactionEntity in transactions)
                 {
                     achTransactionEntity.TransactionStatus = status;
-                    base.Update(achTransactionEntity);
+                    this.Update(achTransactionEntity);
                 }
+
                 tx.Complete();
             }
         }
@@ -85,30 +89,6 @@ namespace Ach.Fulfillment.Business.Impl
         public void SendAchNotification(List<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
-
-            using (var tx = new Transaction())
-            {
-                foreach (var achTransactionEntity in transactions)
-                {
-                    achTransactionEntity.TransactionStatus = AchTransactionStatus.Batched;
-                    base.Update(achTransactionEntity);
-                }
-                tx.Complete();
-            }
-
-        }
-
-        public FileEntity CreateFileForPartnerTransactions(PartnerEntity partner, List<AchTransactionEntity> transactionEntities, string filename)
-        {
-            var fileEntity = new FileEntity
-            {
-                Name = filename,
-                FileStatus = 0,//TODO make an Enum
-                Partner = partner,
-                Transactions = transactionEntities,
-                FileIdModifier = "" //TODO calculate modifier
-            };
-            return FileManager.Create(fileEntity);
         }
 
         #endregion
@@ -122,35 +102,40 @@ namespace Ach.Fulfillment.Business.Impl
             if (groupedTransactions.Any())
             {
                 var achfile = new File
-                {
-                    Header = CreateFileControlRecord(partner, "0"),//TODO put real fileIdModifier
-                    Batches = new List<GeneralBatch>()
-                };
+                    {
+                        Header = this.CreateFileControlRecord(partner, "A"), // TODO put real fileIdModifier
+                        Batches = new List<GeneralBatch>()
+                    };
                 var batchNumber = 0;
                 foreach (var transaction in groupedTransactions)
                 {
-                    var batch = CreateBatch(partner, transaction.Key, transaction.ToList(), batchNumber);
+                    var batch = this.CreateBatch(partner, transaction.Key, transaction.ToList(), batchNumber);
                     achfile.Batches.AddRange(batch);
                     batchNumber++;
                 }
 
                 var entryCount = achfile.Batches.Select(b => b.Control.EntryAndAddendaCount).Sum();
                 var entryHash =
-                    achfile.Batches.Select(o => Convert.ToInt32(o.Control.EntryHash)).Sum().ToString(CultureInfo.InvariantCulture);
+                    achfile.Batches.Select(o => Convert.ToInt32(o.Control.EntryHash)).Sum().ToString(
+                        CultureInfo.InvariantCulture);
                 if (entryHash.Length > 10)
-                    entryHash = entryHash.Substring(entryHash.Length - 10, 10);
-                achfile.Control = new FileControlRecord
                 {
-                    BatchCount = batchNumber - 1,
-                    BlockCount = batchNumber + 1,
-                    EntryAndAddendaCount = entryCount,
-                    EntryHash = entryHash, //TODO calculate right EntryHash
-                    TotalCreditAmount = achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
-                    TotalDebitAmount = achfile.Batches.Select(b => b.Control.TotalDebitAmount).Sum()
-                };
+                    entryHash = entryHash.Substring(entryHash.Length - 10, 10);
+                }
+
+                achfile.Control = new FileControlRecord
+                    {
+                        BatchCount = batchNumber - 1,
+                        BlockCount = batchNumber + 1,
+                        EntryAndAddendaCount = entryCount,
+                        EntryHash = entryHash, // TODO calculate right EntryHash
+                        TotalCreditAmount = achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
+                        TotalDebitAmount = achfile.Batches.Select(b => b.Control.TotalDebitAmount).Sum()
+                    };
                 var result = achfile.Serialize();
                 return result;
             }
+
             return null;
         }
 
@@ -198,15 +183,19 @@ namespace Ach.Fulfillment.Business.Impl
                                             Entries = new List<EntryDetailGeneralRecord>()
                                         };
 
-                        foreach (var entry in achTransactionEntities.Select(CreateEntryDetailRecord))
+                        foreach (var entry in achTransactionEntities.Select(this.CreateEntryDetailRecord))
                         {
                             batch.Entries.Add(entry);
                         }
+
                         var entryHash =
                             batch.Entries.Select(e => Convert.ToInt32(e.RDFIRoutingTransitNumber)).Sum().ToString(
                                 CultureInfo.InvariantCulture);
+
                         if (entryHash.Length > 10)
+                        {
                             entryHash = entryHash.Substring(entryHash.Length - 10, 10);
+                        }
 
                         batch.Control = new BatchControlRecord
                                             {
@@ -223,20 +212,21 @@ namespace Ach.Fulfillment.Business.Impl
                     }
                 }
             }
+
             return batches;
         }
 
         private EntryDetailGeneralRecord CreateEntryDetailRecord(AchTransactionEntity transaction)
         {
             return new EntryDetailGeneralRecord
-            {
-                AddendaRecordIndicator = transaction.PaymentRelatedInfo!= null?"1":"0",
-                Amount = transaction.Amount,
-                RDFIRoutingTransitNumber = transaction.TransitRoutingNumber.Substring(0, 8),
-                CheckDigit = transaction.TransitRoutingNumber.Substring(8, 1),
-                IndividualOrCompanyName = transaction.ReceiverName,
-                RDFIAccountNumber = transaction.DfiAccountId,
-                TransactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode),transaction.TransactionCode)
+                {
+                    AddendaRecordIndicator = transaction.PaymentRelatedInfo != null ? "1" : "0",
+                    Amount = transaction.Amount,
+                    RDFIRoutingTransitNumber = transaction.TransitRoutingNumber.Substring(0, 8),
+                    CheckDigit = transaction.TransitRoutingNumber.Substring(8, 1),
+                    IndividualOrCompanyName = transaction.ReceiverName,
+                    RDFIAccountNumber = transaction.DfiAccountId,
+                    TransactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode), transaction.TransactionCode)
             };
         }
 

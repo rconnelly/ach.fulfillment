@@ -1,11 +1,12 @@
-﻿using System;
-using Ach.Fulfillment.Nacha.Attribute;
-using Ach.Fulfillment.Nacha.Enumeration;
-using Ach.Fulfillment.Nacha.Serialization;
-
-namespace Ach.Fulfillment.Nacha.Record
+﻿namespace Ach.Fulfillment.Nacha.Record
 {
-	[Serializable]
+    using System;
+
+    using Ach.Fulfillment.Nacha.Attribute;
+    using Ach.Fulfillment.Nacha.Enumeration;
+    using Ach.Fulfillment.Nacha.Serialization;
+
+    [Serializable]
 	public class FileHeaderRecord : SerializableBase
 	{
 		/// <summary>

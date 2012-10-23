@@ -80,7 +80,7 @@ namespace Ach.Fulfillment.Scheduler.Common
         }
 
         /// <summary>
-        /// Pauses all activity in scheudler.
+        /// Pauses all activity in scheduler.
         /// </summary>
         public virtual void Pause()
         {
@@ -88,9 +88,9 @@ namespace Ach.Fulfillment.Scheduler.Common
         }
 
         /// <summary>
-        /// Resumes all acitivity in server.
+        /// Resumes all activity in server.
         /// </summary>
-        public void Resume()
+        public virtual void Resume()
         {
             this.scheduler.ResumeAll();
         }

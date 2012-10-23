@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-
-namespace Ach.Fulfillment.Tests.Business
+﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using NUnit.Framework;
+
     [TestFixture]
     public class GenerateAchFilesJobTests
     {
@@ -15,4 +11,3 @@ namespace Ach.Fulfillment.Tests.Business
         }
     }
 }
- 
