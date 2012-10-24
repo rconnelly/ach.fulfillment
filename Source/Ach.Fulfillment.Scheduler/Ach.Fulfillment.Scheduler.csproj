@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\FtpHelper.cs" />
     <Compile Include="Common\SchedulerFactory.cs" />
     <Compile Include="Configuration\ProjectInstaller.cs">
       <SubType>Component</SubType>
