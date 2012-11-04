@@ -16,6 +16,7 @@
     using NUnit.Framework;
 
     using Rhino.Mocks;
+
     [TestFixture]
     public class AchTransactionManagerTests : BusinessIntegrationTestBase
     {

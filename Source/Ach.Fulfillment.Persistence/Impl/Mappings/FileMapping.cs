@@ -15,7 +15,7 @@
                 .Table("AchFileTransaction")
                 .ChildKeyColumn("AchTransactionId")
                 .ParentKeyColumn("AchFileId")
-                .LazyLoad();
+                .LazyLoad().Cascade.AllDeleteOrphan();
 
              mapping.References(x => x.Partner, "PartnerId").Fetch.Join();
         }

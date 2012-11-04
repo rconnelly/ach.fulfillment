@@ -105,7 +105,7 @@
     </Compile>
     <Compile Include="Configuration\SchedulerContainerExtension.cs" />
     <Compile Include="Configuration\Registry.cs" />
-    <Compile Include="Jobs\CheckAchFileStatusJob.cs" />
+    <Compile Include="Jobs\CheckStatusFilesJob.cs" />
     <Compile Include="Jobs\CleanUpTransactionsJob.cs" />
     <Compile Include="Jobs\GenerateAchFilesJob.cs" />
     <Compile Include="Common\JobFactory.cs" />

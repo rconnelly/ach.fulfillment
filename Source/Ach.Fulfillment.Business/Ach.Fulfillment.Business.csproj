@@ -129,6 +129,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -152,9 +153,11 @@
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
     <Compile Include="IAchTransactionManager.cs" />
+    <Compile Include="IClientNotifier.cs" />
     <Compile Include="IFileManager.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
+    <Compile Include="Impl\ClientNotifier.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\FileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
