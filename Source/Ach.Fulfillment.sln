@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06.Deployment", "06.Deploym
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Ach.Fulfillment.Scheduler.Setup", "Ach.Fulfillment.Scheduler.Setup\Ach.Fulfillment.Scheduler.Setup.wixproj", "{614EC757-5279-4727-816E-020D318855B3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5D4140CA-719D-4E23-933A-98AFA6165228}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

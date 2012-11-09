@@ -48,21 +48,22 @@
                 {
                     var trns = transactions.ToList();
                     var partner = transactions.Key;
-                    var achFile = this.GenerateAchFileForPartner(partner, trns);
-                    
+                    var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    var fileEntity = this.FileManager.CreateFileForPartnerTransactions(partner, trns, newFileName);
+
+                    var achFile = this.GenerateAchFileForPartner(partner, trns, fileEntity.Id);
+
+                    // Todo add try/catch block 
                     if (!string.IsNullOrEmpty(achFile))
                     {
-                        var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
                         var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".ach");
-                         
+
                         using (var file = new System.IO.StreamWriter(newPath))
                         {
                             file.Write(achFile);
                             file.Flush();
                             file.Close();
                         }
-                        
-                        this.FileManager.CreateFileForPartnerTransactions(partner, trns, newFileName);
                     }
 
                     this.ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
@@ -95,15 +96,15 @@
 
         #region Private Methods
 
-        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions)
+        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions, long fileEntityId)
         {
-            var transactionGroups = transactions.GroupBy(tt => tt.EntryDescription);
+            var transactionGroups = transactions.GroupBy(tt => tt.EntryDescription); // ToDo change to settelment date 
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
             if (groupedTransactions.Any())
             {
                 var achfile = new File
                     {
-                        Header = this.CreateFileControlRecord(partner, "A"), // TODO put real fileIdModifier
+                        Header = this.CreateFileControlRecord(partner, "A", fileEntityId), // TODO put real fileIdModifier
                         Batches = new List<GeneralBatch>()
                     };
                 var batchNumber = 0;
@@ -139,7 +140,7 @@
             return null;
         }
 
-        private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, string fileIdModifier)
+        private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, string fileIdModifier, long fileEntityId)
         {
             Contract.Assert(partner != null);
             Contract.Assert(partner.Details != null);
@@ -151,7 +152,8 @@
                            FileIdModifier = fileIdModifier,
                            ImmediateDestination = partner.Details.ImmediateDestination,
                            ImmediateOrigin = partner.Details.CompanyIdentification,
-                           OriginOrCompanyName = partner.Details.OriginOrCompanyName
+                           OriginOrCompanyName = partner.Details.OriginOrCompanyName,
+                           ReferenceCode = fileEntityId.ToString(CultureInfo.InvariantCulture)
                        };
         }
 
