@@ -38,10 +38,11 @@
                     if (!(string.IsNullOrEmpty(ftphost)
                         && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
                     {
-                        var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password)
-                        {
-                            Timeout = TimeSpan.FromSeconds(60)
-                        };
+                        var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
+
+                        // {
+                            // Timeout = TimeSpan.FromSeconds(60)
+                       // };
                         this.Uploadfiles(connectionInfo, achfilesStore);
                     }
                 }
