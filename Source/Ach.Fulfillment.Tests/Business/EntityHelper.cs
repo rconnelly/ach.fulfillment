@@ -55,7 +55,7 @@ namespace Ach.Fulfillment.Tests.Business
             {
                 DfiAccountId = "12345678901234567",
                 Amount = (decimal)123.00,
-                CallbackUrl = "test.com",
+                CallbackUrl = "http://test.com",
                 TransactionStatus = AchTransactionStatus.Received,
                 EntryDescription = "PAYROLL",
                 IndividualIdNumber = "123456789012345",
@@ -64,7 +64,6 @@ namespace Ach.Fulfillment.Tests.Business
                 EntryClassCode = "PPD",
                 ServiceClassCode = "200",
                 TransactionCode = "22",
-                PaymentRelatedInfo = "dsdfdsfsdf",
                 EntryDate = DateTime.Now
             };
 

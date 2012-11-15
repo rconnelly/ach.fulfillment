@@ -41,7 +41,7 @@
 
         public void ChangeFilesStatus(AchFileStatus status)
         {
-            var fileToChange = Repository.Load<FileEntity>(0); //ToDo find real file
+            var fileToChange = Repository.Load<FileEntity>(0); // ToDo find real file
             using (var tx = new Transaction())
             {
                 fileToChange.FileStatus = status;

@@ -28,8 +28,9 @@
             Contract.Assert(transaction != null);
 
             this.DemandValid<AchTransactionValidator>(transaction);
-
-            return base.Create(transaction);
+            var entity = base.Create(transaction);
+            this.SendAchNotification(new List<AchTransactionEntity> { entity });
+            return entity;
         }
 
         public void Generate(string achfilesStore)
@@ -85,11 +86,18 @@
 
                 tx.Complete();
             }
+
+            this.SendAchNotification(transactions);
         }
 
         public void SendAchNotification(List<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
+            foreach (var achTransactionEntity in transactions)
+            {
+                ClientNotifier.NotificationRequest(
+                    achTransactionEntity.CallbackUrl, achTransactionEntity.TransactionStatus.ToString()); // ToDo format notification
+            }
         }
 
         #endregion
@@ -180,7 +188,7 @@
                                                              EffectiveEntryDate = DateTime.Now,
                                                              OriginatingDfiIdentification = partner.Details.DfiIdentification,
                                                              ServiceClassCode = ServiceClassCode.CreditAndDebit,
-                                                             StandardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), trn.Key)
+                                                             StandardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), trn.Key.ToUpper())
                                                          },
                                             Entries = new List<EntryDetailGeneralRecord>()
                                         };

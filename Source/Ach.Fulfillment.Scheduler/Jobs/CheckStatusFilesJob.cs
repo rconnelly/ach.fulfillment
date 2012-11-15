@@ -9,7 +9,7 @@
 
     using Quartz;
 
-    public class CheckAchFileStatusJob : IJob
+    public class CheckStatusFilesJob : IJob
     {
         #region Public Properties
 
