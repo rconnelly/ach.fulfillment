@@ -27,33 +27,33 @@
         /// </list>
         /// </value>
         [Field(Position = 1, DataType = DataType.Numeric, Length = 3, IsRequired = true, MaskOnAudit = false)]
-        public ServiceClassCode ServiceClassCode;
+        public ServiceClassCode ServiceClassCode { get; set; }
 
         /// <summary>
         /// Your company name. NACHA rules require the RDFI to print this value on the receiver's statement so you will want to make this value as clear as possible.
         /// </summary>
         [Field(Position = 2, DataType = DataType.Alphanumeric, Length = 16, IsRequired = true, MaskOnAudit = false)]
-        public string CompanyName;
+        public string CompanyName { get; set; }
 
         /// <summary>
         /// For your company's internal use. If you    include a value in this field, and your settlement occurs at the batch level, 
         /// or your returns settle at the item level, we will report the value in the settlement entries we create.
         /// </summary>
         [Field(Position = 3, DataType = DataType.Alphanumeric, Length = 20, IsRequired = false, MaskOnAudit = false)]
-        public string CompanyDiscretionaryData;
+        public string CompanyDiscretionaryData { get; set; }
 
         /// <summary>
         /// Your 10-digit company number assigned by Bank of America.
         /// </summary>
         [Field(Position = 4, DataType = DataType.Numeric, Length = 10, IsRequired = true, MaskOnAudit = false)]
-        public string CompanyIdentification;
+        public string CompanyIdentification { get; set; }
 
         /// <summary>
         /// A mnemonic, designated by NACHA, which permits entries to be distinguished. Identifies the specific computer record format used to carry 
         /// payment and payment-related information.
         /// </summary>
         [Field(Position = 5, DataType = DataType.Alphanumeric, Length = 3, IsRequired = true, MaskOnAudit = false)]
-        public StandardEntryClassCode StandardEntryClassCode;
+        public StandardEntryClassCode StandardEntryClassCode { get; set; }
 
         /// <summary>
         /// You establish the value of this field to provide a description to be displayed to the Receiver. 
@@ -61,26 +61,27 @@
         /// NACHA Rules require that RDFIs print this value on the Receiver's account statement.
         /// </summary>
         [Field(Position = 6, DataType = DataType.Alphanumeric, Length = 10, IsRequired = true, MaskOnAudit = false)]
-        public string CompanyEntryDescription;
+        public string CompanyEntryDescription { get; set; }
 
         /// <summary>
         /// Description you choose to identify the date. NACHA recommends, but does not require, that RDFIs print this value on the receiver‟s statement.
         /// </summary>
         [Field(Position = 7, DataType = DataType.Alphanumeric, Length = 6, IsRequired = false, MaskOnAudit = false)]
-        public string CompanyDescriptiveDate;
+        public string CompanyDescriptiveDate { get; set; }
 
         /// <summary>
         /// Date you desire funds to post to receiver's    account.
         /// </summary>
-        [Field(Position = 8, DataType = DataType.Date, Length = 6, IsRequired = true, MaskOnAudit = false, FormattingString = "yyMMdd")]
-        public DateTime EffectiveEntryDate;
+        [Field(Position = 8, DataType = DataType.Date, Length = 6, IsRequired = true, MaskOnAudit = false,
+            FormattingString = "yyMMdd")]
+        public DateTime EffectiveEntryDate { get; set; }
 
         /// <summary>
         /// Description you choose to identify the date. NACHA recommends, but does not require, that RDFIs print this value on the receiver‟s statement.
         /// </summary>
         [Field(Position = 9, DataType = DataType.Alphanumeric, Length = 3, IsRequired = false, MaskOnAudit = false)]
-        internal string SettlementDate;
-        
+        internal string SettlementDate { get; set; }
+
         /// <summary>
         /// Identifies the originator as a non Federal Government.
         /// </summary>
@@ -100,12 +101,12 @@
         /// </list>
         /// </value>
         [Field(Position = 11, DataType = DataType.Numeric, Length = 8, IsRequired = true, MaskOnAudit = false)]
-        public string OriginatingDfiIdentification;
+        public string OriginatingDfiIdentification { get; set; }
 
         /// <summary>
         /// Assign batch numbers in ascending order    within each file.
         /// </summary>
         [Field(Position = 12, DataType = DataType.Numeric, Length = 7, IsRequired = true, MaskOnAudit = false)]
-        public long BatchNumber;
+        public long BatchNumber { get; set; }
     }
 }

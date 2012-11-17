@@ -182,7 +182,7 @@
                 .CheckEntity(c => c.Partner, partner)
             .VerifyTheMappings();
 
-            new PersistenceSpecification<FileEntity>(Session)
+            new PersistenceSpecification<AchFileEntity>(Session)
                 .CheckProperty(c => c.FileIdModifier, "A")
                 .CheckProperty(c => c.FileStatus, AchFileStatus.Created).CheckProperty(c => c.Locked, false)
                 .CheckProperty(c => c.Name, new StringGenerator(16, 16).GetRandomValue())
@@ -225,7 +225,7 @@
                 .CheckEntity(c => c.Partner, partner)
             .VerifyTheMappings();
 
-            var file = new PersistenceSpecification<FileEntity>(Session)
+            var file = new PersistenceSpecification<AchFileEntity>(Session)
                 .CheckProperty(c => c.FileIdModifier, "A")
                 .CheckProperty(c => c.FileStatus, AchFileStatus.Uploaded)
                 .CheckProperty(c => c.Locked, false)
@@ -238,7 +238,7 @@
             Session.Flush();
             Session.Clear();
 
-            file = Session.Load<FileEntity>(file.Id);
+            file = Session.Load<AchFileEntity>(file.Id);
             transaction = Session.Load<AchTransactionEntity>(transaction.Id);
 
             Assert.That(file.Transactions, Is.Not.Null);

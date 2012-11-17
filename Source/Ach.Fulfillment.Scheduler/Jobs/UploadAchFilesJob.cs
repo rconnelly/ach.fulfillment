@@ -14,10 +14,12 @@
 
     public class UploadAchFilesJob : IJob
     {
+       // private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));
+
         #region Public Properties
 
         [Dependency]
-        public IFileManager Manager { get; set; }
+        public IAchFileManager Manager { get; set; }
 
         #endregion
 
@@ -61,17 +63,29 @@
         {
             using (var sftp = new SftpClient(connectionInfo))
             {
-                var directory = new DirectoryInfo(sourceDirectory);
-                var files = directory.GetFiles("*.ach");
+                var achfiles = Manager.AchFilesUpload();
+                              
                 try
                 {
                     sftp.Connect();
 
-                    foreach (var file in files)
+                    foreach (var achfile in achfiles)
                     {
-                        using (var fileStream = File.OpenRead(file.FullName))
+                        var fileName = achfile.Name + ".ach";
+                        var path = Path.Combine(sourceDirectory, fileName);
+
+                        if (File.Exists(path))
                         {
-                            sftp.UploadFile(fileStream, file.Name);
+                            using (var fileStream = File.OpenRead(path))
+                            {
+                                sftp.UploadFile(fileStream, fileName);
+                                Manager.ChangeAchFilesStatus(achfile, Data.AchFileStatus.Uploaded);
+                                Manager.UploadCompleted(achfile);
+                            }
+                        }
+                        else
+                        {
+                            throw new FileNotFoundException("AchFile not found.");
                         }
                     }
                 }

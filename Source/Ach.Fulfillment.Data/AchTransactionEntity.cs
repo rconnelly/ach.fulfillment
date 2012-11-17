@@ -8,7 +8,7 @@
         Received = 0,
         Batched = 1,
         InProgress = 2,
-        Complete = 3,
+        Completed = 3,
         Error = 4
     } 
 

@@ -5,8 +5,12 @@
 
     public interface IAchTransactionManager : IManager<AchTransactionEntity>
     {
-        void Generate(string achfilesStore);
+        void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status);
 
-        void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status);      
+        void SendAchTransactionNotification(List<AchTransactionEntity> transactions);
+
+        List<AchTransactionEntity> GetTransactionsInQueue(bool toLock = true);
+
+        void UnLockTransactions(List<AchTransactionEntity> transactions);
     }
 }

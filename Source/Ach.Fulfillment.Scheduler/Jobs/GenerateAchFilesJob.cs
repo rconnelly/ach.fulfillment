@@ -18,7 +18,7 @@
         #region Public Properties
 
         [Dependency]
-        public IAchTransactionManager Manager { get; set; }
+        public IAchFileManager Manager { get; set; }
 
         #endregion
 

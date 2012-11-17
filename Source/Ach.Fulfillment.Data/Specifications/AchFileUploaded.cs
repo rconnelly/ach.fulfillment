@@ -5,9 +5,9 @@ namespace Ach.Fulfillment.Data.Specifications
 
     using Ach.Fulfillment.Data.Common;
 
-    public class AchFileUploaded : SpecificationBase<FileEntity>
+    public class AchFileUploaded : SpecificationBase<AchFileEntity>
     {
-        public override Expression<Func<FileEntity, bool>> IsSatisfiedBy()
+        public override Expression<Func<AchFileEntity, bool>> IsSatisfiedBy()
         {
             return m => m.FileStatus == AchFileStatus.Uploaded;
         }

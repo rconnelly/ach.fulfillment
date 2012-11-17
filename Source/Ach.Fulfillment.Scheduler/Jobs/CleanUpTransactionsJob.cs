@@ -14,7 +14,7 @@
         #region Public Properties
 
         [Dependency]
-        public IFileManager FileManager { get; set; }
+        public IAchFileManager AchFileManager { get; set; }
 
         #endregion
 
@@ -26,7 +26,7 @@
             {
                 using (new UnitOfWork())
                 {
-                    this.FileManager.CleanUpCompletedFiles();
+                    this.AchFileManager.CleanUpCompletedFiles();
                 }
             }
             catch (Exception ex)

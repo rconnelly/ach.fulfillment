@@ -9,12 +9,16 @@
 
     using Quartz;
 
+    using global::Common.Logging;
+
     public class CheckStatusFilesJob : IJob
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
+
         #region Public Properties
 
         [Dependency]
-        public IFileManager FileManager { get; set; }
+        public IAchFileManager AchFileManager { get; set; }
 
         [Dependency]
         public IAchTransactionManager AchTransactionManager { get; set; }
@@ -27,7 +31,9 @@
             {
                 using (new UnitOfWork())
                 {
-                    // this.FileManager.ChangeFilesStatus();
+                    Logger.Info("CheckStatusFilesJob started...");
+
+                    // this.AchFileManager.ChangeAchFilesStatus();
 
                     // switch (status)
                     // {
@@ -36,10 +42,12 @@
                     // case AchFileStatus.Completed: break;
                     // case AchFileStatus.Uploaded: break;
                     // }
+                    Logger.Info("CheckStatusFilesJob finished...");
                 }
             }
             catch (Exception ex)
             {
+                Logger.Error(ex);
                 throw new JobExecutionException(ex);
             }
         }

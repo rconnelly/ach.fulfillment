@@ -157,6 +157,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\AchFileManagerTests.cs" />
     <Compile Include="Business\AchTransactionManagerTests.cs">
       <SubType>Code</SubType>
     </Compile>

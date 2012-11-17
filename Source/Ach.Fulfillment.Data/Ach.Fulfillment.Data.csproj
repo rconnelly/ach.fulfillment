@@ -130,10 +130,12 @@
     </Compile>
     <Compile Include="AchTransactionEntity.cs" />
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="FileEntity.cs" />
+    <Compile Include="AchFileEntity.cs" />
     <Compile Include="PartnerDetailEntity.cs" />
-    <Compile Include="Specifications\AchFile.cs" />
+    <Compile Include="Specifications\AchFileCompleted.cs" />
     <Compile Include="Specifications\AchFileAccepted.cs" />
+    <Compile Include="Specifications\AchFileCreated.cs" />
+    <Compile Include="Specifications\AchFileForPartner.cs" />
     <Compile Include="Specifications\AchFileRejected.cs" />
     <Compile Include="Specifications\AchFileUploaded.cs" />
     <Compile Include="Specifications\AchTransactionInQueue.cs" />

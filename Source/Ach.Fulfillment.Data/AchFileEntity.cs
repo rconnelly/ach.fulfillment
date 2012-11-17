@@ -11,7 +11,7 @@
         Completed = 4
     }
 
-    public class FileEntity : BaseEntity
+    public class AchFileEntity : BaseEntity
     {
         public virtual string Name { get; set; } 
 

@@ -4,9 +4,9 @@
     using FluentNHibernate.Automapping;
     using FluentNHibernate.Automapping.Alterations;
     
-    public class FileMapping : IAutoMappingOverride<FileEntity>
+    public class AchFileMapping : IAutoMappingOverride<AchFileEntity>
     {
-        public void Override(AutoMapping<FileEntity> mapping)
+        public void Override(AutoMapping<AchFileEntity> mapping)
         {
              mapping.Table("AchFile");
              mapping.Id(x => x.Id, "AchFileId").GeneratedBy.Identity();

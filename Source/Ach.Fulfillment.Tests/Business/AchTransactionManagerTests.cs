@@ -144,49 +144,6 @@
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
         }
 
-        [Ignore]
-        [Test]
-        public void GenerateAchFileTest()
-        {
-            var manager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestTransaction();
-            transaction.Partner = partner;
-
-            manager.Create(transaction);
-
-            // manager.Generate();
-        }
-
-        [Ignore]
-        [Test]
-        public void CreateFileForPartnerTransactionsTest()
-        {
-            var mocks = new MockRepository();
-            var container = mocks.StrictMock<IUnityContainer>();
-            var fileManager = mocks.DynamicMock<IFileManager>();
-            container.RegisterInstance(fileManager);
-            container.RegisterType<IAchTransactionManager>();
-
-            // var manager = container.Resolve<IAchTransactionManager>();            
-            var fileEntity = new FileEntity();
-            var createFileWasCalled = false;
-            var transaction = this.CreateTestTransaction();
-            transaction.Partner.Id = 1;
-
-            // var trnList = new List<AchTransactionEntity> { transaction };
-            Expect.Call(fileManager.Create(fileEntity)).Return(fileEntity).WhenCalled(
-                delegate { createFileWasCalled = true; });
-            mocks.ReplayAll();
-
-            // manager.CreateFileForPartnerTransactions(transaction.Partner, trnList, "achfile");
-            Assert.IsTrue(createFileWasCalled);
-        }
-
         #endregion
 
         #region Private Methods
