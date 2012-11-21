@@ -31,7 +31,7 @@ We are wating for request in Json format, for example
     "DfiAccountId":"12345678901234567", 
     "Amount":"123,00", 
     "EntryClassCode":"PPD", 
-    "CallbackUrl":"send.callback.here",
+    "CallbackUrl":"http://send.callback.here",
     "PaymentRelatedInfo":"",
     "ServiceClassCode":"200"
   }
