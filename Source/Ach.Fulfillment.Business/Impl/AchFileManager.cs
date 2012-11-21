@@ -33,7 +33,7 @@
                                      FileStatus = AchFileStatus.Created,
                                      Partner = partner,
                                      Transactions = transactionEntities,
-                                     FileIdModifier = "A" // TODO calculate modifier
+                                     FileIdModifier = this.GetNextIdModifier(partner)
                                  };
             return this.Create(fileEntity);
         }
@@ -91,53 +91,61 @@
             }
         }
 
-        public void CreateFile(string achFile, string achfilesStore, string newFileName)
+        public List<AchFileEntity> AchFilesToUpload(bool lockRecords = true)
         {
-            Contract.Assert(!string.IsNullOrEmpty(achFile));
-            Contract.Assert(!string.IsNullOrEmpty(achfilesStore));
-            Contract.Assert(!string.IsNullOrEmpty(newFileName));
-
-            var newPath = System.IO.Path.Combine(achfilesStore, newFileName + ".ach");
-
-            using (var file = new System.IO.StreamWriter(newPath))
+            List<AchFileEntity> achFilesList;
+            using (var tx = new Transaction())
             {
-                    file.Write(achFile);
-                    file.Flush();
-                    file.Close();
+                achFilesList = Repository.FindAll(new AchFileCreated()).ToList();
+
+                foreach (var achFile in achFilesList)
+                {
+                    achFile.Locked = true;
+                    this.Update(achFile);
+                }
+
+                tx.Complete();
             }
-        }
 
-        public List<AchFileEntity> AchFilesUpload()
-        {
-            var achFilesList = Repository.FindAll(new AchFileCreated()).ToList();
-
-            // ToDo lock entities
             return achFilesList;
         }
 
-        public void UploadCompleted(AchFileEntity achFile)
+        public void UnLock(AchFileEntity achFile)
         {
-            achFile.Locked = false;
+            achFile.Locked = false;            
+            this.Update(achFile);
+        }
+
+        public void Lock(AchFileEntity achFile)
+        {
+            achFile.Locked = true;
             this.Update(achFile);
         }
 
         public string GetNextIdModifier(PartnerEntity partner)
         {
-            var lastAchFile = Repository.Query<AchFileEntity>(new AchFileForPartner(partner)).Last(
-                    m => m.Created.Date == DateTime.Today.Date);
-             
-             if (string.IsNullOrEmpty(lastAchFile.FileIdModifier))
+            var fileIdModifier  =
+                Repository.Query<AchFileEntity>(new AchFileForPartner(partner)).Where(
+                    m => m.Created.Date == DateTime.Today.Date).Max(m => m.FileIdModifier);
+
+            if (string.IsNullOrEmpty(fileIdModifier))
              {
                  return "A";
              }
 
-            return "B"; // ToDo calculate next Id
+            if (fileIdModifier == "Z")
+            {
+                return "A";
+            }
+
+            var result = fileIdModifier.FirstOrDefault();
+            result++;
+            return result.ToString(CultureInfo.InvariantCulture); 
         }
 
-        public void Generate(string achfilesStore)
+        public Dictionary<AchFileEntity, string> Generate()
         {
-            Contract.Assert(!string.IsNullOrEmpty(achfilesStore));
-
+            var generatedFiles = new Dictionary<AchFileEntity, string>();
             var achTransactionEntities = this.AchTransactionManager.GetTransactionsInQueue();
 
             var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
@@ -150,30 +158,33 @@
                     var trns = transactions.ToList();
                     var partner = transactions.Key;
                     var fileEntity = this.Create(partner, trns);
-                    var achFile = this.GenerateAchFileForPartner(partner, trns, fileEntity.Id);
-                    this.CreateFile(achFile, achfilesStore, fileEntity.Name);
+                    var achFile = this.GenerateAchFileForPartner(partner, trns, fileEntity);
+                    generatedFiles.Add(fileEntity, achFile);
                     this.AchTransactionManager.ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
+
+                        // ToDo move from here
                     this.AchTransactionManager.UnLockTransactions(trns);
                 }
             }
+
+            return generatedFiles;
         }
 
         #endregion
 
         #region Private Methods
 
-        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions, long fileEntityId)
+        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions, AchFileEntity fileEntity)
         {
             var transactionGroups = transactions.GroupBy(tt => tt.EntryDescription); // ToDo change to settelment date 
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
             if (groupedTransactions.Any())
             {
-                var fileIdModifier = this.GetNextIdModifier(partner);
                 var batchNumber = 0;
 
                 var achfile = new File
                 {
-                    Header = this.CreateFileControlRecord(partner, fileIdModifier, fileEntityId),
+                    Header = this.CreateFileControlRecord(partner, fileEntity),
                     Batches = new List<GeneralBatch>()
                 };
 
@@ -209,7 +220,7 @@
             return null;
         }
 
-        private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, string fileIdModifier, long fileEntityId)
+        private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, AchFileEntity fileEntity)
         {
             Contract.Assert(partner != null);
             Contract.Assert(partner.Details != null);
@@ -218,11 +229,11 @@
             {
                 Destination = partner.Details.Destination,
                 FileCreationDateTime = DateTime.Now,
-                FileIdModifier = fileIdModifier,
+                FileIdModifier = fileEntity.FileIdModifier,
                 ImmediateDestination = partner.Details.ImmediateDestination,
                 ImmediateOrigin = partner.Details.CompanyIdentification,
                 OriginOrCompanyName = partner.Details.OriginOrCompanyName,
-                ReferenceCode = fileEntityId.ToString(CultureInfo.InvariantCulture)
+                ReferenceCode = fileEntity.Id.ToString(CultureInfo.InvariantCulture)
             };
         }
 

@@ -1,10 +1,14 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Data;
+
+    using log4net;
 
     using Microsoft.Practices.Unity;
 
@@ -14,7 +18,7 @@
 
     public class UploadAchFilesJob : IJob
     {
-       // private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));
+       private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));
 
         #region Public Properties
 
@@ -32,7 +36,6 @@
                 using (new UnitOfWork())
                 {
                     var dataMap = context.JobDetail.JobDataMap;
-                    var achfilesStore = dataMap.GetString("AchFilesStore");
                     var ftphost = dataMap.GetString("FtpHost");
                     var userId = dataMap.GetString("UserId");
                     var password = dataMap.GetString("Password");
@@ -45,7 +48,8 @@
                         // {
                             // Timeout = TimeSpan.FromSeconds(60)
                        // };
-                        this.Uploadfiles(connectionInfo, achfilesStore);
+                        var achFilesToUpload = this.Manager.AchFilesToUpload();
+                        this.Uploadfiles(connectionInfo, achFilesToUpload);
                     }
                 }
             }
@@ -59,33 +63,28 @@
 
         #region Private Methods
 
-        private void Uploadfiles(PasswordConnectionInfo connectionInfo, string sourceDirectory)
+        private void Uploadfiles(PasswordConnectionInfo connectionInfo, IEnumerable<AchFileEntity> achFilesToUpload)
         {
             using (var sftp = new SftpClient(connectionInfo))
-            {
-                var achfiles = Manager.AchFilesUpload();
-                              
+            {          
                 try
                 {
                     sftp.Connect();
 
-                    foreach (var achfile in achfiles)
+                    foreach (var achfile in achFilesToUpload)
                     {
-                        var fileName = achfile.Name + ".ach";
-                        var path = Path.Combine(sourceDirectory, fileName);
+                        using (var stream = new MemoryStream())
+                        {
+                            var fileName = achfile.Name + ".ach";
 
-                        if (File.Exists(path))
-                        {
-                            using (var fileStream = File.OpenRead(path))
-                            {
-                                sftp.UploadFile(fileStream, fileName);
-                                Manager.ChangeAchFilesStatus(achfile, Data.AchFileStatus.Uploaded);
-                                Manager.UploadCompleted(achfile);
-                            }
-                        }
-                        else
-                        {
-                            throw new FileNotFoundException("AchFile not found.");
+                            var writer = new StreamWriter(stream);
+                           // writer.Write(achfile.AchFileBody);
+                            writer.Flush();
+                            stream.Position = 0;
+
+                            sftp.UploadFile(stream, fileName);
+                            this.Manager.ChangeAchFilesStatus(achfile, AchFileStatus.Uploaded);
+                            this.Manager.UnLock(achfile);
                         }
                     }
                 }

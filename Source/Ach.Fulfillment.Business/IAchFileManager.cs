@@ -12,14 +12,14 @@
 
         void ChangeAchFilesStatus(AchFileEntity file, AchFileStatus status);
 
-        void CreateFile(string achFile, string achfilesStore, string newFileName);
+        List<AchFileEntity> AchFilesToUpload(bool lockRecords = true);
 
-        List<AchFileEntity> AchFilesUpload();
+        void UnLock(AchFileEntity achFile);
 
-        void UploadCompleted(AchFileEntity achFile);
+        void Lock(AchFileEntity achFile);
 
         string GetNextIdModifier(PartnerEntity partner);
 
-        void Generate(string achfilesStore);
+        Dictionary<AchFileEntity, string> Generate();
     }
 }
