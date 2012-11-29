@@ -30,7 +30,7 @@
             
             var partner = this.CreateTestPartner();
             partnerManager.Create(partner);
-            var transaction = this.CreateTestTransaction();
+            var transaction = this.CreateTestAchTransaction();
             transaction.Partner = partner;
             
             var instance = manager.Create(transaction);
@@ -38,48 +38,6 @@
             Assert.That(instance.Id, Is.GreaterThan(0));         
         }
 
-        [Test]
-        public void LoadTest()
-        {
-            var manager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-            var transaction = this.CreateTestTransaction();
-            transaction.Partner = partner;
-            var instance = manager.Create(transaction);
-
-            Assert.That(instance, Is.Not.Null);
-            Assert.That(instance.Id, Is.GreaterThan(0));
-           
-            this.ClearSession(instance);
-
-            transaction = manager.Load(instance.Id);
-            Assert.That(transaction, Is.Not.Null);
-        }
-
-        [Test]
-        public void ChangeAchTransactionStatusTest()
-        {
-            var manager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestTransaction();
-            transaction.Partner = partner;
-
-            var instance = manager.Create(transaction);
-
-            var transactions = new List<AchTransactionEntity> { transaction };
-            manager.ChangeAchTransactionStatus(transactions, AchTransactionStatus.Batched);
-
-            var changedTransaction = manager.Load(instance.Id);
-            Assert.AreEqual(changedTransaction.TransactionStatus, AchTransactionStatus.Batched);
-        }
-        
         [Test]
         public void CreateAchTransactionUsingInvalidDataTest()
         {
@@ -89,17 +47,17 @@
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(string.Empty));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: string.Empty));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(1));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(new string('&', MetadataInfo.StringLong)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: new string('&', MetadataInfo.StringLong)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(1));
 
             Trace.WriteLine("DfiAccountId test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(entryClassCode: "QQqq#$&"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(dfiAccountId: "QQqq#$&"));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
@@ -144,6 +102,177 @@
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
         }
 
+        [Test]
+        [Ignore]
+        public void CallCreateWithNullArgumentTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+
+            Assert.Throws<ArgumentNullException>(() => manager.Create(null));
+        }
+
+        [Test]
+        public void LoadTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            var instance = manager.Create(transaction);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+           
+            this.ClearSession(instance);
+
+            transaction = manager.Load(instance.Id);
+            Assert.That(transaction, Is.Not.Null);
+        }
+
+        [Test]
+        public void ChangeAchTransactionStatusTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+
+            var instance = manager.Create(transaction);
+
+            var transactions = new List<AchTransactionEntity> { transaction };
+            manager.ChangeAchTransactionStatus(transactions, AchTransactionStatus.Batched);
+
+            var changedTransaction = manager.Load(instance.Id);
+            Assert.AreEqual(changedTransaction.TransactionStatus, AchTransactionStatus.Batched);
+        }
+
+        [Test]
+        [Ignore]
+        public void SendNotificationWhenAchTransactionCreatedTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var mocks = new MockRepository();
+            var container = mocks.StrictMock<IUnityContainer>();
+            var notifier = mocks.DynamicMock<IClientNotifier>();
+            container.RegisterInstance(notifier);
+
+            var notificationRequestWasCalled = false;
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+
+            notifier.Expect(_ => notifier.NotificationRequest(transaction.CallbackUrl, transaction.TransactionStatus.ToString()))
+                .WhenCalled(delegate { notificationRequestWasCalled = true; });
+
+            // mocks.ReplayAll();
+            var instance = manager.Create(transaction);
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+            Assert.IsTrue(notificationRequestWasCalled);
+        }
+
+        [Test]
+        public void GetTransactionsInQueueTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            var instance = manager.Create(transaction);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+
+            var transaction2 = this.CreateTestAchTransaction();
+            transaction2.Partner = partner;
+            var instance2 = manager.Create(transaction2);
+
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2.Id, Is.GreaterThan(0));
+            transaction2.TransactionStatus = AchTransactionStatus.Batched;
+            manager.Update(transaction2);
+
+            this.ClearSession(instance);
+            this.ClearSession(instance2);
+
+            var trns = manager.GetTransactionsInQueue();
+            Assert.That(trns, Is.Not.Null);
+            Assert.AreEqual(trns.Count(), 1);
+            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.IsTrue(trns[0].Locked);
+        }
+
+        [Test]
+        public void GetTransactionsInQueueWithoutLockingTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            var instance = manager.Create(transaction);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+
+            this.ClearSession(instance);
+
+            var trns = manager.GetTransactionsInQueue(false);
+            Assert.That(trns, Is.Not.Null);
+            Assert.AreEqual(trns.Count(), 1);
+            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.IsFalse(trns[0].Locked);
+        }
+        
+        [Test]
+        public void UnLockTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transaction.Locked = true;
+            var instance = manager.Create(transaction);
+
+            var transaction2 = this.CreateTestAchTransaction();
+            transaction2.Partner = partner;
+            transaction2.Locked = true;
+            var instance2 = manager.Create(transaction2);
+
+            this.ClearSession(instance);
+            this.ClearSession(instance2);
+            var trnsList = new List<AchTransactionEntity> { transaction, transaction2 };
+            manager.UnLock(trnsList);
+
+            transaction = manager.Load(transaction.Id);
+            Assert.IsFalse(transaction.Locked);
+
+            transaction2 = manager.Load(transaction2.Id);
+            Assert.IsFalse(transaction2.Locked);
+        }
+
         #endregion
 
         #region Private Methods
@@ -167,7 +296,7 @@
             var transaction = new AchTransactionEntity
                                   {
                                       DfiAccountId = dfiAccountId ?? "12345678901234567",
-                                      CallbackUrl = callbackUrl ?? "test.com",
+                                      CallbackUrl = callbackUrl ?? "http://test.com",
                                       EntryDescription = entryDescription ?? "PAYROLL",
                                       IndividualIdNumber = individualIdNumber ?? "123456789012345",
                                       ReceiverName = receiverName ?? "SomeName",

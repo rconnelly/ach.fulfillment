@@ -191,7 +191,7 @@
         }
 
         [Test]
-        public void FileTransactionSpecification()
+        public void AchFileTransactionSpecification()
         {
             var partner = new PersistenceSpecification<PartnerEntity>(Session)
                .CheckProperty(c => c.Name, ShortStringGenerator.GetRandomValue())
@@ -262,19 +262,6 @@
                 .CheckProperty(c => c.OriginOrCompanyName, new StringGenerator(5, 23).GetRandomValue())
                 .CheckEntity(c => c.Partner, partner).VerifyTheMappings();
 
-            // var partner = new PartnerEntity{ Name = "Test"};
-            // partner.Details = new PartnerDetailEntity
-            //                      {
-            //                          CompanyIdentification = new StringGenerator(10, 10).GetRandomValue(),
-            //                          CompanyName = new StringGenerator(5, 16).GetRandomValue(),
-            //                          DfiIdentification = new StringGenerator(8, 8).GetRandomValue(),
-            //                          Destination = new StringGenerator(5, 23).GetRandomValue(),
-            //                          DiscretionaryData = new StringGenerator(5, 20).GetRandomValue(),
-            //                          ImmediateDestination = new StringGenerator(5, 10).GetRandomValue(),
-            //                          OriginOrCompanyName = new StringGenerator(5, 23).GetRandomValue(),
-            //                          Partner = partner
-            //                      };
-            // Session.Save(partner);
             Session.Evict(partner);
 
             partner = Session.Load<PartnerEntity>(partner.Id);

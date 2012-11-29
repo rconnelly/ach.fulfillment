@@ -1,61 +1,399 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using System.Diagnostics;
+
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Data;
 
-    using Microsoft.Practices.Unity;
-
     using NUnit.Framework;
-
-    using Rhino.Mocks;
 
     [TestFixture]
     public class AchFileManagerTests : BusinessIntegrationTestBase
     {
         #region Public Methods and Operators
 
-        [Ignore]
         [Test]
-        public void GenerateAchFileTest()
+        public void CreateTest()
         {
-            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
             var partnerManager = Locator.GetInstance<IPartnerManager>();
 
             var partner = this.CreateTestPartner();
             partnerManager.Create(partner);
 
-            var transaction = this.CreateTestTransaction();
+            var transaction = this.CreateTestAchTransaction();
             transaction.Partner = partner;
+            transactionManager.Create(transaction);
 
-            manager.Create(transaction);
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
 
-            // manager.Generate();
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));   
+            Assert.NotNull(instance.Transactions);
+            Assert.AreEqual(1, instance.Transactions.Count);
+            Assert.AreEqual(transaction, instance.Transactions[0]);
+            Assert.AreEqual(partner, instance.Partner);
+        }
+
+        [Test]
+        public void CleanUpCompletedFilesTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
+            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+
+            manager.CleanUpCompletedFiles();
+
+            var ex = Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
+            Trace.WriteLine(ex.Message);
+
+            ex = Assert.Throws<ObjectNotFoundException>(() => transactionManager.Load(transaction.Id));
+            Trace.WriteLine(ex.Message);
+        }
+
+        [Test]
+        public void CleanUpCompletedFilesWontDeleteAlreadyLockedAchFilesTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
+            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+
+            var achFile2 = this.CreateTestAchFile();
+            achFile2.Partner = partner;
+            achFile2.Locked = true;
+            achFile2.FileStatus = AchFileStatus.Completed;
+            var instance2 = manager.Create(achFile2);
+
+            manager.CleanUpCompletedFiles();
+
+            this.ClearSession(instance, instance2);
+            var ex = Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
+            Trace.WriteLine(ex.Message);
+
+            ex = Assert.Throws<ObjectNotFoundException>(() => transactionManager.Load(transaction.Id));
+            Trace.WriteLine(ex.Message);
+
+            instance2 = manager.Load(instance2.Id);
+            Assert.IsNotNull(instance2);
+        }
+
+        [Test]
+        public void ChangeAchFilesStatusToUploadedTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Uploaded);
+
+            this.ClearSession(instance);
+
+            instance = manager.Load(achFile.Id);
+            Assert.AreEqual(AchFileStatus.Uploaded, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.InProgress, instance.Transactions[0].TransactionStatus);
+        }
+
+        [Test]
+        public void ChangeAchFilesStatusToCompletedTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
+
+            this.ClearSession(instance);
+
+            instance = manager.Load(achFile.Id);
+            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+        }
+
+        [Test]
+        public void ChangeAchFilesStatusToRejectedTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Rejected);
+
+            this.ClearSession(instance);
+
+            instance = manager.Load(achFile.Id);
+            Assert.AreEqual(AchFileStatus.Rejected, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.Error, instance.Transactions[0].TransactionStatus);
+        }
+
+        [Test]
+        public void AchFilesToUploadTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+
+            var transaction2 = this.CreateTestAchTransaction();
+            transaction2.Partner = partner;
+            transactionManager.Create(transaction2);
+
+            var achFile2 = this.CreateTestAchFile();
+            achFile2.Partner = partner;
+            achFile2.FileStatus = AchFileStatus.Uploaded;
+            achFile2.Transactions.Add(transaction2);
+            var instance2 = manager.Create(achFile2);
+
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2.Id, Is.GreaterThan(0));  
+
+            var achFileList = manager.AchFilesToUpload();            
+
+            achFile = manager.Load(instance.Id);
+            achFile2 = manager.Load(instance2.Id);
+
+            Assert.IsNotNull(achFileList);
+            Assert.GreaterOrEqual(achFileList.Count, 1);
+            CollectionAssert.Contains(achFileList, achFile);
+            CollectionAssert.DoesNotContain(achFileList, achFile2);
+            Assert.IsTrue(achFile.Locked);
+        }
+
+        [Test]
+        public void LockTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.Lock(achFile);
+
+            this.ClearSession(instance);
+
+            achFile = manager.Load(instance.Id);
+
+            Assert.That(achFile, Is.Not.Null);
+            Assert.IsTrue(achFile.Locked);
+        }
+
+        [Test]
+        public void UnLockTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            manager.Lock(achFile);
+
+            this.ClearSession(instance);
+
+            achFile = manager.Load(instance.Id);
+
+            Assert.That(achFile, Is.Not.Null);
+            Assert.IsTrue(achFile.Locked);
+
+            manager.UnLock(achFile);
+            this.ClearSession(instance);
+
+            achFile = manager.Load(instance.Id);
+
+            Assert.That(achFile, Is.Not.Null);
+            Assert.IsFalse(achFile.Locked);
+        }
+
+        [Test]
+        public void GetNextIdModifierTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+
+            var instance = manager.Create(achFile);
+
+            this.ClearSession(instance);
+
+            var idmodifier = manager.GetNextIdModifier(partner);
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+            Assert.AreEqual("B", idmodifier);
+        }
+
+        [Test]
+        public void GetNextIdModifierWillReturnAAfterZTest()
+        {
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
+
+            var achFile = this.CreateTestAchFile();
+            achFile.FileIdModifier = "Z";
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+
+            var instance = manager.Create(achFile);
+
+            this.ClearSession(instance);
+
+            var idmodifier = manager.GetNextIdModifier(partner);
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+            Assert.AreEqual("A", idmodifier);
         }
 
         [Ignore]
         [Test]
-        public void CreateFileForPartnerTransactionsTest()
+        public void GenerateAchFileTest()
         {
-            var mocks = new MockRepository();
-            var container = mocks.StrictMock<IUnityContainer>();
-            var fileManager = mocks.DynamicMock<IAchFileManager>();
-            container.RegisterInstance(fileManager);
-            container.RegisterType<IAchTransactionManager>();
+            var manager = Locator.GetInstance<IAchFileManager>();
+            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
 
-            // var manager = container.Resolve<IAchTransactionManager>();            
-            var fileEntity = new AchFileEntity();
-            var createFileWasCalled = false;
-            var transaction = this.CreateTestTransaction();
-            transaction.Partner.Id = 1;
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
 
-            // var trnList = new List<AchTransactionEntity> { transaction };
-            Expect.Call(fileManager.Create(fileEntity)).Return(fileEntity).WhenCalled(
-                delegate { createFileWasCalled = true; });
-            mocks.ReplayAll();
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            transactionManager.Create(transaction);
 
-            // manager.Create(transaction.Partner, trnList, "achfile");
-            Assert.IsTrue(createFileWasCalled);
+            var achFile = this.CreateTestAchFile();
+            achFile.Partner = partner;
+            achFile.Transactions.Add(transaction);
+            var instance = manager.Create(achFile);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));   
+
+            var strAchFile  = manager.Generate(); 
         }
+
         #endregion
     }
 }

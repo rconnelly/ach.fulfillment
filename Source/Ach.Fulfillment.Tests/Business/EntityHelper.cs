@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Tests.Business
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using Ach.Fulfillment.Data;
@@ -49,7 +50,7 @@ namespace Ach.Fulfillment.Tests.Business
             return u;
         }
 
-        public static AchTransactionEntity CreateTestTransaction(this BusinessIntegrationTestBase testBase)
+        public static AchTransactionEntity CreateTestAchTransaction(this BusinessIntegrationTestBase testBase)
         {
             var transaction = new AchTransactionEntity
             {
@@ -68,6 +69,20 @@ namespace Ach.Fulfillment.Tests.Business
             };
 
             return transaction;
+        }
+
+        public static AchFileEntity CreateTestAchFile(this BusinessIntegrationTestBase testBase)
+        {
+            var achFile = new AchFileEntity
+            {
+                Name = "AchFilename",
+                FileIdModifier = "A",
+                FileStatus = AchFileStatus.Created,
+                Locked = false,
+                Transactions = new List<AchTransactionEntity>()
+            };
+
+            return achFile;
         }
     }
 }

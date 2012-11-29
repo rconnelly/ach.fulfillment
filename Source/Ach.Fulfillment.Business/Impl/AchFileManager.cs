@@ -26,6 +26,8 @@
 
         public AchFileEntity Create(PartnerEntity partner, List<AchTransactionEntity> transactionEntities)
         {
+            Contract.Assert(transactionEntities != null);
+
             var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
             var fileEntity = new AchFileEntity
                                  {
@@ -54,10 +56,6 @@
                 tx.Complete();
             }
 
-            // foreach (var completedFile in completedFiles)
-            // {
-                // completedFile.Name;
-            // }
             using (var tx = new Transaction())
             {
                 foreach (var completedFile in completedFiles)
@@ -145,6 +143,7 @@
 
         public Dictionary<AchFileEntity, string> Generate()
         {
+            // ToDo remove grouping 
             var generatedFiles = new Dictionary<AchFileEntity, string>();
             var achTransactionEntities = this.AchTransactionManager.GetTransactionsInQueue();
 
@@ -163,7 +162,7 @@
                     this.AchTransactionManager.ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
 
                         // ToDo move from here
-                    this.AchTransactionManager.UnLockTransactions(trns);
+                    this.AchTransactionManager.UnLock(trns);
                 }
             }
 

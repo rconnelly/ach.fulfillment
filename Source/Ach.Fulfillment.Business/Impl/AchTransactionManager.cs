@@ -17,7 +17,7 @@
         {
             Contract.Assert(transaction != null);
 
-            // this.DemandValid<AchTransactionValidator>(transaction);
+            this.DemandValid<AchTransactionValidator>(transaction); // issue with 4.5 framework
             var entity = base.Create(transaction);
             this.SendAchTransactionNotification(new List<AchTransactionEntity> { entity });
             return entity;
@@ -44,6 +44,7 @@
         public void SendAchTransactionNotification(List<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
+
             foreach (var achTransactionEntity in transactions)
             {
                 ClientNotifier.NotificationRequest(
@@ -71,8 +72,10 @@
             return transactions;
         }
 
-        public void UnLockTransactions(List<AchTransactionEntity> transactions)
+        public void UnLock(List<AchTransactionEntity> transactions)
         {
+            Contract.Assert(transactions != null);
+
             using (var tx = new Transaction())
             {
                 foreach (var achTransactionEntity in transactions)

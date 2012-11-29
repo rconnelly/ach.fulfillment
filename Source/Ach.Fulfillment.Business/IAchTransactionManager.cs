@@ -11,6 +11,6 @@
 
         List<AchTransactionEntity> GetTransactionsInQueue(bool toLock = true);
 
-        void UnLockTransactions(List<AchTransactionEntity> transactions);
+        void UnLock(List<AchTransactionEntity> transactions);
     }
 }

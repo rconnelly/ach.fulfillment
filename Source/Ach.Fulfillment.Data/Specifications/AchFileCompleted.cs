@@ -9,7 +9,7 @@
     {
         public override Expression<Func<AchFileEntity, bool>> IsSatisfiedBy()
         {
-            return m => m.FileStatus == AchFileStatus.Completed;
+            return m => m.FileStatus == AchFileStatus.Completed && !m.Locked;
         }
     }
 }
