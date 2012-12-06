@@ -27,11 +27,8 @@ define([
                     { name: $('#name').val() },
                     {
                         success: function (m) {
-                            console.info('model has been updated');
-                            alert(that.p.collection.length);
-                            //that.p.collection.add(m);
-                            //that.p.render();
-                            //that.p.load({});
+                            console.info('model id ' + m.id + ' has been added/updated');
+                            that.p.collection.add(m);
                             Backbone.history.navigate('/#tests');
                         }
                     }

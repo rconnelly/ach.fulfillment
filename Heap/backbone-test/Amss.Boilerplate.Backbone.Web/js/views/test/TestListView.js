@@ -22,9 +22,11 @@ define([
             },
 
             load: function (options) {
+                console.info('loading tests....');
+
                 var that = this;
                 var onDataHandler = function (collection) {
-                    console.info('#update collection. new len ' + collection.length);
+                    console.info('tests loaded. count ' + collection.length);
                     that.collection = collection;
                     that.render();
 
@@ -33,8 +35,6 @@ define([
                         var testView = new TestView({ el: $("#edit-form"), id: options.id, p: that });
                     }
                 };
-
-                console.info('#init collection.');
 
                 this.collection.fetch({ success: onDataHandler, dataType: "json" });
             },
@@ -45,37 +45,41 @@ define([
                 var caller = e.target || e.srcElement;
                 var id = $(caller).attr("data-id");
 
-                console.info('deleteing ' + id + " col len " + this.collection.length);
+                console.info('deleting test ' + id);
 
                 var m = this.collection.get(id);
 
                 if (m == undefined) {
-                    alert('ERROR');
+                    console.info('!!!can not find test ' + id + '. tests count ' + this.collection.length);
                     return;
                 }
 
                 //debugger;
-                console.info('deleteing ' + m.get('name'));
 
                 var that = this;
                 m.destroy({
                     success: function (model, response) {
+                        console.info('test ' + id + ' has been deleted');
                         that.collection.remove(id);
                         that.render();
-                        //Backbone.history.navigate('/#tests');
                     }
                 });
             },
 
             render: function () {
+                console.info('rendering tests...');
+
                 $('.menu li').removeClass('active');
                 $('.menu li a[href="#/tests"]').parent().addClass('active');
 
                 var data = { tests: this.collection.toJSON() };
                 var compiledTemplate = _.template(testListTemplate, data);
                 this.$el.html(compiledTemplate);
+            },
 
-                // this.delegateEvents();
+            cleanUp: function () {
+                console.info('cleaning up view');
+                this.undelegateEvents(); 
             }
         });
 

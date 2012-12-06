@@ -7,11 +7,23 @@ define([
   'views/projects/ProjectsView',
   'views/contributors/ContributorsView',
   'views/test/TestListView',
-  //'views/test/TestView',
+//'views/test/TestView',
   'views/footer/FooterView'
-], function ($, _, Backbone, HomeView, ProjectsView, ContributorsView, TestListView, /*TestView,*/ FooterView) {
+], function ($, _, Backbone, HomeView, ProjectsView, ContributorsView, TestListView, /*TestView,*/FooterView) {
 
     var AppRouter = Backbone.Router.extend({
+
+        views: [],
+
+        cleanViews: function () {
+            if (this.views.length) {
+                _.each(this.views, function (view) {
+                    view.cleanUp();
+                });
+                this.views = [];
+            }
+        },
+
         routes: {
             // Define some URL routes
             'projects': 'showProjects',
@@ -37,12 +49,22 @@ define([
         });
 
         app_router.on('route:showTest', function () {
+            console.info('--> Routing to show tests');
+            app_router.cleanViews();
+
             var testView = new TestListView({});
+
+            app_router.views.push(testView);
         });
 
         app_router.on('route:editTest', function (id) {
-            var testListView = new TestListView({id:id});
-            console.info('set id ' + id);
+            console.info('--> Routing to edit test ' + id);
+
+            app_router.cleanViews();
+
+            var testListView = new TestListView({ id: id });
+            
+            app_router.views.push(testListView);
         });
 
         app_router.on('route:showContributors', function () {
