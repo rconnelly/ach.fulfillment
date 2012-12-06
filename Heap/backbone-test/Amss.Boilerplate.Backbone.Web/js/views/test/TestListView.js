@@ -19,7 +19,11 @@ define([
 
             initialize: function (options) {
                 this.load(options);
+
+                _.bindAll(this, 'up');
             },
+
+            childeView: null,
 
             load: function (options) {
                 console.info('loading tests....');
@@ -32,11 +36,20 @@ define([
 
                     if (options.id != undefined) {
                         console.info('add/edit id ' + options.id);
-                        var testView = new TestView({ el: $("#edit-form"), id: options.id, p: that });
+                        
+                        var data = { el: $("#edit-form"), id: options.id};
+                        that.childeView = that.childeView ? that.childeView(data) : new TestView(data);
+                        that.childeView.bind('updated', that.up);
                     }
                 };
 
                 this.collection.fetch({ success: onDataHandler, dataType: "json" });
+            },
+
+            up: function (m) {
+                console.info('handle updated event....');
+                // this.collection.add(m);
+                Backbone.history.navigate('/#tests');
             },
 
             del: function (e) {
@@ -79,7 +92,7 @@ define([
 
             cleanUp: function () {
                 console.info('cleaning up view');
-                this.undelegateEvents(); 
+                this.undelegateEvents();
             }
         });
 

@@ -11,7 +11,6 @@ define([
 
             initialize: function (options) {
                 this.render(options.id);
-                this.p = options.p;
             },
 
             events: {
@@ -27,9 +26,8 @@ define([
                     { name: $('#name').val() },
                     {
                         success: function (m) {
-                            console.info('model id ' + m.id + ' has been added/updated');
-                            that.p.collection.add(m);
-                            Backbone.history.navigate('/#tests');
+                            console.info('rasing updated event for '+ m.id + '....');
+                            that.trigger('updated', m);
                         }
                     }
                 );
