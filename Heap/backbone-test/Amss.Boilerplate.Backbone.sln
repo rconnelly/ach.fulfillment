@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00.Crosscutting", "00.Crosscutting", "{60A9F57B-18AA-41A2-AD6E-EB376C0C83AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Persistence", "01.Persistence", "{BE5C8642-D4DD-4D0B-AF84-7B827CA23644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Business", "02.Business", "{64AC1DDA-7DBA-4FDE-AEE9-EB331D3C8C11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.Communication", "03.Communication", "{3FE17825-3817-458E-B7BB-7F046F4EBC21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.Presentation", "04.Presentation", "{8F50DCC7-6651-4166-8C5B-4460511CB9A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.Testing", "05.Testing", "{11A65C41-E1A5-411A-9A49-D27F04C2FBF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amss.Boilerplate.Backbone.Web", "Amss.Boilerplate.Backbone.Web\Amss.Boilerplate.Backbone.Web.csproj", "{0DD560AD-390B-474C-8321-569DFA7A2454}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DD560AD-390B-474C-8321-569DFA7A2454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD560AD-390B-474C-8321-569DFA7A2454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DD560AD-390B-474C-8321-569DFA7A2454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DD560AD-390B-474C-8321-569DFA7A2454}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0DD560AD-390B-474C-8321-569DFA7A2454} = {8F50DCC7-6651-4166-8C5B-4460511CB9A5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35
+	EndGlobalSection
+EndGlobal

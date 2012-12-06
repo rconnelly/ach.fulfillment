@@ -1,0 +1,12 @@
+
+<a class="add" href="#/tests/0">Add</a>
+
+<ul>
+    <% _.each(tests, function(test){  %>
+    <li> <a class="edit" href="#/tests/<%=test.id %>"><%=test.name %> - <%=test.id %></a> ### <a class="del" data-id="<%=test.id %>">del</a></li>
+    <% }); %>
+</ul>
+
+<div id="edit-form"></div>
+
+
