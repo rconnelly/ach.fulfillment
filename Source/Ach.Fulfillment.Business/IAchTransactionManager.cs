@@ -9,7 +9,9 @@
 
         void SendAchTransactionNotification(List<AchTransactionEntity> transactions);
 
-        List<AchTransactionEntity> GetTransactionsInQueue(bool toLock = true);
+        List<AchTransactionEntity> GetAllInQueue(bool toLock = true);
+
+        List<AchTransactionEntity> GetAllInQueueForPartner(PartnerEntity partner, bool toLock = true);
 
         void UnLock(List<AchTransactionEntity> transactions);
     }

@@ -210,7 +210,7 @@
             this.ClearSession(instance);
             this.ClearSession(instance2);
 
-            var trns = manager.GetTransactionsInQueue();
+            var trns = manager.GetAllInQueue();
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
             Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
@@ -235,13 +235,50 @@
 
             this.ClearSession(instance);
 
-            var trns = manager.GetTransactionsInQueue(false);
+            var trns = manager.GetAllInQueue(false);
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
             Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
             Assert.IsFalse(trns[0].Locked);
         }
-        
+
+        [Test]
+        public void GetAllInQueueForPartnerTest()
+        {
+            var manager = Locator.GetInstance<IAchTransactionManager>();
+            var partnerManager = Locator.GetInstance<IPartnerManager>();
+
+            var partner = this.CreateTestPartner();
+            partnerManager.Create(partner);
+
+            var transaction = this.CreateTestAchTransaction();
+            transaction.Partner = partner;
+            var instance = manager.Create(transaction);
+
+            Assert.That(instance, Is.Not.Null);
+            Assert.That(instance.Id, Is.GreaterThan(0));
+
+            var partner2 = this.CreateTestPartner();
+            partnerManager.Create(partner2);
+
+            var transaction2 = this.CreateTestAchTransaction();
+            transaction2.Partner = partner2;
+            var instance2 = manager.Create(transaction2);
+
+            Assert.That(instance2, Is.Not.Null);
+            Assert.That(instance2.Id, Is.GreaterThan(0));
+
+            this.ClearSession(instance);
+            this.ClearSession(instance2);
+
+            var trns = manager.GetAllInQueueForPartner(partner);
+            Assert.That(trns, Is.Not.Null);
+            Assert.AreEqual(trns.Count(), 1);
+            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.IsTrue(trns[0].Locked);
+            Assert.AreEqual(partner, trns[0].Partner);
+        }
+
         [Test]
         public void UnLockTest()
         {

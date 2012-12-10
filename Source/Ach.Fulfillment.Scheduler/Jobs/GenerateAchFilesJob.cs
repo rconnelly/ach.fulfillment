@@ -37,7 +37,9 @@
                     var dataMap = context.JobDetail.JobDataMap;
                     var achfilesStore = dataMap.GetString("AchFilesStore");
 
-                    var achFiles = this.Manager.Generate();
+                    this.Manager.Generate();
+
+                    var achFiles = this.Manager.GetAchFilesDataForUploading();
 
                     foreach (var newPath in achFiles.Select(achFile => Path.Combine(achfilesStore, achFile.Key.Name + ".ach")))
                     {

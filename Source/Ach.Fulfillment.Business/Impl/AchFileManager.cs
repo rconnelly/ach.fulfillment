@@ -22,6 +22,9 @@
         [Dependency]
         public IAchTransactionManager AchTransactionManager { get; set; }
 
+        [Dependency]
+        public IPartnerManager PartnerManager { get; set; }
+
         #region Public Methods
 
         public AchFileEntity Create(PartnerEntity partner, List<AchTransactionEntity> transactionEntities)
@@ -141,55 +144,66 @@
             return result.ToString(CultureInfo.InvariantCulture); 
         }
 
-        public Dictionary<AchFileEntity, string> Generate()
-        {
-            // ToDo remove grouping 
-            var generatedFiles = new Dictionary<AchFileEntity, string>();
-            var achTransactionEntities = this.AchTransactionManager.GetTransactionsInQueue();
+        public void Generate()
+        { 
+            var partners = this.PartnerManager.FindAll(new PartnerAll()); // ToDo probably we will need flag for  partner in future which will say that we need to genarate achfiles for it
 
-            var transactionGroups = achTransactionEntities.GroupBy(tt => tt.Partner);
-            var partnerTransactions = transactionGroups as List<IGrouping<PartnerEntity, AchTransactionEntity>> ?? transactionGroups.ToList();
-
-            if (partnerTransactions.Any())
+            foreach (var partner in partners)
             {
-                foreach (var transactions in partnerTransactions)
-                {
-                    var trns = transactions.ToList();
-                    var partner = transactions.Key;
-                    var fileEntity = this.Create(partner, trns);
-                    var achFile = this.GenerateAchFileForPartner(partner, trns, fileEntity);
-                    generatedFiles.Add(fileEntity, achFile);
-                    this.AchTransactionManager.ChangeAchTransactionStatus(trns, AchTransactionStatus.Batched);
+                this.GenerateForPartner(partner);
+            }
+        }
 
-                        // ToDo move from here
-                    this.AchTransactionManager.UnLock(trns);
-                }
+        public void GenerateForPartner(PartnerEntity partner)
+        {
+            var achTransactions = this.AchTransactionManager.GetAllInQueueForPartner(partner).ToList();
+            if (achTransactions.Any())
+            {
+                this.Create(partner, achTransactions);
+                this.AchTransactionManager.ChangeAchTransactionStatus(achTransactions, AchTransactionStatus.InProgress);
+            }
+
+            this.AchTransactionManager.UnLock(achTransactions);
+        }
+
+        public Dictionary<AchFileEntity, string> GetAchFilesDataForUploading()
+        {
+            var generatedFiles = new Dictionary<AchFileEntity, string>();
+            var achFiles = Repository.FindAll(new AchFileCreated());
+
+            foreach (var achFile in achFiles)
+            {
+                var file = this.GenerateAchFileForPartner(achFile);
+                var achFileString = file.Serialize();
+                generatedFiles.Add(achFile, achFileString);
+                this.AchTransactionManager.ChangeAchTransactionStatus(achFile.Transactions.ToList(), AchTransactionStatus.Batched);
             }
 
             return generatedFiles;
         }
-
+            
         #endregion
 
         #region Private Methods
 
-        private string GenerateAchFileForPartner(PartnerEntity partner, IEnumerable<AchTransactionEntity> transactions, AchFileEntity fileEntity)
+        private File GenerateAchFileForPartner(AchFileEntity fileEntity)
         {
-            var transactionGroups = transactions.GroupBy(tt => tt.EntryDescription); // ToDo change to settelment date 
+            var transactionGroups = fileEntity.Transactions.GroupBy(tt => tt.EntryDescription); // ToDo change to settelment date 
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
+
             if (groupedTransactions.Any())
             {
                 var batchNumber = 0;
 
                 var achfile = new File
                 {
-                    Header = this.CreateFileControlRecord(partner, fileEntity),
+                    Header = this.CreateFileControlRecord(fileEntity),
                     Batches = new List<GeneralBatch>()
                 };
 
                 foreach (var transaction in groupedTransactions)
                 {
-                    var batch = this.CreateBatchRecord(partner, transaction.Key, transaction.ToList(), batchNumber);
+                    var batch = this.CreateBatchRecord(fileEntity.Partner, transaction.Key, transaction.ToList(), batchNumber);
                     achfile.Batches.AddRange(batch);
                     batchNumber++;
                 }
@@ -212,26 +226,30 @@
                     TotalCreditAmount = achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
                     TotalDebitAmount = achfile.Batches.Select(b => b.Control.TotalDebitAmount).Sum()
                 };
-                var result = achfile.Serialize();
-                return result;
+                
+                return achfile;
             }
 
             return null;
         }
 
-        private FileHeaderRecord CreateFileControlRecord(PartnerEntity partner, AchFileEntity fileEntity)
+        private FileHeaderRecord CreateFileControlRecord(AchFileEntity fileEntity)
         {
-            Contract.Assert(partner != null);
-            Contract.Assert(partner.Details != null);
+            Contract.Assert(fileEntity != null);
+            Contract.Assert(fileEntity.Partner != null);
+            Contract.Assert(fileEntity.Partner.Details != null);
+
+            var partner = fileEntity.Partner;
+            var details = partner.Details;
 
             return new FileHeaderRecord
             {
                 Destination = partner.Details.Destination,
                 FileCreationDateTime = DateTime.Now,
                 FileIdModifier = fileEntity.FileIdModifier,
-                ImmediateDestination = partner.Details.ImmediateDestination,
-                ImmediateOrigin = partner.Details.CompanyIdentification,
-                OriginOrCompanyName = partner.Details.OriginOrCompanyName,
+                ImmediateDestination = details.ImmediateDestination,
+                ImmediateOrigin = details.CompanyIdentification,
+                OriginOrCompanyName = details.OriginOrCompanyName,
                 ReferenceCode = fileEntity.Id.ToString(CultureInfo.InvariantCulture)
             };
         }

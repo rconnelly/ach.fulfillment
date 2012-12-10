@@ -74,15 +74,39 @@ namespace Ach.Fulfillment.Tests.Business
         public static AchFileEntity CreateTestAchFile(this BusinessIntegrationTestBase testBase)
         {
             var achFile = new AchFileEntity
-            {
-                Name = "AchFilename",
-                FileIdModifier = "A",
-                FileStatus = AchFileStatus.Created,
-                Locked = false,
-                Transactions = new List<AchTransactionEntity>()
-            };
+                {
+                    Name = "AchFilename",
+                    FileIdModifier = "A",
+                    FileStatus = AchFileStatus.Created,
+                    Locked = false,
+                    Transactions = new List<AchTransactionEntity>()
+                };
 
             return achFile;
+        }
+
+        public static PartnerEntity CreateTestPartnerWithDetails(this BusinessIntegrationTestBase testBase)
+        {
+            var partner = new PartnerEntity
+            {
+                Name = ShortStringGenerator.GetRandomValue()
+            };
+
+            var details = new PartnerDetailEntity
+                {
+                    CompanyIdentification = new StringGenerator(10, 10).GetRandomValue(),
+                    CompanyName = new StringGenerator(5, 16).GetRandomValue(),
+                    DfiIdentification = new StringGenerator(8, 8).GetRandomValue(),
+                    Destination = new StringGenerator(5, 23).GetRandomValue(),
+                    DiscretionaryData = new StringGenerator(5, 20).GetRandomValue(),
+                    ImmediateDestination = new StringGenerator(5, 10).GetRandomValue(),
+                    OriginOrCompanyName = new StringGenerator(5, 23).GetRandomValue(),
+                    Partner = partner
+                };
+
+            partner.Details = details;
+
+            return partner;
         }
     }
 }

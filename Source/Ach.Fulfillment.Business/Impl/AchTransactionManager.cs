@@ -52,13 +52,33 @@
             }
         }
 
-        public List<AchTransactionEntity> GetTransactionsInQueue(bool toLock = true)
+        public List<AchTransactionEntity> GetAllInQueue(bool toLock = true)
         {
             List<AchTransactionEntity> transactions;
 
             using (var tx = new Transaction())
             {
                 transactions = Repository.FindAll(new AchTransactionInQueue()).ToList();
+
+                foreach (var achTransactionEntity in transactions)
+                {
+                    achTransactionEntity.Locked = toLock;
+                    this.Update(achTransactionEntity);
+                }
+
+                tx.Complete();
+            }
+
+            return transactions;
+        }
+
+        public List<AchTransactionEntity> GetAllInQueueForPartner(PartnerEntity partner, bool toLock = true)
+        {
+            List<AchTransactionEntity> transactions;
+            
+            using (var tx = new Transaction())
+            {
+                transactions = Repository.FindAll(new AchTransactionInQueueForPartner(partner)).ToList();
 
                 foreach (var achTransactionEntity in transactions)
                 {

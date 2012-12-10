@@ -20,6 +20,10 @@
 
         string GetNextIdModifier(PartnerEntity partner);
 
-        Dictionary<AchFileEntity, string> Generate();
+        void Generate();
+
+        void GenerateForPartner(PartnerEntity partner);
+
+        Dictionary<AchFileEntity, string> GetAchFilesDataForUploading();
     }
 }
