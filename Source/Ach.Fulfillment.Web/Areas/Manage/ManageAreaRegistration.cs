@@ -1,4 +1,6 @@
-﻿namespace Ach.Fulfillment.Web.Areas.Manage
+﻿using Ach.Fulfillment.Web.Common;
+
+namespace Ach.Fulfillment.Web.Areas.Manage
 {
     using System.Web.Mvc;
 
@@ -14,6 +16,7 @@
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
+            context.MapRoute(RouteHelper.Transaction, "Transaction", new { area = "Manage", controller = "AchTransaction", action = "Create" });
             context.MapRoute(
                 "Manage_default",
                 "Manage/{controller}/{action}/{id}",
