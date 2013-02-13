@@ -15,7 +15,7 @@ it is login for default user. It will be used for non-authentificated requests. 
 
 
 ## Request
-Url : http://yourhost/achtransaction/create
+Url : http://yourhost/transaction
 Accept: application/json
 Content-Type: application/json
 
