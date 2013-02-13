@@ -21,17 +21,17 @@ Content-Type: application/json
 
 We are wating for request in Json format, for example
 
-  {
-    "IndividualIdNumber" : "123456789012345",
-    "ReceiverName" : "ReceiverName",
-    "EntryDescription":"PAYROLL",
-    "EntryDate":"01.01.2012",
-    "TransactionCode":"22", 
-    "TransitRoutingNumber":"123456789",
-    "DfiAccountId":"12345678901234567", 
-    "Amount":"123,00", 
-    "EntryClassCode":"PPD", 
-    "CallbackUrl":"http://send.callback.here",
-    "PaymentRelatedInfo":"",
-    "ServiceClassCode":"200"
-  }
+    {
+      "IndividualIdNumber" : "123456789012345",
+      "ReceiverName" : "ReceiverName",
+      "EntryDescription":"PAYROLL",
+      "EntryDate":"01.01.2012",
+      "TransactionCode":"22", 
+      "TransitRoutingNumber":"123456789",
+      "DfiAccountId":"12345678901234567", 
+      "Amount":"123,00", 
+      "EntryClassCode":"PPD", 
+      "CallbackUrl":"http://send.callback.here",
+      "PaymentRelatedInfo":"",
+      "ServiceClassCode":"200"
+    }
