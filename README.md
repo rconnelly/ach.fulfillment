@@ -21,7 +21,9 @@ it is login for default user. It will be used for non-authentificated requests. 
     http://servicehost/transaction
 
 **Accept:** application/json
+
 **Content-Type:** application/json
+
 **Request Body:**
 
     {
