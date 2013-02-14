@@ -18,7 +18,7 @@ it is login for default user. It will be used for non-authentificated requests. 
 
 **CREATE TRANSACTION**
 
-    http://servicehost/transaction
+**POST**    >> http://servicehost/transaction
 
 **Accept:** application/json
 
