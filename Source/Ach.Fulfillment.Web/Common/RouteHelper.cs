@@ -11,6 +11,7 @@
         public const string Error403 = "Error403";
         public const string About = "About";
         public const string Contact = "Contact";
+        public const string Transaction = "Transaction";
 
         public static void InitErrorRoute(int httpCode, RouteData routeData)
         {
