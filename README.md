@@ -14,14 +14,15 @@ it is login for default user. It will be used for non-authentificated requests. 
 3. Open "trigger" section - there you can configure when your job will be run. Change cron-expression for your one. For more information look at http://en.wikipedia.org/wiki/Cron
 
 
-## Request
+## API
 
-Url : http://yourhost/transaction
+**CREATE TRANSACTION**
+    http://servicehost/transaction
 
 Accept: application/json
 Content-Type: application/json
 
-We are wating for request in Json format, for example
+The transaction request body looks like this:
 
     {
       "IndividualIdNumber" : "123456789012345",
@@ -37,3 +38,5 @@ We are wating for request in Json format, for example
       "PaymentRelatedInfo":"",
       "ServiceClassCode":"200"
     }
+
+
