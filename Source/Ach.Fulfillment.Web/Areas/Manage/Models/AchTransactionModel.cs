@@ -1,13 +1,17 @@
-﻿namespace Ach.Fulfillment.Web.Areas.Manage.Models
+﻿using Newtonsoft.Json;
+
+namespace Ach.Fulfillment.Web.Areas.Manage.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
     
+    [Serializable]
     public class AchTransactionModel
     {
         [HiddenInput]
         public long? AchTransactionId { get; set; }
+        public string Status { get; set; }
 
         [Required(ErrorMessage = "Individual Id Number is required.")]
         [StringLength(15, MinimumLength = 15, ErrorMessage = "Individual Id Number must be 15 characters.")]

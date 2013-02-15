@@ -108,6 +108,11 @@
             }
         }
 
+        public void SendCallBack(string callbackUrl, string data)
+        {
+            ClientNotifier.NotificationRequest(callbackUrl, data);
+        }
+
         #endregion
     }
 }

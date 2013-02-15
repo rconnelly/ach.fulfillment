@@ -1,4 +1,6 @@
-﻿namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
+﻿using System.Collections.Generic;
+
+namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 {
     using System.Configuration;
 
@@ -41,8 +43,26 @@
                                   };
 
             this.Manager.Create(transaction);
+            Manager.SendAchTransactionNotification(new List<AchTransactionEntity> { transaction });
 
             return transaction.Id;
+        }
+
+        public AchTransactionModel LoadAchTransaction(long transactionId)
+        {
+            var achEntity = this.Manager.Load(transactionId);
+            var achModel = new AchTransactionModel
+                               {
+                                   AchTransactionId = achEntity.Id,
+                                  // Status = achEntity.TransactionStatus.ToString()
+                               };
+
+            return achModel;
+        }
+
+        public void SendCallBack(string url, string data)
+        {
+            this.Manager.SendCallBack(url, data);
         }
     }
 }
