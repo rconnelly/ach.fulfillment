@@ -10,7 +10,8 @@ it is login for default user. It will be used for non-authentificated requests. 
 
 ## Job configuration
 1. Go to quartz_jobs.config file 
-2. Open "job-data-map" section - there for entry with key "AchFilesStore" you should put path to the directory where genarated files will be stored.
+2. For each job there is  "job-data-map" section where additional data for job should be added.
+   Find GenerateAchFilesJob and fill parameters in "job-data-map" section.
 3. Open "trigger" section - there you can configure when your job will be run. Change cron-expression for your one. For more information look at http://en.wikipedia.org/wiki/Cron
 
 
