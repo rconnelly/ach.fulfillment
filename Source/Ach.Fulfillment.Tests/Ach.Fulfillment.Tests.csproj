@@ -115,7 +115,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\_libBinary\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="LinqSpecs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="LinqSpecs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_libBinary\LinqSpecs.1.0\lib\LinqSpecs.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\_libBinary\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>

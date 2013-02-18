@@ -78,7 +78,9 @@
                             var fileName = achfile.Name + ".ach";
 
                             var writer = new StreamWriter(stream);
-                           // writer.Write(achfile.AchFileBody);
+
+                            /*writer.Write(achfile.AchFileBody);*/
+
                             writer.Flush();
                             stream.Position = 0;
 

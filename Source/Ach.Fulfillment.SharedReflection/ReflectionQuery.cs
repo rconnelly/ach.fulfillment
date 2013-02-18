@@ -8,7 +8,7 @@
 
     public class ReflectionQuery<T> where T : Attribute
     {
-        private static Dictionary<string, ReflectionQueryResult<T>> reflectionCache = new Dictionary<string, ReflectionQueryResult<T>>();
+        private static readonly Dictionary<string, ReflectionQueryResult<T>> ReflectionCache = new Dictionary<string, ReflectionQueryResult<T>>();
 
         public ReflectionQueryResult<T> Reflect(Type type)
         {
@@ -21,20 +21,20 @@
 
             // check
             Debug.Assert(type.FullName != null, "type.FullName != null");
-            if (!reflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
+            if (!ReflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
             {
                 // lock
-                lock (reflectionCache) 
+                lock (ReflectionCache) 
                 {
                     // double-check
-                    if (!reflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
+                    if (!ReflectionCache.TryGetValue(type.FullName, out reflectorCacheEntry))
                     {
                         var reflectorEntries = new Dictionary<string, ReflectMember<T>>();
                         this.QueryType(type, reflectorEntries);
 
                         reflectorCacheEntry = new ReflectionQueryResult<T>(type, reflectorEntries); // add to cache for all future requests
 
-                        reflectionCache.Add(type.FullName, reflectorCacheEntry);
+                        ReflectionCache.Add(type.FullName, reflectorCacheEntry);
                     }
                 }
             }
@@ -50,21 +50,19 @@
             }
 
             var reflectableMembers =
-                from memberInfo in
+                (from memberInfo in
                     type.FindMembers(
                         MemberTypes.Field | MemberTypes.Property,
                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Static | BindingFlags.Default,
                         null,
                         null)
-                where (memberInfo.GetCustomAttributes(typeof(T), false) as T[]).Any()
-
-                // orderby ((memberInfo.GetCustomAttributes(typeof(T), false) as T[])[0] as IReflectAttribute).Position ascending
+                where memberInfo != null && memberInfo.GetCustomAttributes(typeof(T), false).OfType<T>().Any() /*orderby ((memberInfo.GetCustomAttributes(typeof(T), false) as T[])[0] as IReflectAttribute).Position ascending*/
                 select
                     new
                         {
                             MemberInfo = memberInfo,
                             ReflectAttributes = memberInfo.GetCustomAttributes(typeof(T), false) as T[]
-                        };
+                        }).ToList().AsQueryable();
 
             if (reflectableMembers.Any() && reflectableMembers.First().ReflectAttributes.First() is IReflectAttribute)
             {

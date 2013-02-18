@@ -1,8 +1,8 @@
-﻿using Ach.Fulfillment.Web.Common;
-
-namespace Ach.Fulfillment.Web.Areas.Manage
+﻿namespace Ach.Fulfillment.Web.Areas.Manage
 {
     using System.Web.Mvc;
+
+    using Ach.Fulfillment.Web.Common;
 
     public class ManageAreaRegistration : AreaRegistration
     {

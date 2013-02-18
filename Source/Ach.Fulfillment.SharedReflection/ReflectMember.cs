@@ -5,9 +5,7 @@
 
     public abstract class ReflectMember<T> where T : Attribute
     {
-        protected MemberInfo MemberInfo;
-
-        public ReflectMember(T reflectAttribute, MemberInfo memberInfo)
+        protected ReflectMember(T reflectAttribute, MemberInfo memberInfo)
         {
             this.ReflectAttribute = reflectAttribute;
             this.MemberInfo = memberInfo;
@@ -24,6 +22,8 @@
                 return this.MemberInfo.Name;
             }
         }
+
+        protected MemberInfo MemberInfo { get; set; }
 
         public abstract void SetValue(object instance, object value);
 
