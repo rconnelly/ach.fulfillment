@@ -33,25 +33,34 @@ namespace Ach.Fulfillment.Web.Common.Filters
             var handledException = exception.TransformException(WebContainerExtension.DefaultPolicy);
 
             // avoid showing death screen even for not 500 error in production
-            if (new HttpException(null, exception).GetHttpCode() != 500)
+            var httpCode = new HttpException(null, exception).GetHttpCode();
+            switch (httpCode)
             {
-                var controllerName = (string)filterContext.RouteData.Values["controller"];
-                var actionName = (string)filterContext.RouteData.Values["action"];
-                var model = new HandleErrorInfo(handledException, controllerName, actionName);
-                filterContext.Result = new ViewResult
+                case 401:
+                case 403:
+                case 404:
+                case 500:
                     {
-                        // if view is not defined - use action name by default
-                        ViewName = "Error",
-                        ViewData = new ViewDataDictionary(model)
-                    };
-                filterContext.ExceptionHandled = true;
+                        filterContext.Exception = handledException;
+                        base.OnException(filterContext);
+                        break;
+                    }
 
-                return;
+                default:
+                    {
+                        var controllerName = (string)filterContext.RouteData.Values["controller"];
+                        var actionName = (string)filterContext.RouteData.Values["action"];
+                        var model = new HandleErrorInfo(handledException, controllerName, actionName);
+                        filterContext.Result = new ViewResult
+                            {
+                                // if view is not defined - use action name by default
+                                ViewName = "Error",
+                                ViewData = new ViewDataDictionary(model)
+                            };
+                        filterContext.ExceptionHandled = true;
+                        break;
+                    }
             }
-
-            filterContext.Exception = handledException;
-
-            base.OnException(filterContext);
         }
     }
 }

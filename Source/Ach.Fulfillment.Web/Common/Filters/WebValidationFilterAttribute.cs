@@ -7,23 +7,24 @@
     using Ach.Fulfillment.Web.Configuration;
 
     // we could use Controller.OnException but I havn't found the way how to know what view is being rendered if it's not the same as action
-    internal class BusinessValidationFilterAttribute : ActionFilterAttribute
+    internal class WebValidationFilterAttribute : ActionFilterAttribute
     {
         private readonly string view;
 
-        public BusinessValidationFilterAttribute()
-            : this(null)
-        {
-        }
-
-        public BusinessValidationFilterAttribute(string view)
+        public WebValidationFilterAttribute(string view = null)
         {
             this.view = view;
+            this.Order = 10;
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var transformedException = filterContext.Exception.TransformException(WebContainerExtension.ValidationPolicy);
+            if (filterContext.Exception == null)
+            {
+                return;
+            }
+
+            var transformedException = filterContext.Exception.TransformException(WebContainerExtension.WebValidationPolicy);
             var exception = transformedException as BusinessValidationException;
             if (exception != null)
             {
@@ -34,12 +35,14 @@
 
                 filterContext.ExceptionHandled = true;
                 filterContext.Result = new ViewResult
-                    {
-                        // if view is not defined - use action name by default
-                        ViewName = this.view ?? filterContext.RouteData.Values["action"].ToString(),
-                        TempData = filterContext.Controller.TempData,
-                        ViewData = filterContext.Controller.ViewData
-                    };
+                                            {
+                                                // if view is not defined - use action name by default
+                                                ViewName =
+                                                    this.view
+                                                    ?? filterContext.RouteData.Values["action"].ToString(),
+                                                TempData = filterContext.Controller.TempData,
+                                                ViewData = filterContext.Controller.ViewData
+                                            };
             }
         }
     }

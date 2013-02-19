@@ -180,9 +180,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\_libBinary\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RouteDebug">
-      <HintPath>..\..\_libBinary\RouteDebug.1.0.0\RouteDebug.dll</HintPath>
-    </Reference>
     <Reference Include="RouteDebugger">
       <HintPath>..\..\_libBinary\routedebugger.2.1.4.0\lib\net40\RouteDebugger.dll</HintPath>
     </Reference>
@@ -261,28 +258,35 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Main\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Main\Controllers\HomeController.cs" />
     <Compile Include="Areas\Main\Controllers\HomeManager.cs" />
     <Compile Include="Areas\Main\MainAreaRegistration.cs" />
     <Compile Include="Areas\Main\Models\ChangePasswordModel.cs" />
     <Compile Include="Areas\Main\Models\LoginModel.cs" />
-    <Compile Include="Areas\Manage\Controllers\AchManager.cs" />
+    <Compile Include="Areas\Api\Controllers\AchManager.cs" />
     <Compile Include="Areas\Manage\Controllers\PartnerController.cs" />
     <Compile Include="Areas\Manage\Controllers\PartnerManager.cs" />
-    <Compile Include="Areas\Manage\Controllers\AchTransactionController.cs" />
+    <Compile Include="Areas\Api\Controllers\AchTransactionController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserController.cs" />
     <Compile Include="Areas\Manage\Controllers\UserManager.cs" />
     <Compile Include="Areas\Manage\ManageAreaRegistration.cs" />
-    <Compile Include="Areas\Manage\Models\AchTransactionModel.cs" />
+    <Compile Include="Areas\Api\Models\AchTransactionModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerGridModel.cs" />
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
+    <Compile Include="Common\Data\OperationError.cs" />
+    <Compile Include="Common\Data\OperationErrorEntry.cs" />
+    <Compile Include="Common\Data\OperationErrorExtension.cs" />
     <Compile Include="Common\Data\PrincipalSession.cs" />
     <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
     <Compile Include="Common\ExceptionHelper.cs" />
-    <Compile Include="Common\Filters\BusinessValidationFilterAttribute.cs" />
+    <Compile Include="Common\Filters\ApiValidationFilterAttribute.cs" />
+    <Compile Include="Common\Filters\WebValidationFilterAttribute.cs" />
+    <Compile Include="Common\Filters\CacheAttribute.cs" />
+    <Compile Include="Common\Filters\Redirect401AuthorizeAttribute.cs" />
     <Compile Include="Common\Filters\WebHandleErrorAttribute.cs" />
     <Compile Include="Common\Controllers\Controller.Generic.cs" />
     <Compile Include="Common\Controllers\CustomControllerFactory.cs" />

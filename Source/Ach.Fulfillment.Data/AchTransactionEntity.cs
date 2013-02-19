@@ -39,6 +39,7 @@
         [StringLength(80)]
         public virtual string PaymentRelatedInfo { get; set; }
 
+        [StringLength(255)]
         public virtual string CallbackUrl { get; set; }
         
         public virtual AchTransactionStatus TransactionStatus { get; set; }

@@ -56,7 +56,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return this.View(model);
         }
 
-        [BusinessValidationFilter]
+        [WebValidationFilter]
         [HttpPost]
         public ActionResult Create(UserModel model)
         {
@@ -90,7 +90,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
             return this.View(model);
         }
 
-        [BusinessValidationFilter]
+        [WebValidationFilter]
         [HttpPost]
         public ActionResult Edit(UserModel model)
         {

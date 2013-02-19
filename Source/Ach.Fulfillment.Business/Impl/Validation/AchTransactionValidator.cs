@@ -1,41 +1,94 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Validation
 {
+    using System;
+
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Persistence;
 
     using FluentValidation;
 
     internal class AchTransactionValidator : AbstractValidator<AchTransactionEntity>
     {
-        public AchTransactionValidator(IRepository repository)
+        private const string UrlRegex =
+    @"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$";
+
+        public AchTransactionValidator()
         {
-            this.Repository = repository;
-            this.RuleFor(i => i.Amount).NotNull();
-            this.RuleFor(i => i.CallbackUrl).Length(1, 255);
-            this.RuleFor(i => i.DfiAccountId).NotEmpty().NotNull().Length(17)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[a-zA-Z0-9]*$"));
-            this.RuleFor(i => i.EntryClassCode).NotEmpty().NotNull().Length(3)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[A-Z]*$"));
-            this.RuleFor(i => i.EntryDate).NotEmpty().NotNull();
-            this.RuleFor(i => i.EntryDescription).NotEmpty().NotNull().Length(1, 10)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[a-zA-Z0-9]*$"));
-            this.RuleFor(i => i.IndividualIdNumber).NotEmpty().NotNull().Length(15)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[a-zA-Z0-9]*$"));
-            this.RuleFor(i => i.PaymentRelatedInfo).Length(0, 94)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[a-zA-Z0-9]*$"));
-            this.RuleFor(i => i.ReceiverName).NotEmpty().NotNull().Length(1, 22)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[a-zA-Z0-9]*$"));
-            this.RuleFor(i => i.ServiceClassCode).Length(3)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^(200|220|225)$"));
-            this.RuleFor(i => i.TransactionCode).NotEmpty().NotNull().Length(2)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^(22|23|24|27|28|29|32|33|34|37|38|39)$"));
-            this.RuleFor(i => i.TransitRoutingNumber).NotEmpty().NotNull().Length(9)
-                .SetValidator(new FluentValidation.Validators.RegularExpressionValidator(@"^[0-9]+$"));
+            // IndividualIdNumber
+            this.RuleFor(i => i.IndividualIdNumber)
+                .NotEmpty()
+                .Length(15)
+                .AlphaNumeric();
 
-            this.RuleFor(i => i.TransactionStatus).NotNull();
-            this.RuleFor(i => i.Partner).NotNull();
+            // ReceiverName
+            this.RuleFor(i => i.ReceiverName)
+                .NotEmpty()
+                .Length(1, 22)
+                .AlphaNumeric();
+
+            // EntryDescription
+            this.RuleFor(i => i.EntryDescription)
+                .NotEmpty()
+                .Length(1, 10)
+                .AlphaNumeric();
+
+            // EntryDate
+            this.RuleFor(i => i.EntryDate)
+                .NotEmpty();
+
+            // TransactionCode
+            this.RuleFor(i => i.TransactionCode)
+                .NotEmpty()
+                .Length(2)
+                .Matches(@"^(22|23|24|27|28|29|32|33|34|37|38|39)$").WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
+
+            // TransitRoutingNumber
+            this.RuleFor(i => i.TransitRoutingNumber)
+                .NotEmpty()
+                .Length(9)                
+                .Matches(@"^[0-9]+$").WithMessage("{PropertyName} must have numeric data");
+
+            // DfiAccountId
+            this.RuleFor(i => i.DfiAccountId)
+                .NotEmpty()
+                .Length(17)
+                .AlphaNumeric();
+
+            // Amount
+            this.RuleFor(i => i.Amount)
+                .NotEmpty()
+                .Must(v =>
+                    {
+                        v = Math.Abs(v);
+                        var decimalPart = v - Math.Floor(v); // 100.354 - 100 = 0.354
+                        var cents = decimalPart * 100; // 35.4
+                        var centDecimalPart = cents - Math.Floor(cents); // 35.4 - 35 = 0.4
+                        return centDecimalPart == 0; // 0.4 compare to 0
+                    }).WithMessage("{PropertyName} must be amount of dollars with two decimal places after ',' ");
+
+            // ServiceClassCode
+            this.RuleFor(i => i.ServiceClassCode)
+                .Length(3)
+                .Matches(@"^(200|220|225)$").WithMessage("Valid codes for {PropertyName} are 200, 220, 225");
+
+            // EntryClassCode
+            this.RuleFor(i => i.EntryClassCode)
+                .NotEmpty()
+                .Length(3)
+                .Matches(@"^[A-Z]*$").WithMessage("{PropertyName} must have 3 uppercase characters");
+
+            // PaymentRelatedInfo
+            this.RuleFor(i => i.PaymentRelatedInfo)
+                .Length(0, 80);
+
+            // CallbackUrl
+            this.RuleFor(i => i.CallbackUrl)
+                .NotEmpty()
+                .Length(1, 255)
+                .Matches(UrlRegex).WithMessage("{PropertyName} format is wrong");
+
+            // Partner
+            this.RuleFor(i => i.Partner)
+                .NotNull();
         }
-
-        public IRepository Repository { get; set; }
     }
 }

@@ -19,6 +19,8 @@
 
             this.DemandValid<AchTransactionValidator>(transaction); // issue with 4.5 framework
             var entity = base.Create(transaction);
+
+            // todo: it is not correct to send notification in the same thread. how about retry logic...
             this.SendAchTransactionNotification(new List<AchTransactionEntity> { entity });
             return entity;
         }
