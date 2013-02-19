@@ -44,9 +44,6 @@
         {
             Shell.Start<WebContainerExtension>();
 
-            DependencyResolver.SetResolver(ServiceLocator.Current);
-            ControllerBuilder.Current.SetControllerFactory(typeof(CustomControllerFactory));
-
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

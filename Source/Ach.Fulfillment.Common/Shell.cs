@@ -90,7 +90,7 @@
                 var configurationSource = ConfigurationSourceFactory.Create();
                 var container = new UnityContainer()
                     .AddExtension(new EnterpriseLibraryCoreExtension(configurationSource))
-                    .RegisterInstance(configurationSource);
+                    .RegisterType<IConfigurationSource>(new ContainerControlledLifetimeManager(), new InjectionFactory(c => configurationSource));
 
                 var serviceLocator = new UnityServiceLocator(container);
                 Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => serviceLocator);

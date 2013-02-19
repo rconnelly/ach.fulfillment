@@ -9,11 +9,22 @@ namespace Ach.Fulfillment.Web.Common.Controllers
 
     using global::Common.Logging;
 
+    using Microsoft.Practices.ServiceLocation;
+
     internal class CustomControllerFactory : DefaultControllerFactory
     {
         #region Constants and Fields
 
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        #endregion
+
+        #region Constructors
+
+        public CustomControllerFactory()
+            : base(new CustomControllerActivator())
+        {
+        }
 
         #endregion
 
@@ -49,5 +60,18 @@ namespace Ach.Fulfillment.Web.Common.Controllers
         }
 
         #endregion
+
+        private class CustomControllerActivator : IControllerActivator
+        {
+            #region Implementation of IControllerActivator
+
+            public IController Create(RequestContext requestContext, Type controllerType)
+            {
+                var service = (IController)ServiceLocator.Current.GetInstance(controllerType);
+                return service;
+            }
+
+            #endregion
+        }
     }
 }
