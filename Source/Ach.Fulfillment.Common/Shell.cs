@@ -4,6 +4,7 @@
     using System.Globalization;
 
     using Ach.Fulfillment.Common.Configuration;
+    using Ach.Fulfillment.Common.Unity;
 
     using global::Common.Logging;
 
@@ -90,7 +91,8 @@
                 var configurationSource = ConfigurationSourceFactory.Create();
                 var container = new UnityContainer()
                     .AddExtension(new EnterpriseLibraryCoreExtension(configurationSource))
-                    .RegisterType<IConfigurationSource>(new ContainerControlledLifetimeManager(), new InjectionFactory(c => configurationSource));
+                    .RegisterType<IConfigurationSource>(new ContainerControlledLifetimeManager(), new InjectionFactory(c => configurationSource))
+                    .RegisterType<UnitOfWorkLifetimeStore, UnitOfWorkLifetimeThreadLocalStore>();
 
                 var serviceLocator = new UnityServiceLocator(container);
                 Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(() => serviceLocator);

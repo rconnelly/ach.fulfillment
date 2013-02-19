@@ -137,6 +137,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -165,6 +166,9 @@
     <Compile Include="Security\ThreadApplicationPrincipal.cs" />
     <Compile Include="Shell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unity\UnitOfWorkLifetimeHttpContextStore.cs" />
+    <Compile Include="Unity\UnitOfWorkLifetimeStore.cs" />
+    <Compile Include="Unity\UnitOfWorkLifetimeThreadLocalStore.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\Transaction.cs" />

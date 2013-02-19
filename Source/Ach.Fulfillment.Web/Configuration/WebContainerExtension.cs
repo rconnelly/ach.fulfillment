@@ -7,6 +7,7 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Async;
 
+    using Ach.Fulfillment.Common.Unity;
     using Ach.Fulfillment.Web.Common.Controllers;
 
     using Business.Exceptions;
@@ -35,6 +36,7 @@
         {
             base.Initialize();
 
+            this.Container.RegisterType<UnitOfWorkLifetimeStore, UnitOfWorkLifetimeHttpContextStore>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IControllerFactory, CustomControllerFactory>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<ITempDataProvider, SessionStateTempDataProvider>(new ContainerControlledLifetimeManager());
             this.Container.RegisterType<IAsyncActionInvoker, AsyncControllerActionInvoker>(new ContainerControlledLifetimeManager());

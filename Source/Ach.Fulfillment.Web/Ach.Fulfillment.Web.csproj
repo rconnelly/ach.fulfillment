@@ -279,7 +279,6 @@
     <Compile Include="Areas\Manage\Models\PartnerModel.cs" />
     <Compile Include="Areas\Manage\Models\UserGridModel.cs" />
     <Compile Include="Areas\Manage\Models\UserModel.cs" />
-    <Compile Include="Common\Binders\DataTablesModelBinder.cs" />
     <Compile Include="Common\Data\PrincipalSession.cs" />
     <Compile Include="Common\Data\PrincipalSessionExtender.cs" />
     <Compile Include="Common\ExceptionHelper.cs" />
