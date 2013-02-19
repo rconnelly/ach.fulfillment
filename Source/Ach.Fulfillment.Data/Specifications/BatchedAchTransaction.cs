@@ -9,6 +9,7 @@ namespace Ach.Fulfillment.Data.Specifications
     {
         public override Expression<Func<AchTransactionEntity, bool>> IsSatisfiedBy()
         {
+            // todo: does it work?
             return m => m.TransactionStatus == AchTransactionStatus.Batched;
         }
     }

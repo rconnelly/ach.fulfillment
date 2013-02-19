@@ -16,6 +16,7 @@ namespace Ach.Fulfillment.Data.Specifications
 
         public override Expression<Func<AchFileEntity, bool>> IsSatisfiedBy()
         {
+            // todo: does it work?
             return m => m.Partner == this.partnerEntity;
         }
     }

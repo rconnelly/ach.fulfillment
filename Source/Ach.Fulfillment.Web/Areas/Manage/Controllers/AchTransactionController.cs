@@ -28,6 +28,7 @@
                     ModelState.FillFrom(exc);
                 }
 
+                // TODO: why AchTransactionStatus.Received in case of BusinessValidationException
                 return new JsonResult { Data = AchTransactionStatus.Received };
             }
 

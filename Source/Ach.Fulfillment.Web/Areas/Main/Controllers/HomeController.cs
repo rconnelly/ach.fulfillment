@@ -15,8 +15,6 @@
         {
             this.ViewBag.ReturnUrl = returnUrl;
 
-            new HttpException(501, "ddd");
-
             return this.View();
         }
 
