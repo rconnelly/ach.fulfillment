@@ -1,13 +1,22 @@
-## Deployment
-1. Download sources from github repository.
-2. Create Database on your Database Server.
-3. Go to \Build\ folder and run Build.Local.cmd
-4. Go to \Build\Assembly\ folder, open setup.cmd and change connection string to proper one. 
-5. Go to \Build\Assembly\Packages\ folder, open Ach.Fulfillment.Web.SetParameters.xml and change connection string to proper one.
-6. Run RunSetup.cmd
-7. Go to Web folder, open Web.config - here in section AppSettings we have   <add key ="DefaultUser" value="admin"/> - 
-it is login for default user. It will be used for non-authentificated requests. We get company payment information from PartnerDetails for this user. 
+## Application and service deployment
 
+### What will you need for deployment 
+1. Installed MSSQL server. You can use [SQLEXPRESS](http://www.microsoft.com/en-us/sqlserver/get-sql-server/try-it.aspx).
+2. Microsoft .Net 3.5 Service Pack 1
+3. .NET Framework 4.5
+4. Your server must have IIS for hosting
+5. [Web-Deploy](http://www.iis.net/downloads/microsoft/web-deploy) this installs Web Deploy (and its underlying executable, MSDeploy.exe) on your server. Also it installs the Web Deploy Handler and integrates it with the Web Management Service. You can find how to configure and install it here [Installing and Configuring Web Deploy](http://www.iis.net/learn/install/installing-publishing-technologies/installing-and-configuring-web-deploy)
+
+### Deployment
+1. Download sources from github repository.
+2. Create new Database on your Database Server. We are using name "Ach" for database by default, if you want another name do not forget change it for your one in scripts.
+3. Go to \Build\ folder and run Build.Local.cmd
+4. Change connection string in such places:
+  \Build\Assembly\Packages\Ach.Fulfillment.Web.SetParameters.xml,
+  \Build\Assembly\Service\Ach.Fulfillment.Scheduler.install.
+6. Go to \Build\Assembly\setup.cmd change connection string to proper one and if you are deploying from one machine to another then set DeploymentServer also.
+7. Run RunSetup.cmd
+8. Go to Web folder, open Web.config - here in section AppSettings we have   <add key ="DefaultUser" value="admin"/> - it is login for default user. It will be used for non-authentificated requests. We get company payment information from PartnerDetails of this user.
 ## Job configuration
 1. Go to quartz_jobs.config file 
 2. For each job there is  "job-data-map" section where additional data for job should be added.
