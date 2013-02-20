@@ -14,9 +14,14 @@
 4. Change connection string in such places:
   \Build\Assembly\Packages\Ach.Fulfillment.Web.SetParameters.xml,
   \Build\Assembly\Service\Ach.Fulfillment.Scheduler.install.
-6. Go to \Build\Assembly\setup.cmd change connection string to proper one and if you are deploying from one machine to another then set DeploymentServer also.
+6. Go to \Build\Assembly\setup.cmd change connection string to proper one and if you are
+deploying from one machine to another then set DeploymentServer also.
 7. Run RunSetup.cmd
-8. Go to Web folder, open Web.config - here in section AppSettings we have   <add key ="DefaultUser" value="admin"/> - it is login for default user. It will be used for non-authentificated requests. We get company payment information from PartnerDetails of this user.
+8. Go to Web folder, open Web.config - here in section AppSettings we have   
+<add key ="DefaultUser" value="admin"/> - it is login for default user.
+It will be used for non-authentificated requests. We get company payment 
+information from PartnerDetails of this user.
+
 ## Job configuration
 1. Go to quartz_jobs.config file 
 2. For each job there is  "job-data-map" section where additional data for job should be added.
