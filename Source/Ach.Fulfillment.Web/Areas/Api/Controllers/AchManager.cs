@@ -1,5 +1,6 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Api.Controllers
 {
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.Contracts;
 
@@ -25,7 +26,7 @@
 
         #region Public Methods and Operators
 
-        public void CreateAchTransaction(AchTransactionModel model)
+        public long CreateAchTransaction(AchTransactionModel model)
         {
             Contract.Assert(model != null);
             var login = ConfigurationManager.AppSettings["DefaultUser"];
@@ -40,6 +41,28 @@
             transaction.TransactionStatus = AchTransactionStatus.Received;
 
             this.Manager.Create(transaction);
+
+            // todo: why do we send notification from presentation
+            this.Manager.SendAchTransactionNotification(new List<AchTransactionEntity> { transaction });
+
+            return transaction.Id;
+        }
+
+        public AchTransactionModel LoadAchTransaction(long transactionId)
+        {
+            var achEntity = this.Manager.Load(transactionId);
+            var achModel = new AchTransactionModel
+                               {
+                                   AchTransactionId = achEntity.Id,
+                                  /*Status = achEntity.TransactionStatus.ToString()*/
+                               };
+
+            return achModel;
+        }
+
+        public void SendCallBack(string url, string data)
+        {
+            this.Manager.SendCallBack(url, data);
         }
 
         #endregion

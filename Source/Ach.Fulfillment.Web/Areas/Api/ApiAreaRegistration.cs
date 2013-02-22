@@ -22,6 +22,11 @@
                 new { area = "Api", controller = "AchTransaction", action = "Create" });
 
             context.MapRoute(
+                "TransactionDetails", 
+                "Api/Transaction/{id}",
+                new { area = "Manage", controller = "AchTransaction", action = "Get", id = UrlParameter.Optional });
+
+            context.MapRoute(
                 "Api_default",
                 "Api/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional });

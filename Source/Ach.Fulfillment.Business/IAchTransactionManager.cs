@@ -14,5 +14,7 @@
         List<AchTransactionEntity> GetAllInQueueForPartner(PartnerEntity partner, bool toLock = true);
 
         void UnLock(List<AchTransactionEntity> transactions);
+
+        void SendCallBack(string callbackUrl, string data);
     }
 }
