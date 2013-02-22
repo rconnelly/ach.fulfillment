@@ -58,7 +58,7 @@
                     if (!(string.IsNullOrEmpty(ftphost)
                         && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
                     {
-                        var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
+                        var connectionInfo = new PasswordConnectionInfo(ftphost, 22, userId, password);
 
                         // {
                             // Timeout = TimeSpan.FromSeconds(60)

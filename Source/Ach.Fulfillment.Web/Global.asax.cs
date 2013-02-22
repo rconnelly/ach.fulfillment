@@ -1,4 +1,7 @@
-﻿namespace Ach.Fulfillment.Web
+﻿using System.Web.Http;
+using Newtonsoft.Json.Serialization;
+
+namespace Ach.Fulfillment.Web
 {
     using System;
     using System.Diagnostics;
@@ -54,6 +57,9 @@
 
             ModelBinders.Binders.Add(typeof(DataTablesParam), new DataTablesModelBinder());
             MvcHandler.DisableMvcResponseHeader = true;
+
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
