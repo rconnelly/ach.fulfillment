@@ -21,7 +21,6 @@ namespace Ach.Fulfillment.Web
     using Ach.Fulfillment.Web.App_Start;
     using Ach.Fulfillment.Web.Areas.Main.Controllers;
     using Ach.Fulfillment.Web.Common;
-    using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Data;
     using Ach.Fulfillment.Web.Configuration;
 
@@ -46,9 +45,6 @@ namespace Ach.Fulfillment.Web
         protected void Application_Start()
         {
             Shell.Start<WebContainerExtension>();
-
-            DependencyResolver.SetResolver(ServiceLocator.Current);
-            ControllerBuilder.Current.SetControllerFactory(typeof(CustomControllerFactory));
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -111,12 +107,12 @@ namespace Ach.Fulfillment.Web
             if (authCookie != null)
             {
                 var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-                if (!authTicket.Expired)
+                if (authTicket != null && !authTicket.Expired)
                 {
                     var login = authTicket.Name;
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
 
-                    // TODO: if we going to use login as cache key we should not allow to change login?!
+                    // WARN: we are going to use login as cache key we should not allow to change login?!
                     var session = cache.Get(login) as PrincipalSession;
                     if (session == null)
                     {

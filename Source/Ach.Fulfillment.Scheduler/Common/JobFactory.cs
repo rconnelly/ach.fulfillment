@@ -3,35 +3,38 @@
     using System;
     using System.Diagnostics.Contracts;
 
-    using Microsoft.Practices.ServiceLocation;
+    using Microsoft.Practices.Unity;
 
     using Quartz;
+    using Quartz.Simpl;
     using Quartz.Spi;
 
-    internal class JobFactory : IJobFactory
+    internal class JobFactory : SimpleJobFactory
     {
         #region Constants and Fields
 
-        private readonly IServiceLocator serviceLocator;
+        private readonly IUnityContainer container;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public JobFactory(IServiceLocator serviceLocator)
+        public JobFactory(IUnityContainer container)
         {
-            this.serviceLocator = serviceLocator;
+            this.container = container;
         }
+
         #endregion
 
         #region Public Methods and Operators
 
-        public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
+        public override IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             try
-            {                
-                var job = this.serviceLocator.GetInstance(bundle.JobDetail.JobType) as IJob;
+            {
+                var job = base.NewJob(bundle, scheduler);
                 Contract.Assert(job != null);
+                this.container.BuildUp(job.GetType(), job);
                 return job;
             }
             catch (Exception exception)

@@ -3,19 +3,11 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public enum AchTransactionStatus
-    {
-        Received = 0,
-        Batched = 1,
-        InProgress = 2,
-        Completed = 3,
-        Error = 4
-    } 
-
     public class AchTransactionEntity : BaseEntity
     {
         public virtual PartnerEntity Partner { get; set; }
 
+        // todo: how StringLength attribute will be used
         [StringLength(15)]
         public virtual string IndividualIdNumber { get; set; }
 
@@ -47,6 +39,7 @@
         [StringLength(80)]
         public virtual string PaymentRelatedInfo { get; set; }
 
+        [StringLength(255)]
         public virtual string CallbackUrl { get; set; }
         
         public virtual AchTransactionStatus TransactionStatus { get; set; }

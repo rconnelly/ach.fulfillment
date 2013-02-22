@@ -10,7 +10,7 @@
 
         public UnitOfWork()
         {
-            UnitOfWorkLifetimeManager.Enable();
+            UnitOfWorkLifetimeManager.Store.Enable();
         }
 
         #endregion
@@ -19,8 +19,8 @@
 
         public void Dispose()
         {
-            UnitOfWorkLifetimeManager.Clear();
-            UnitOfWorkLifetimeManager.Disable();
+            UnitOfWorkLifetimeManager.Store.Clear();
+            UnitOfWorkLifetimeManager.Store.Disable();
         }
 
         #endregion

@@ -2,15 +2,6 @@
 {
     using System.Collections.Generic;
 
-    public enum AchFileStatus
-    {
-        Created = 0,
-        Uploaded = 1,
-        Accepted = 2,
-        Rejected = 3,
-        Completed = 4
-    }
-
     public class AchFileEntity : BaseEntity
     {
         public virtual string Name { get; set; } 

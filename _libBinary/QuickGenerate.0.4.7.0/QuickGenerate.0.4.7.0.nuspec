@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>QuickGenerate</id>
+    <version>0.4.7.0</version>
+    <title>QuickGenerate</title>
+    <authors>Kilfour</authors>
+    <owners>Kilfour</owners>
+    <projectUrl>https://github.com/kilfour/QuickGenerate</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easily create random objects or hierarchies thereof in c#.</description>
+    <references>
+      <reference file="QuickGenerate.dll" />
+    </references>
+  </metadata>
+</package>

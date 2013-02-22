@@ -6,6 +6,8 @@
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.FileSetOrderList.Clear();
+
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                 "~/Scripts/modernizr-*"));
 

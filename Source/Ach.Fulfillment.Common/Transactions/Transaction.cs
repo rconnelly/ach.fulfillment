@@ -1,7 +1,6 @@
 ﻿namespace Ach.Fulfillment.Common.Transactions
 {
     using System;
-    using System.Diagnostics.Contracts;
 
     using Microsoft.Practices.ServiceLocation;
 

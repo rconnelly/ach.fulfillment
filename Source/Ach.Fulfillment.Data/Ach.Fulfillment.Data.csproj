@@ -128,7 +128,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AccessRight.tt</DependentUpon>
     </Compile>
+    <Compile Include="AchFileStatus.cs" />
     <Compile Include="AchTransactionEntity.cs" />
+    <Compile Include="AchTransactionStatus.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="AchFileEntity.cs" />
     <Compile Include="PartnerDetailEntity.cs" />
@@ -178,6 +180,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AccessRight.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

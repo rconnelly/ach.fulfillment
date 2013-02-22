@@ -5,11 +5,11 @@
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
 
+    using global::Common.Logging;
+
     using Microsoft.Practices.Unity;
 
     using Quartz;
-
-    using global::Common.Logging;
 
     public class CheckStatusFilesJob : IJob
     {
