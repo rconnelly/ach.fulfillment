@@ -59,10 +59,9 @@
                         && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
                     {
                         var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
-
-                        // {
-                            // Timeout = TimeSpan.FromSeconds(60)
-                       // };
+                        /* {
+                             Timeout = TimeSpan.FromSeconds(60)
+                        };*/
                         this.Uploadfiles(connectionInfo, achFiles);
                     }
                 }
@@ -75,8 +74,9 @@
 
         #endregion
 
-       #region Private Methods
+        #region Private Methods
 
+        [Obsolete("todo (ng): it should be in business = not in presentation")]
         private void Uploadfiles(PasswordConnectionInfo connectionInfo, Dictionary<AchFileEntity, string> achFilesToUpload)
         {
             using (var sftp = new SftpClient(connectionInfo))

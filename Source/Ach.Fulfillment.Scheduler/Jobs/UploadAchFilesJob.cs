@@ -16,6 +16,8 @@
 
     using Renci.SshNet;
 
+    // todo (ng): no trigger/job definition associated with current class
+    // todo (ng): it is similar/duplicate to GenerateAchFilesJob
     public class UploadAchFilesJob : IJob
     {
        private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));

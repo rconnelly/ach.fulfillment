@@ -33,6 +33,7 @@
                 {
                     Logger.Info("CheckStatusFilesJob started...");
 
+                    // todo (ng): why there are no implementation?
                     // this.AchFileManager.ChangeAchFilesStatus();
 
                     // switch (status)

@@ -22,6 +22,7 @@
 
         public void Execute(IJobExecutionContext context)
         {
+            // todo (ng): create base class with unitofwork wrapping and EHAB policy exception handling. logging should be configured in EHAB
             try
             {
                 using (new UnitOfWork())

@@ -1,7 +1,6 @@
 namespace Ach.Fulfillment.Scheduler.Common
 {
     using System;
-    using System.Threading;
 
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Scheduler.Configuration;
@@ -101,15 +100,6 @@ namespace Ach.Fulfillment.Scheduler.Common
         public virtual void Start()
         {
             this.scheduler.Start();
-
-            try
-            {
-                Thread.Sleep(3000);
-            }
-            catch (ThreadInterruptedException)
-            {
-            }
-
             this.logger.Info("Scheduler started successfully");
         }
 
