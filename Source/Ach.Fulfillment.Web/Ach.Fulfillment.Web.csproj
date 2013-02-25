@@ -259,6 +259,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Models\AchTransactionStatusModel.cs" />
     <Compile Include="Areas\Main\Controllers\ErrorController.cs" />
     <Compile Include="Areas\Main\Controllers\HomeController.cs" />
     <Compile Include="Areas\Main\Controllers\HomeManager.cs" />
@@ -473,8 +474,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Main\Views\Home\About.cshtml" />
-    <Content Include="Areas\Main\Views\Home\Contact.cshtml" />
     <Content Include="Areas\Main\Views\Home\Index.cshtml" />
     <Content Include="Areas\Main\Views\Home\Login.cshtml" />
     <Content Include="Areas\Main\Views\Web.config" />

@@ -1,11 +1,9 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Api.Controllers
 {
-    using System;
-    using System.Net;
-    using System.Web;
     using System.Web.Mvc;
 
     using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Web.Areas.Api.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
@@ -15,7 +13,7 @@
     [ApiValidationFilter]
     public class AchTransactionController : Controller<AchManager>
     {
-        #region Create
+        #region Methods
 
         [HttpPost]
         [AllowAnonymous]
@@ -28,7 +26,7 @@
             }
             catch (BusinessException ex)
             {
-                // todo: remove all that try-catch-sendcallback crap
+                // todo (ng): remove all that try-catch-sendcallback. we do not need any callbacks here
                 if (value.CallbackUrl != null)
                 {
                     this.Manager.SendCallBack(value.CallbackUrl, JsonConvert.SerializeObject(ex));
@@ -38,45 +36,21 @@
             }
         }
 
-        #endregion Create
-
-        #region Get
-
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Get(long? id)
+        public ActionResult GetStatus(long transactionId)
         {
             try
             {
-                // todo: why id is optional??
-                if (id == null)
-                {
-                    throw new HttpException((int)HttpStatusCode.BadRequest, "id required");
-                }
-
-                var achTransaction = this.Manager.LoadAchTransaction(id.Value);
-
-                // todo: why load method returns null
-                if (achTransaction == null)
-                {
-                    throw new HttpException((int)HttpStatusCode.NotFound, "Transaction not found");
-                }
-                
-                return this.Json(
-                    new
-                    {
-                        transactionId = achTransaction.AchTransactionId.ToString(), 
-                        transactionStatus = achTransaction.Status
-                    }, 
-                    JsonRequestBehavior.AllowGet);
+                var transactionStatus = this.Manager.LoadAchTransactionStatus(transactionId);
+                return this.Json(transactionStatus, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception)
+            catch (ObjectNotFoundException ex)
             {
-                // todo: why we are catching Exception and throwing NotFound?
-                throw new HttpException((int)HttpStatusCode.NotFound, "???");
+                throw new BusinessException("Transaction not found", ex);
             }
         }
 
-        #endregion Get
+        #endregion Methods
     }
 }

@@ -9,10 +9,7 @@
         public const string Root = "Root";
         public const string Error404 = "Error404";
         public const string Error403 = "Error403";
-        public const string About = "About";
-        public const string Contact = "Contact";
-        public const string Transaction = "Transaction";
-
+        
         public static void InitErrorRoute(int httpCode, RouteData routeData)
         {
             Contract.Assert(routeData != null);

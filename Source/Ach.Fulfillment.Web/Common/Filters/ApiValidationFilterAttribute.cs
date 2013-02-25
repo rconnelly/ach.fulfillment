@@ -43,7 +43,7 @@
                 statusCode = HttpStatusCode.InternalServerError;
             }
 
-            filterContext.Result = new JsonResult { Data = operationError };
+            filterContext.Result = new JsonResult { Data = operationError, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();
             filterContext.HttpContext.Response.StatusCode = (int)statusCode;

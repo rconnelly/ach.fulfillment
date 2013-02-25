@@ -1,25 +1,24 @@
 ﻿namespace Ach.Fulfillment.Web.Configuration
 {
     using System;
-    using System.Linq;
     using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Globalization;
+    using System.Linq;
     using System.Runtime.Caching;
     using System.Web.Mvc;
     using System.Web.Mvc.Async;
 
+    using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Common.Unity;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Initialization.Configuration;
     using Ach.Fulfillment.Web.Areas.Api.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
 
     using AutoMapper;
-
-    using Business.Exceptions;
-    using Fulfillment.Common.Exceptions;
-    using Initialization.Configuration;
 
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
     using Microsoft.Practices.EnterpriseLibrary.Common.Configuration.ContainerModel.Unity;
