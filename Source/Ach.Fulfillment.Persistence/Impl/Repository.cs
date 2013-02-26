@@ -1,10 +1,10 @@
 ﻿namespace Ach.Fulfillment.Persistence.Impl
 {
     using System;
+    using System.Configuration;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
-    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence.Impl.Commands;
     using Ach.Fulfillment.Persistence.Impl.Configuration;
@@ -50,37 +50,20 @@
 
         #region Methods
 
-        public void Create<T>(T instance) where T : class, IEntity
+        public IQueryable<T> Query<T>(IQueryData queryData)
         {
-            this.Session.Save(instance);
+            Contract.Assert(queryData != null);
+            var command = this.ResolveCommand<T>(queryData);
+            var result = command.Execute(queryData);
+            return result;
         }
 
-        public T Get<T>(long id) where T : class, IEntity
+        public T Scalar<T>(IQueryData queryData)
         {
-            var instance = this.Session.Load<T>(id);
-            return instance;
-        }
-
-        public T Load<T>(long id) where T : class, IEntity
-        {
-            var instance = this.Session.Get<T>(id);
-            if (instance == null)
-            {
-                throw new Common.Exceptions.ObjectNotFoundException(id, typeof(T), null);
-            }
-            
-            return instance;
-        }
-
-        public void Update<T>(T instance) where T : class, IEntity
-        {
-            this.Session.Update(instance);
-        }
-
-        public void Delete<T>(T instance) where T : class, IEntity
-        {
-            // want to explicitly flush here, because do not want suspended throw on transaction commit
-            this.Delete(instance, true);
+            Contract.Assert(queryData != null);
+            var command = this.ResolveCommand<T>(queryData);
+            var result = command.ExecuteScalar(queryData);
+            return result;
         }
 
         public int Count<T>(IQueryData queryData)
@@ -91,12 +74,21 @@
             return count;
         }
 
-        public IQueryable<T> Query<T>(IQueryData queryData)
+        public void Execute(IActionData actionData)
         {
-            Contract.Assert(queryData != null);
-            var command = this.ResolveCommand<T>(queryData);
-            var result = command.Execute(queryData);
-            return result;
+            var command = this.ResolveCommand(actionData);
+            try
+            {
+                command.Execute(actionData);
+            }
+            catch (Exception ex)
+            {
+                var rethrow = ExceptionPolicy.HandleException(ex, PersistenceContainerExtension.ExecutePolicy);
+                if (rethrow)
+                {
+                    throw;
+                }
+            }
         }
 
         public void Flush(bool force = false)
@@ -107,33 +99,35 @@
             }
         }
 
-        private void Delete<T>(T instance, bool flush) where T : class, IEntity
+        private IQueryCommand<T> ResolveCommand<T>(IQueryData commandData)
         {
-            Contract.Assert(instance != null);
+            Contract.Assert(commandData != null);
             try
             {
-                this.Session.Delete(instance);
-                if (flush)
-                {
-                    this.Flush(true);
-                }
+                var type = typeof(IQueryCommand<,>).MakeGenericType(commandData.GetType(), typeof(T));
+                var command = (IQueryCommand<T>)this.ServiceLocator.GetInstance(type);
+                return command;
             }
-            catch (Exception ex)
+            catch (ActivationException ex)
             {
-                var rethrow = ExceptionPolicy.HandleException(ex, PersistenceContainerExtension.DeletePolicy);
-                if (rethrow)
-                {
-                    throw;
-                }
+                throw new ConfigurationErrorsException("Cannot find corresponding query command for " + commandData.GetType().FullName, ex);
             }
         }
 
-        private IQueryRepositoryCommand<T> ResolveCommand<T>(IQueryData commandData)
+        private IActionCommand ResolveCommand(IActionData actionData)
         {
-            Contract.Assert(commandData != null);
-            var type = typeof(IQueryRepositoryCommand<,>).MakeGenericType(commandData.GetType(), typeof(T));
-            var command = (IQueryRepositoryCommand<T>)this.ServiceLocator.GetInstance(type);
-            return command;
+            Contract.Assert(actionData != null);
+            var actionDataType = actionData.GetType();
+            try
+            {
+                var interfaceType = typeof(IActionCommand<>).MakeGenericType(actionDataType);
+                var command = (IActionCommand)this.ServiceLocator.GetInstance(interfaceType);
+                return command;
+            }
+            catch (ActivationException ex)
+            {
+                throw new ConfigurationErrorsException("Cannot find corresponding action command for " + actionDataType.FullName, ex);
+            }
         }
 
         #endregion

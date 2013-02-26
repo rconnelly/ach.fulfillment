@@ -1,7 +1,7 @@
 namespace Ach.Fulfillment.Data.Common
 {
-    public interface IInstanceQueryData<T> : IQueryData<T>
+    public interface IInstanceQueryData<TEntity> : IQueryData<TEntity>
     {
-        T Instance { get; set; }
+        TEntity Instance { get; set; }
     }
 }

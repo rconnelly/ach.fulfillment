@@ -1,6 +1,7 @@
 namespace Ach.Fulfillment.Data.Common
 {
-    public interface IQueryData<T> : IQueryData
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces", Justification = "By Design")]
+    public interface IQueryData<TEntity> : IQueryData
     {
     }
 }

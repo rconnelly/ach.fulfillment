@@ -4,10 +4,12 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
     using Ach.Fulfillment.Data.Common;
 
-    internal interface IQueryRepositoryCommand<in TQueryData, out TResult> : IQueryRepositoryCommand<TResult>
+    internal interface IQueryCommand<in TQueryData, out TResult> : IQueryCommand<TResult>
         where TQueryData : IQueryData
     {
         IQueryable<TResult> Execute(TQueryData queryData);
+
+        TResult ExecuteScalar(TQueryData queryData);
 
         int RowCount(TQueryData queryData);
     }

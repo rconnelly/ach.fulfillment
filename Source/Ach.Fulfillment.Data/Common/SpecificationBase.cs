@@ -4,7 +4,7 @@ namespace Ach.Fulfillment.Data.Common
 
     using LinqSpecs;
 
-    public abstract class SpecificationBase<T> : Specification<T>, ISpecification<T>
+    public abstract class SpecificationBase<TEntity> : Specification<TEntity>, ISpecification<TEntity>
     {
         #region Public Properties
 
@@ -16,7 +16,7 @@ namespace Ach.Fulfillment.Data.Common
 
         #region Public Methods and Operators
 
-        public virtual IQueryable<T> Order(IQueryable<T> query)
+        public virtual IQueryable<TEntity> Order(IQueryable<TEntity> query)
         {
             return query;
         }

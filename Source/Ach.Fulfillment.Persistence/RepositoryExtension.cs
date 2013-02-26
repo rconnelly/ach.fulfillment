@@ -15,6 +15,36 @@ namespace Ach.Fulfillment.Data
     {
         #region Methods
 
+        public static void Create<T>(this IRepository repository, T instance)
+        {
+            Contract.Assert(repository != null);
+            repository.Execute(new CommonCreateActionData<T> { Instance = instance });
+        }
+
+        public static void Update<T>(this IRepository repository, T instance)
+        {
+            Contract.Assert(repository != null);
+            repository.Execute(new CommonUpdateActionData<T> { Instance = instance });
+        }
+
+        public static void Delete<T>(this IRepository repository, T instance)
+        {
+            Contract.Assert(repository != null);
+            repository.Execute(new CommonDeleteActionData<T> { Instance = instance });
+        }
+
+        public static T Get<T>(this IRepository repository, long id)
+        {
+            return repository.FindOne(new CommonGetQueryData<T> { Key = id });
+        }
+
+        public static T Load<T>(this IRepository repository, long id)
+            where T : class
+        {
+            return repository.LoadOne(new CommonGetQueryData<T> { Key = id });
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "As Designed")]
         public static int Count<T>(this IRepository repository, IQueryData<T> queryData)
         {
             Contract.Assert(repository != null);
@@ -47,13 +77,14 @@ namespace Ach.Fulfillment.Data
                     CultureInfo.InvariantCulture,
                     "Cannot load [{0}] using criteria [{1}].",
                     typeof(T),
-                    queryData.GetType());
+                    queryData);
                 throw new ObjectNotFoundException(message);
             }
 
             return instance;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "As Designed")]
         public static T FindOne<T>(this IRepository repository, IQueryData<T> queryData)
         {
             Contract.Assert(repository != null);
@@ -63,8 +94,7 @@ namespace Ach.Fulfillment.Data
         public static T FindOne<T>(this IRepository repository, IQueryData queryData)
         {
             Contract.Assert(queryData != null);
-            var query = repository.Query<T>(queryData);
-            var result = query.FirstOrDefault();
+            var result = repository.Scalar<T>(queryData);
             return result;
         }
 

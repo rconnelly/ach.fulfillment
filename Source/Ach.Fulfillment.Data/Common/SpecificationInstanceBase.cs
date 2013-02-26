@@ -1,7 +1,7 @@
 namespace Ach.Fulfillment.Data.Common
 {
-    public abstract class SpecificationInstanceBase<T> : SpecificationBase<T>, IInstanceQueryData<T>
+    public abstract class SpecificationInstanceBase<TEntity> : SpecificationBase<TEntity>, IInstanceQueryData<TEntity>
     {
-        public T Instance { get; set; }
+        public TEntity Instance { get; set; }
     }
 }

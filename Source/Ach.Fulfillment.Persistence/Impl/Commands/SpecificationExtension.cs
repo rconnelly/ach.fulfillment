@@ -10,6 +10,23 @@ namespace Ach.Fulfillment.Persistence.Impl.Commands
 
     internal static class SpecificationExtension
     {
+        public static IQueryable<T> Apply<T>(this ISession session, ISpecification<T> queryData)
+        {
+            var result = session
+                            .Query<T>()
+                            .Apply(queryData);
+            return result;
+        }
+
+        public static IQueryable<T> Apply<T>(this IQueryable<T> query, ISpecification<T> queryData)
+        {
+            var result = query
+                            .Page(queryData)
+                            .Where(queryData)
+                            .Order(queryData);
+            return result;
+        }
+
         public static IQueryable<T> Page<T>(this ISession session, ISpecification<T> queryData)
         {
             Contract.Assert(session != null);

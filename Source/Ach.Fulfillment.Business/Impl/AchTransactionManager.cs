@@ -17,7 +17,7 @@
         {
             Contract.Assert(transaction != null);
 
-            this.DemandValid<AchTransactionValidator>(transaction); // issue with 4.5 framework
+            this.DemandValid<AchTransactionValidator>(transaction);
             var entity = base.Create(transaction);
 
             // todo: it is not correct to send notification in the same thread. how about retry logic...
