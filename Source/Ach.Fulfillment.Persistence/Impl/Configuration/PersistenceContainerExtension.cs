@@ -8,6 +8,7 @@
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Common.Unity;
+    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence.Impl.Commands;
 
@@ -23,6 +24,8 @@
     public class PersistenceContainerExtension : UnityContainerExtension
     {
         #region Fields
+
+        public const string ExecutePolicy = "Persistence.Execute";
 
         public const string DeletePolicy = "Persistence.Delete";
 
@@ -131,13 +134,18 @@
                 .Include(
                     t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.ImplementsOpenGeneric(typeof(ISpecification<>)),
                     this.RegisterSpecification)
+                .Include(
+                    t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.Implements<IIdentified>(),
+                    this.RegisterRelational)
                 .ApplyAutoRegistration();
         }
 
         private Type[] CommandToContract(Type commandType)
         {
             var query = from t in commandType.GetInterfaces()
-                        where t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IQueryRepositoryCommand<,>)
+                        let gd = t.IsGenericType ? t.GetGenericTypeDefinition() : null
+                        where gd != null
+                        && (gd == typeof(IQueryCommand<,>) || gd == typeof(IActionCommand<>))
                         select t;
             var result = query.ToArray();
             return result;
@@ -152,9 +160,17 @@
                 .GetGenericArguments()
                 .Single();
             var queryDataType = specificationType;
-            var interfaceType = typeof(IQueryRepositoryCommand<,>).MakeGenericType(queryDataType, resulType);
-            var commandType = typeof(SpecificationCommand<>).MakeGenericType(resulType);
+            var interfaceType = typeof(IQueryCommand<,>).MakeGenericType(queryDataType, resulType);
+            var commandType = typeof(RelationalSpecificationCommand<>).MakeGenericType(resulType);
             container.RegisterType(interfaceType, commandType);
+        }
+
+        private void RegisterRelational(Type entityType, IUnityContainer container)
+        {
+            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonCreateActionData<>).MakeGenericType(entityType)), typeof(RelationalCreateCommand<>).MakeGenericType(entityType));
+            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonUpdateActionData<>).MakeGenericType(entityType)), typeof(RelationalUpdateCommand<>).MakeGenericType(entityType));
+            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonDeleteActionData<>).MakeGenericType(entityType)), typeof(RelationalDeleteCommand<>).MakeGenericType(entityType));
+            this.Container.RegisterType(typeof(IQueryCommand<,>).MakeGenericType(typeof(CommonGetQueryData<>).MakeGenericType(entityType), entityType), typeof(RelationalGetByIdCommand<>).MakeGenericType(entityType));
         }
 
         private void ConfigureExceptionHandling()
@@ -164,12 +180,19 @@
             var builder = new ConfigurationSourceBuilder();
             builder.ConfigureExceptionHandling()
                    .GivenPolicyWithName(DeletePolicy)
-                   .ForExceptionType<Exception>()
-                        .ThenNotifyRethrow()
                    .ForExceptionType<NHibernate.Exceptions.ConstraintViolationException>()
                         .WrapWith<DeleteConstraintException>()
                         .UsingMessage("Cannot delete object.")
-                        .ThenThrowNewException();
+                        .ThenThrowNewException()
+                    .ForExceptionType<Exception>()
+                        .ThenNotifyRethrow()
+                   .GivenPolicyWithName(ExecutePolicy)
+                   .ForExceptionType<NHibernate.Exceptions.ConstraintViolationException>()
+                        .WrapWith<DeleteConstraintException>()
+                        .UsingMessage("Cannot delete object.")
+                        .ThenThrowNewException()
+                   .ForExceptionType<Exception>()
+                        .ThenNotifyRethrow();
             builder.UpdateConfigurationWithReplace(configurationSource);
 
             var configurator = new UnityContainerConfigurator(this.Container);

@@ -133,6 +133,14 @@
     <Compile Include="AchTransactionStatus.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="AchFileEntity.cs" />
+    <Compile Include="Common\CommonCreateActionData.cs" />
+    <Compile Include="Common\CommonDeleteActionData.cs" />
+    <Compile Include="Common\CommonGetQueryData.Generic1.cs" />
+    <Compile Include="Common\CommonUpdateActionData.cs" />
+    <Compile Include="Common\CommonGetQueryData.Generic2.cs" />
+    <Compile Include="Common\IActionData.cs" />
+    <Compile Include="Common\IActionData.Generic.cs" />
+    <Compile Include="Common\IActionData.Instance.cs" />
     <Compile Include="PartnerDetailEntity.cs" />
     <Compile Include="Specifications\AchFileCompleted.cs" />
     <Compile Include="Specifications\AchFileAccepted.cs" />

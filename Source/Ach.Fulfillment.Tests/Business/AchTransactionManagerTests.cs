@@ -49,12 +49,12 @@
             Trace.WriteLine("CallbackUrl test");
             ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: string.Empty));
             Trace.WriteLine(ex.Message);
-            Assert.That(ex.Errors.Count(), Is.EqualTo(1));
+            Assert.That(ex.Errors.Count(), Is.EqualTo(3));
 
             Trace.WriteLine("CallbackUrl test");
             ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: new string('&', MetadataInfo.StringLong)));
             Trace.WriteLine(ex.Message);
-            Assert.That(ex.Errors.Count(), Is.EqualTo(1));
+            Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("DfiAccountId test");
             ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(dfiAccountId: "QQqq#$&"));
@@ -79,7 +79,7 @@
             Trace.WriteLine("PaymentRelatedInfo test");
             ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(paymentRelatedInfo: new string('$', MetadataInfo.StringNormal)));
             Trace.WriteLine(ex.Message);
-            Assert.That(ex.Errors.Count(), Is.EqualTo(2));
+            Assert.That(ex.Errors.Count(), Is.EqualTo(1));
 
             Trace.WriteLine("ReceiverName test");
             ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(receiverName: new string('$', MetadataInfo.StringShort + 3)));
