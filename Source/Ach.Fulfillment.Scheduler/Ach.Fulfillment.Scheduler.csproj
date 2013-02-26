@@ -101,6 +101,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BaseJob.cs" />
+    <Compile Include="Common\JobListener.cs" />
     <Compile Include="Common\SchedulerFactory.cs" />
     <Compile Include="Configuration\ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -108,14 +110,13 @@
     <Compile Include="Configuration\SchedulerContainerExtension.cs" />
     <Compile Include="Configuration\Registry.cs" />
     <Compile Include="Jobs\CheckStatusFilesJob.cs" />
-    <Compile Include="Jobs\CleanUpTransactionsJob.cs" />
+    <Compile Include="Jobs\CleanUpJob.cs" />
     <Compile Include="Jobs\GenerateAchFilesJob.cs" />
     <Compile Include="Common\JobFactory.cs" />
     <Compile Include="Jobs\UploadAchFilesJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\QuartzServer.cs" />
-    <Compile Include="Jobs\SampleJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

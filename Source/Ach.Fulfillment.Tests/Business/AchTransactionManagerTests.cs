@@ -150,7 +150,7 @@
             manager.ChangeAchTransactionStatus(transactions, AchTransactionStatus.Batched);
 
             var changedTransaction = manager.Load(instance.Id);
-            Assert.AreEqual(changedTransaction.TransactionStatus, AchTransactionStatus.Batched);
+            Assert.AreEqual(changedTransaction.Status, AchTransactionStatus.Batched);
         }
 
         [Test]
@@ -172,7 +172,7 @@
             var transaction = this.CreateTestAchTransaction();
             transaction.Partner = partner;
 
-            notifier.Expect(_ => notifier.NotificationRequest(transaction.CallbackUrl, transaction.TransactionStatus.ToString()))
+            notifier.Expect(_ => notifier.NotificationRequest(transaction.CallbackUrl, transaction.Status.ToString()))
                 .WhenCalled(delegate { notificationRequestWasCalled = true; });
 
             // mocks.ReplayAll();
@@ -204,7 +204,7 @@
 
             Assert.That(instance2, Is.Not.Null);
             Assert.That(instance2.Id, Is.GreaterThan(0));
-            transaction2.TransactionStatus = AchTransactionStatus.Batched;
+            transaction2.Status = AchTransactionStatus.Batched;
             manager.Update(transaction2);
 
             this.ClearSession(instance);
@@ -213,7 +213,7 @@
             var trns = manager.GetAllInQueue();
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
             Assert.IsTrue(trns[0].Locked);
         }
 
@@ -238,7 +238,7 @@
             var trns = manager.GetAllInQueue(false);
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
             Assert.IsFalse(trns[0].Locked);
         }
 
@@ -274,7 +274,7 @@
             var trns = manager.GetAllInQueueForPartner(partner);
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns[0].TransactionStatus, AchTransactionStatus.Received);
+            Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
             Assert.IsTrue(trns[0].Locked);
             Assert.AreEqual(partner, trns[0].Partner);
         }
@@ -344,7 +344,7 @@
                                       PaymentRelatedInfo = paymentRelatedInfo ?? "dsdfdsfsdf",
                                       Partner = defaultPartner,
                                       Amount = (decimal)123.00,
-                                      TransactionStatus = AchTransactionStatus.Received,
+                                      Status = AchTransactionStatus.Created,
                                       EntryDate = DateTime.Now
                                   };
             var manager = Locator.GetInstance<IAchTransactionManager>();

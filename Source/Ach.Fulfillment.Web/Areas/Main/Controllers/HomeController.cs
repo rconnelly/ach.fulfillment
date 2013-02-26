@@ -1,9 +1,7 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Main.Controllers
 {
-    using System.Web;
     using System.Web.Mvc;
 
-    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Web.Areas.Main.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
@@ -50,23 +48,6 @@
 
         public ActionResult Index()
         {
-            this.ViewBag.Message = "Modify this template to kick-start your ASP.NET MVC application.";
-            return this.View();
-        }
-
-        [PrincipalRightPermission(AccessRight.Admin, AccessRight.SuperAdmin)]
-        public ActionResult About()
-        {
-            this.ViewBag.Message = "Your app description page.";
-
-            return this.View();
-        }
-
-        [PrincipalRightPermission(AccessRight.SuperAdmin)]
-        public ActionResult Contact()
-        {
-            this.ViewBag.Message = "Your contact page.";
-
             return this.View();
         }
     }

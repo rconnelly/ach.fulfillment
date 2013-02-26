@@ -158,7 +158,7 @@
                 .CheckProperty(c => c.PaymentRelatedInfo, new StringGenerator(4, 84).GetRandomValue())
                 .CheckProperty(c => c.ServiceClassCode, new StringGenerator(3, 3).GetRandomValue())
                 .CheckProperty(c => c.TransactionCode, new StringGenerator(2, 2).GetRandomValue())
-                .CheckProperty(c => c.TransactionStatus, AchTransactionStatus.Received)
+                .CheckProperty(c => c.Status, AchTransactionStatus.Created)
                 .CheckProperty(c => c.TransitRoutingNumber, new StringGenerator(9, 9).GetRandomValue())
                 .CheckEntity(c => c.Partner, partner)
             .VerifyTheMappings();
@@ -220,7 +220,7 @@
                 .CheckProperty(c => c.PaymentRelatedInfo, new StringGenerator(4, 84).GetRandomValue())
                 .CheckProperty(c => c.ServiceClassCode, new StringGenerator(3, 3).GetRandomValue())
                 .CheckProperty(c => c.TransactionCode, new StringGenerator(2, 2).GetRandomValue())
-                .CheckProperty(c => c.TransactionStatus, AchTransactionStatus.Received)
+                .CheckProperty(c => c.Status, AchTransactionStatus.Created)
                 .CheckProperty(c => c.TransitRoutingNumber, new StringGenerator(9, 9).GetRandomValue())
                 .CheckEntity(c => c.Partner, partner)
             .VerifyTheMappings();

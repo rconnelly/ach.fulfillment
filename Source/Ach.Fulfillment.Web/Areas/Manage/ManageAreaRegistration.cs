@@ -1,7 +1,4 @@
-﻿using System.Web.Http;
-using Ach.Fulfillment.Web.Common;
-
-namespace Ach.Fulfillment.Web.Areas.Manage
+﻿namespace Ach.Fulfillment.Web.Areas.Manage
 {
     using System.Web.Mvc;
 
@@ -19,7 +16,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage
         {
             context.MapRoute(
                 "Manage_default",
-                "Manage/{controller}/{action}/{id}",
+                "manage/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional });
         }
     }

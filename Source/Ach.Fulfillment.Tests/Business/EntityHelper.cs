@@ -57,7 +57,7 @@ namespace Ach.Fulfillment.Tests.Business
                 DfiAccountId = "12345678901234567",
                 Amount = (decimal)123.00,
                 CallbackUrl = "http://test.com",
-                TransactionStatus = AchTransactionStatus.Received,
+                Status = AchTransactionStatus.Created,
                 EntryDescription = "PAYROLL",
                 IndividualIdNumber = "123456789012345",
                 ReceiverName = "SomeName",

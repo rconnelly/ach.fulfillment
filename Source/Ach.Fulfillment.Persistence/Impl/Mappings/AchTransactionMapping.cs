@@ -9,7 +9,7 @@
         public void Override(AutoMapping<AchTransactionEntity> mapping)
         {
             mapping.References(x => x.Partner, "PartnerId").Cascade.None();
-            mapping.Map(x => x.TransactionStatus).CustomType<int>().Column("TransactionStatus").Not.Nullable();
+            mapping.Map(x => x.Status).CustomType<int>().Column("TransactionStatus").Not.Nullable();
         }
     }
 }

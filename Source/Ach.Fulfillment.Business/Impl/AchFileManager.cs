@@ -188,7 +188,7 @@
 
         private File GenerateAchFileForPartner(AchFileEntity fileEntity)
         {
-            var transactionGroups = fileEntity.Transactions.GroupBy(tt => tt.EntryDescription); // ToDo change to settelment date 
+            var transactionGroups = fileEntity.Transactions.GroupBy(tt => tt.EntryDescription); // ToDo needs to be changed to settelment date??
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>> ?? transactionGroups.ToList();
 
             if (groupedTransactions.Any())

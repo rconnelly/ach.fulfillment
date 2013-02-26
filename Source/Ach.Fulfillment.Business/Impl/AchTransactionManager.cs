@@ -17,11 +17,11 @@
         {
             Contract.Assert(transaction != null);
 
-            this.DemandValid<AchTransactionValidator>(transaction); // issue with 4.5 framework
+            this.DemandValid<AchTransactionValidator>(transaction); 
+
+            transaction.Status = AchTransactionStatus.Created;
             var entity = base.Create(transaction);
 
-            // todo: it is not correct to send notification in the same thread. how about retry logic...
-            this.SendAchTransactionNotification(new List<AchTransactionEntity> { entity });
             return entity;
         }
         
@@ -33,25 +33,13 @@
             {
                 foreach (var achTransactionEntity in transactions)
                 {
-                    achTransactionEntity.TransactionStatus = status;
+                    achTransactionEntity.Status = status;
                     this.Update(achTransactionEntity);
                 }
 
                 tx.Complete();
             }
 
-            this.SendAchTransactionNotification(transactions);
-        }
-
-        public void SendAchTransactionNotification(List<AchTransactionEntity> transactions)
-        {
-            Contract.Assert(transactions != null);
-
-            foreach (var achTransactionEntity in transactions)
-            {
-                ClientNotifier.NotificationRequest(
-                    achTransactionEntity.CallbackUrl, achTransactionEntity.TransactionStatus.ToString()); // ToDo format notification
-            }
         }
 
         public List<AchTransactionEntity> GetAllInQueue(bool toLock = true)
@@ -108,11 +96,6 @@
 
                 tx.Complete();
             }
-        }
-
-        public void SendCallBack(string callbackUrl, string data)
-        {
-            ClientNotifier.NotificationRequest(callbackUrl, data);
         }
 
         #endregion

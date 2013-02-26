@@ -146,6 +146,7 @@
     <Compile Include="Specifications\BatchedAchTransaction.cs" />
     <Compile Include="Specifications\CompletedAchTransaction.cs" />
     <Compile Include="Specifications\UserAll.cs" />
+    <Compile Include="Specifications\UserByRole.cs" />
     <Compile Include="Specifications\UserPasswordCredentialByLogin.cs" />
     <Compile Include="Specifications\PartnerAll.cs" />
     <Compile Include="Specifications\PartnerUniqness.cs" />

@@ -1,9 +1,7 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
-    using System;
-
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Scheduler.Common;
 
     using global::Common.Logging;
 
@@ -11,7 +9,7 @@
 
     using Quartz;
 
-    public class CheckStatusFilesJob : IJob
+    public class CheckStatusFilesJob : BaseJob
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
 
@@ -25,31 +23,17 @@
 
         #endregion
 
-        public void Execute(IJobExecutionContext context)
+        protected override void InternalExecute(IJobExecutionContext context)
         {
-            try
-            {
-                using (new UnitOfWork())
-                {
-                    Logger.Info("CheckStatusFilesJob started...");
+            Logger.Info("CheckStatusFilesJob started...");
 
-                    // this.AchFileManager.ChangeAchFilesStatus();
+                    // todo (ng): Waiting for additional documentation
+                    // todo (ng): Look at place where statusfiles are and get new 
+                    // todo (ng): Parse status files
+                    // todo (ng): Change statuses of Achfiles and included transactions to proper one
+                    // todo (ng): Create webhook 
 
-                    // switch (status)
-                    // {
-                    // case AchFileStatus.Rejected: break;
-                    // case AchFileStatus.Accepted: break;
-                    // case AchFileStatus.Completed: break;
-                    // case AchFileStatus.Uploaded: break;
-                    // }
-                    Logger.Info("CheckStatusFilesJob finished...");
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                throw new JobExecutionException(ex);
-            }
+            Logger.Info("CheckStatusFilesJob finished...");
         }
     }
 }

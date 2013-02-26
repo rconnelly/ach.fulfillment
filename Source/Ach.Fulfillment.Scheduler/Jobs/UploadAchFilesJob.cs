@@ -5,8 +5,9 @@
     using System.IO;
 
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Business.Impl;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Scheduler.Common;
 
     using log4net;
 
@@ -16,7 +17,7 @@
 
     using Renci.SshNet;
 
-    public class UploadAchFilesJob : IJob
+    public class UploadAchFilesJob : BaseJob
     {
        private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));
 
@@ -29,74 +30,27 @@
 
         #region Public Methods and Operators
 
-        public void Execute(IJobExecutionContext context)
+        protected override void InternalExecute(IJobExecutionContext context)
         {
-            try
-            {
-                using (new UnitOfWork())
-                {
-                    var dataMap = context.JobDetail.JobDataMap;
-                    var ftphost = dataMap.GetString("FtpHost");
-                    var userId = dataMap.GetString("UserId");
-                    var password = dataMap.GetString("Password");
+            Logger.Info("UploadAchFilesJob started...");
 
-                    if (!(string.IsNullOrEmpty(ftphost)
-                        && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
-                    {
-                        var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
+            var dataMap = context.JobDetail.JobDataMap;
+            var ftphost = dataMap.GetString("FtpHost");
+            var userId = dataMap.GetString("UserId");
+            var password = dataMap.GetString("Password");
 
-                        // {
-                            // Timeout = TimeSpan.FromSeconds(60)
-                       // };
-                        var achFilesToUpload = this.Manager.AchFilesToUpload();
-                        this.Uploadfiles(connectionInfo, achFilesToUpload);
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (!(string.IsNullOrEmpty(ftphost) && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
             {
-                throw new JobExecutionException(ex);
+                var fileUploader = new FileUploader(ftphost, userId, password);
+                var achFilesToUpload = this.Manager.GetAchFilesDataForUploading();
+                
+                fileUploader.Uploadfiles(achFilesToUpload);
             }
+
+            Logger.Info("UploadAchFilesJob finished...");
         }
 
         #endregion
 
-        #region Private Methods
-
-        private void Uploadfiles(PasswordConnectionInfo connectionInfo, IEnumerable<AchFileEntity> achFilesToUpload)
-        {
-            using (var sftp = new SftpClient(connectionInfo))
-            {          
-                try
-                {
-                    sftp.Connect();
-
-                    foreach (var achfile in achFilesToUpload)
-                    {
-                        using (var stream = new MemoryStream())
-                        {
-                            var fileName = achfile.Name + ".ach";
-
-                            var writer = new StreamWriter(stream);
-
-                            /*writer.Write(achfile.AchFileBody);*/
-
-                            writer.Flush();
-                            stream.Position = 0;
-
-                            sftp.UploadFile(stream, fileName);
-                            this.Manager.ChangeAchFilesStatus(achfile, AchFileStatus.Uploaded);
-                            this.Manager.UnLock(achfile);
-                        }
-                    }
-                }
-                finally
-                {
-                    sftp.Disconnect();
-                }
-            }
-        }
-
-        #endregion
     }
 }

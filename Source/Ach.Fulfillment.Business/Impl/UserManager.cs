@@ -105,6 +105,18 @@ namespace Ach.Fulfillment.Business.Impl
             return user;
         }
 
+        public UserEntity FindByRole(string role, bool fetchDeleted = false)
+        {
+            Contract.Assert(role != null);
+            var user =  this.Repository.FindOne(new UserByRole(role));
+            return user;
+        }
+
+        public UserEntity GetDefaultUser()
+        {
+            return FindByRole("DefaultUser");
+        }
+
         public override void Delete(UserEntity instance)
         {
             Contract.Assert(instance != null);

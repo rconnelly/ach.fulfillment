@@ -130,6 +130,7 @@
     <Content Include="Data\100000000001.sql" />
     <Content Include="Data\201209172135.sql" />
     <Content Include="Data\201212101618.sql" />
+    <Content Include="Data\201302261622.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

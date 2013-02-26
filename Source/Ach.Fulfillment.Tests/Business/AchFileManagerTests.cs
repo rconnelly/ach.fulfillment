@@ -63,7 +63,7 @@
 
             manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
             Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
 
             manager.CleanUpCompletedFiles();
 
@@ -95,7 +95,7 @@
 
             manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
             Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
 
             var achFile2 = this.CreateTestAchFile();
             achFile2.Partner = partner;
@@ -141,7 +141,7 @@
 
             instance = manager.Load(achFile.Id);
             Assert.AreEqual(AchFileStatus.Uploaded, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.InProgress, instance.Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.InProgress, instance.Transactions[0].Status);
         }
 
         [Test]
@@ -169,7 +169,7 @@
 
             instance = manager.Load(achFile.Id);
             Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
         }
 
         [Test]
@@ -197,7 +197,7 @@
 
             instance = manager.Load(achFile.Id);
             Assert.AreEqual(AchFileStatus.Rejected, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Error, instance.Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.Error, instance.Transactions[0].Status);
         }
 
         [Test]
@@ -393,7 +393,7 @@
             Assert.IsNotNull(achFilesCreated[0].Transactions);
             Assert.AreEqual(transaction, achFilesCreated[0].Transactions[0]);
             Assert.AreEqual(AchFileStatus.Created, achFilesCreated[0].FileStatus);
-            Assert.AreEqual(AchTransactionStatus.InProgress, achFilesCreated[0].Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.InProgress, achFilesCreated[0].Transactions[0].Status);
         }
 
         [Test]
@@ -483,7 +483,7 @@
             Assert.IsNotNull(achFiles);
             Assert.GreaterOrEqual(achFiles.Count, 1);
             Assert.IsNotNull(achFiles[achFilesCreated[0]]);
-            Assert.AreEqual(AchTransactionStatus.Batched, achFilesCreated[0].Transactions[0].TransactionStatus);
+            Assert.AreEqual(AchTransactionStatus.Batched, achFilesCreated[0].Transactions[0].Status);
         }
 
         #endregion
