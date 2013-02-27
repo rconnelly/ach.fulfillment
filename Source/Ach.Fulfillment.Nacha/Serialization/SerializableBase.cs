@@ -18,14 +18,15 @@
     [Serializable]
     public abstract class SerializableBase : ISerializable
     {
-        private static ReflectionQuery<RecordAttribute> reflectionRecordQuery = new ReflectionQuery<RecordAttribute>();
-        private static ReflectionQuery<FieldAttribute> reflectionFieldQuery = new ReflectionQuery<FieldAttribute>();
+        private static readonly ReflectionQuery<RecordAttribute> ReflectionRecordQuery = new ReflectionQuery<RecordAttribute>();
+
+        private static readonly ReflectionQuery<FieldAttribute> ReflectionFieldQuery = new ReflectionQuery<FieldAttribute>();
 
         public virtual string Serialize(bool audit = false)
         {
             var message = new StringBuilder();
 
-            foreach (var entry in reflectionRecordQuery.Reflect(this.GetType()).ReflectableMembers)
+            foreach (var entry in ReflectionRecordQuery.Reflect(this.GetType()).ReflectableMembers)
             {
                 var value = entry.Value.GetValue(this);
 
@@ -72,7 +73,7 @@
                 }
             }
 
-            foreach (var entry in reflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
+            foreach (var entry in ReflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
             {
                 var attribute = entry.Value.ReflectAttribute;
                 var value = entry.Value.GetValue(this);
@@ -216,7 +217,7 @@
 
         public virtual void Deserialize(StreamReader message)
         {
-            var recordResult = reflectionRecordQuery.Reflect(this.GetType());
+            var recordResult = ReflectionRecordQuery.Reflect(this.GetType());
 
             do
             {
@@ -264,12 +265,12 @@
 
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            foreach (var entry in reflectionRecordQuery.Reflect(this.GetType()).ReflectableMembers)
+            foreach (var entry in ReflectionRecordQuery.Reflect(this.GetType()).ReflectableMembers)
             {
                 info.AddValue(entry.Value.MemberName, entry.Value.GetValue(this), entry.Value.Type);
             }
 
-            foreach (var entry in reflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
+            foreach (var entry in ReflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
             {
                 info.AddValue(entry.Value.MemberName, entry.Value.GetValue(this), entry.Value.Type);
             }
@@ -279,7 +280,7 @@
         {
             var offset = 0;
         
-            foreach (var entry in reflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
+            foreach (var entry in ReflectionFieldQuery.Reflect(this.GetType()).ReflectableMembers)
             {
                 if (entry.Value.ReflectAttribute.IsRequired
                     && record.Length - offset < entry.Value.ReflectAttribute.Length)

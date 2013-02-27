@@ -31,6 +31,7 @@
         {
             Contract.Assert(transactionEntities != null);
 
+            // todo: utcnow???
             var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss");
             var fileEntity = new AchFileEntity
                                  {
@@ -136,6 +137,7 @@
 
             if (fileIdModifier == "Z")
             {
+                // todo (ng): "A" can be duplicated! is it correct?
                 return "A";
             }
 
@@ -146,7 +148,7 @@
 
         public void Generate()
         { 
-            var partners = this.PartnerManager.FindAll(new PartnerAll()); // ToDo probably we will need flag for  partner in future which will say that we need to genarate achfiles for it
+            var partners = this.PartnerManager.FindAll(new PartnerAll()); // ToDo probably we will need flag for partner in future which will say that we need to genarate achfiles for it
 
             foreach (var partner in partners)
             {
@@ -169,6 +171,7 @@
         public Dictionary<AchFileEntity, string> GetAchFilesDataForUploading()
         {
             var generatedFiles = new Dictionary<AchFileEntity, string>();
+
             var achFiles = Repository.FindAll(new AchFileCreated());
 
             foreach (var achFile in achFiles)
@@ -176,6 +179,8 @@
                 var file = this.GenerateAchFileForPartner(achFile);
                 var achFileString = file.Serialize();
                 generatedFiles.Add(achFile, achFileString);
+
+                // todo (ng): why get method changes transaction status
                 this.AchTransactionManager.ChangeAchTransactionStatus(achFile.Transactions.ToList(), AchTransactionStatus.Batched);
             }
 
@@ -230,6 +235,7 @@
                 return achfile;
             }
 
+            // todo (ng): NullReferenceException ?
             return null;
         }
 
