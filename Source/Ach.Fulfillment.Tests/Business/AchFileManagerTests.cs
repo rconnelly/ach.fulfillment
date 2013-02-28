@@ -70,46 +70,6 @@
         }
 
         [Test]
-        public void CleanUpCompletedFilesWontDeleteAlreadyLockedAchFilesTest()
-        {
-            var manager = Locator.GetInstance<AchFileManager>();
-            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestAchTransaction();
-            transaction.Partner = partner;
-            transactionManager.Create(transaction);
-
-            var instance = manager.Create(partner, transaction);
-            var achFile = instance;
-
-            manager.UpdateStatus(achFile, AchFileStatus.Completed);
-            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
-
-            var achFile2 = this.CreateTestAchFile();
-            achFile2.Partner = partner;
-            achFile2.Locked = true;
-            achFile2.FileStatus = AchFileStatus.Completed;
-            var instance2 = manager.Create(achFile2);
-
-            manager.Cleanup();
-
-            this.ClearSession(instance, instance2);
-            var ex = Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
-            Trace.WriteLine(ex.Message);
-
-            ex = Assert.Throws<ObjectNotFoundException>(() => transactionManager.Load(transaction.Id));
-            Trace.WriteLine(ex.Message);
-
-            instance2 = manager.Load(instance2.Id);
-            Assert.IsNotNull(instance2);
-        }
-
-        [Test]
         public void ChangeAchFilesStatusToUploadedTest()
         {
             var manager = Locator.GetInstance<AchFileManager>();

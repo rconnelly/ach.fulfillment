@@ -219,7 +219,7 @@
 
         public void Cleanup()
         {
-            Repository.Execute(new DeleteCompletedFilesActionData());
+            Repository.Execute(new DeleteCompletedAchFiles());
         }
 
         #endregion

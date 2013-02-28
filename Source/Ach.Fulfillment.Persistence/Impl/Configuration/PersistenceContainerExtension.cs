@@ -135,6 +135,9 @@
                     t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.ImplementsOpenGeneric(typeof(ISpecification<>)),
                     this.RegisterSpecification)
                 .Include(
+                    t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.Implements<IDeleteByQueryActionData>(),
+                    this.RegisterRelationalDeleteByQuery)
+                .Include(
                     t => t.IsClass && !t.IsGenericType && !t.IsAbstract && t.Implements<IIdentified>(),
                     this.RegisterRelational)
                 .ApplyAutoRegistration();
@@ -165,12 +168,17 @@
             container.RegisterType(interfaceType, commandType);
         }
 
+        private void RegisterRelationalDeleteByQuery(Type entityType, IUnityContainer container)
+        {
+            container.RegisterType(typeof(IActionCommand<>).MakeGenericType(entityType), typeof(RelationalDeleteByQueryCommand<>).MakeGenericType(entityType));
+        }
+
         private void RegisterRelational(Type entityType, IUnityContainer container)
         {
-            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonCreateActionData<>).MakeGenericType(entityType)), typeof(RelationalCreateCommand<>).MakeGenericType(entityType));
-            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonUpdateActionData<>).MakeGenericType(entityType)), typeof(RelationalUpdateCommand<>).MakeGenericType(entityType));
-            this.Container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonDeleteActionData<>).MakeGenericType(entityType)), typeof(RelationalDeleteCommand<>).MakeGenericType(entityType));
-            this.Container.RegisterType(typeof(IQueryCommand<,>).MakeGenericType(typeof(CommonGetQueryData<>).MakeGenericType(entityType), entityType), typeof(RelationalGetByIdCommand<>).MakeGenericType(entityType));
+            container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonCreateActionData<>).MakeGenericType(entityType)), typeof(RelationalCreateCommand<>).MakeGenericType(entityType));
+            container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonUpdateActionData<>).MakeGenericType(entityType)), typeof(RelationalUpdateCommand<>).MakeGenericType(entityType));
+            container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonDeleteActionData<>).MakeGenericType(entityType)), typeof(RelationalDeleteCommand<>).MakeGenericType(entityType));
+            container.RegisterType(typeof(IQueryCommand<,>).MakeGenericType(typeof(CommonGetQueryData<>).MakeGenericType(entityType), entityType), typeof(RelationalGetByIdCommand<>).MakeGenericType(entityType));
         }
 
         private void ConfigureExceptionHandling()

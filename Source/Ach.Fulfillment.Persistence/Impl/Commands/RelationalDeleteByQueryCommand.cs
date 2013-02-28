@@ -11,7 +11,8 @@
 
     using NHibernate;
 
-    internal class DeleteByQueryCommand : ActionCommandBase<DeleteByQueryActionData>
+    internal class RelationalDeleteByQueryCommand<TData> : ActionCommandBase<TData>
+        where TData : class, IDeleteByQueryActionData
     {
         #region Public Properties
 
@@ -22,13 +23,12 @@
 
         #region Public Methods and Operators
 
-        public override void Execute(DeleteByQueryActionData queryData)        
+        public override void Execute(TData queryData)
         {
             Contract.Assert(queryData != null);
             try
             {
                 this.Session.Delete(queryData.Query);
-                this.Session.Flush();
             }
             catch (Exception ex)
             {
