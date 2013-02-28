@@ -37,12 +37,12 @@
                                 writer.Flush();
                                 stream.Position = 0;
                                 sftp.UploadFile(stream, fileName);
-                                //todo this.Manager.ChangeAchFilesStatus(achfile.Key, AchFileStatus.Uploaded);
+                                // this.Manager.ChangeAchFilesStatus(achfile.Key, AchFileStatus.Uploaded);
                             }
                         }
                         finally
                         {
-                            // todo this.Manager.UnLock(achfile.Key);
+                            // this.Manager.UnLock(achfile.Key);
                         }
                     }
                 }

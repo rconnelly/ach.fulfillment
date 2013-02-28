@@ -16,6 +16,7 @@
                 using (new UnitOfWork())
                 {
                     InternalExecute(context);
+                    ScheduleNextJob(context);
                 }
             }
             catch (Exception ex)
@@ -30,18 +31,8 @@
         {
             var jobDataMap = context.MergedJobDataMap;
             var nextJob = jobDataMap.GetString("NEXT_JOB"); 
-            if (!string.IsNullOrEmpty(nextJob))
-            {
-                try
-                {
-                    // Class jobClass = Class.forName(nextJob); 
-                    // scheduleJob(jobClass, context.getScheduler());
-                }
-                catch (Exception ex)
-                {
-                    //Logger.error("error scheduling chained job", ex);
-                }
-            }
+
+            // todo fire next job here
         }
 
     }

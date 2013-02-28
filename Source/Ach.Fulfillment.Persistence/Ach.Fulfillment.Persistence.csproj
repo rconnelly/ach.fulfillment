@@ -175,6 +175,7 @@
     <Compile Include="Impl\Commands\ActionCommandBase.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic1.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic2.cs" />
+    <Compile Include="Impl\Commands\DeleteByQueryCommand.cs" />
     <Compile Include="Impl\Commands\QueryCommand.Base.cs" />
     <Compile Include="Impl\Commands\QueryCommand.Relational.cs" />
     <Compile Include="Impl\Commands\RelationalCreateCommand.cs" />

@@ -8,6 +8,7 @@
 
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Nacha.Enumeration;
     using Ach.Fulfillment.Nacha.Message;
@@ -45,29 +46,7 @@
 
         public void CleanUpCompletedFiles()
         {
-            List<AchFileEntity> completedFiles;
-            using (var tx = new Transaction())
-            {
-                completedFiles = Repository.FindAll(new AchFileCompleted()).ToList();
-
-                foreach (var achFile in completedFiles)
-                {
-                    achFile.Locked = true;
-                    this.Update(achFile);
-                }
-
-                tx.Complete();
-            }
-
-            using (var tx = new Transaction())
-            {
-                foreach (var completedFile in completedFiles)
-                {
-                    Repository.Delete(completedFile);
-                }
-
-                tx.Complete();
-            }
+            Repository.Execute(new DeleteCompletedFilesActionData());
         }
 
         public void ChangeAchFilesStatus(AchFileEntity file, AchFileStatus status)

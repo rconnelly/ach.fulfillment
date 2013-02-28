@@ -138,6 +138,8 @@
     <Compile Include="Common\CommonGetQueryData.Generic1.cs" />
     <Compile Include="Common\CommonUpdateActionData.cs" />
     <Compile Include="Common\CommonGetQueryData.Generic2.cs" />
+    <Compile Include="Common\DeleteByQueryActionData.cs" />
+    <Compile Include="Common\DeleteCompletedFilesActionData.cs" />
     <Compile Include="Common\IActionData.cs" />
     <Compile Include="Common\IActionData.Generic.cs" />
     <Compile Include="Common\IActionData.Instance.cs" />

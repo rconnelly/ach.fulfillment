@@ -61,57 +61,19 @@
             achFile.Transactions.Add(transaction);
             var instance = manager.Create(achFile);
 
-            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
-            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
-
-            manager.CleanUpCompletedFiles();
-
-            var ex = Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
-            Trace.WriteLine(ex.Message);
-
-            ex = Assert.Throws<ObjectNotFoundException>(() => transactionManager.Load(transaction.Id));
-            Trace.WriteLine(ex.Message);
-        }
-
-        [Test]
-        public void CleanUpCompletedFilesWontDeleteAlreadyLockedAchFilesTest()
-        {
-            var manager = Locator.GetInstance<IAchFileManager>();
-            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestAchTransaction();
-            transaction.Partner = partner;
-            transactionManager.Create(transaction);
-
-            var achFile = this.CreateTestAchFile();
-            achFile.Partner = partner;
-            achFile.Transactions.Add(transaction);
-            var instance = manager.Create(achFile);
-
-            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
-            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
-            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
-
             var achFile2 = this.CreateTestAchFile();
             achFile2.Partner = partner;
-            achFile2.Locked = true;
-            achFile2.FileStatus = AchFileStatus.Completed;
             var instance2 = manager.Create(achFile2);
 
+            manager.ChangeAchFilesStatus(achFile, AchFileStatus.Completed);
+            Assert.AreEqual(AchFileStatus.Completed, instance.FileStatus);
+            Assert.AreEqual(AchTransactionStatus.Completed, instance.Transactions[0].Status);
+            
             manager.CleanUpCompletedFiles();
 
-            this.ClearSession(instance, instance2);
             var ex = Assert.Throws<ObjectNotFoundException>(() => manager.Load(instance.Id));
             Trace.WriteLine(ex.Message);
-
-            ex = Assert.Throws<ObjectNotFoundException>(() => transactionManager.Load(transaction.Id));
-            Trace.WriteLine(ex.Message);
-
+            
             instance2 = manager.Load(instance2.Id);
             Assert.IsNotNull(instance2);
         }

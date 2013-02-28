@@ -38,11 +38,13 @@
 
             var achFiles = this.Manager.GetAchFilesDataForUploading();
 
-            foreach (var newPath in achFiles.Select(achFile => Path.Combine(achfilesStore, achFile.Key.Name + ".ach")))
+            // todo to be deleted
+            foreach (var achfile in achFiles)
             {
+                var newPath = Path.Combine(achfilesStore, achfile.Key.Name + ".ach");
                 using (var file = new StreamWriter(newPath))
                 {
-                    file.Write(newPath);
+                    file.Write(achfile.Value);
                     file.Flush();
                     file.Close();
                 }
