@@ -1,31 +1,21 @@
 ﻿namespace Ach.Fulfillment.Business
 {
+    using System;
     using System.Collections.Generic;
 
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Common;
 
-    public interface IAchFileManager : IManager<AchFileEntity>
+    using Renci.SshNet;
+
+    public interface IAchFileManager
     {
-        AchFileEntity Create(PartnerEntity partner, List<AchTransactionEntity> transactionEntities);
-
-        void CleanUpCompletedFiles();
-
-        void ChangeAchFilesStatus(AchFileEntity file, AchFileStatus status);
-
-        List<AchFileEntity> AchFilesToUpload(bool lockRecords = true);
-
-        void UnLock(AchFileEntity achFile);
-
-        void Lock(AchFileEntity achFile);
-
-        string GetNextIdModifier(PartnerEntity partner);
-
         void Generate();
 
-        void GenerateForPartner(PartnerEntity partner);
+        void Upload(PasswordConnectionInfo connectionInfo);
 
-        Dictionary<AchFileEntity, string> GetAchFilesDataForUploading();
+        void Cleanup();
 
-        void Uploadfiles(string ftphost, string userId, string password, Dictionary<AchFileEntity, string> achFilesToUpload);
+        /*List<AchFileEntity> AchFilesToUpload(bool lockRecords = true);*/
     }
 }

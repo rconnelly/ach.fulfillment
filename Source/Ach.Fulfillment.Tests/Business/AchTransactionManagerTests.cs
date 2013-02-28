@@ -47,12 +47,12 @@
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: string.Empty));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(string.Empty));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(3));
 
             Trace.WriteLine("CallbackUrl test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(callbackUrl: new string('&', MetadataInfo.StringLong)));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(new string('&', MetadataInfo.StringLong)));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
@@ -147,7 +147,7 @@
             var instance = manager.Create(transaction);
 
             var transactions = new List<AchTransactionEntity> { transaction };
-            manager.ChangeAchTransactionStatus(transactions, AchTransactionStatus.Batched);
+            manager.UpdateStatus(AchTransactionStatus.Batched, transactions);
 
             var changedTransaction = manager.Load(instance.Id);
             Assert.AreEqual(changedTransaction.Status, AchTransactionStatus.Batched);
@@ -204,17 +204,16 @@
 
             Assert.That(instance2, Is.Not.Null);
             Assert.That(instance2.Id, Is.GreaterThan(0));
-            transaction2.Status = AchTransactionStatus.Batched;
-            manager.Update(transaction2);
+            manager.UpdateStatus(AchTransactionStatus.Batched, transaction2);
 
             this.ClearSession(instance);
             this.ClearSession(instance2);
 
-            var trns = manager.GetAllInQueue();
+            var trns = manager.GetEnqueued(partner).ToList();
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
-            Assert.IsTrue(trns[0].Locked);
+            Assert.AreEqual(trns.First().Status, AchTransactionStatus.Created);
+            Assert.IsTrue(trns.First().Locked);
         }
 
         [Test]
@@ -235,11 +234,11 @@
 
             this.ClearSession(instance);
 
-            var trns = manager.GetAllInQueue(false);
+            var trns = manager.GetEnqueued(partner, false).ToList();
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
-            Assert.IsFalse(trns[0].Locked);
+            Assert.AreEqual(trns.First().Status, AchTransactionStatus.Created);
+            Assert.IsFalse(trns.First().Locked);
         }
 
         [Test]
@@ -271,7 +270,7 @@
             this.ClearSession(instance);
             this.ClearSession(instance2);
 
-            var trns = manager.GetAllInQueueForPartner(partner);
+            var trns = manager.GetEnqueued(partner).ToList();
             Assert.That(trns, Is.Not.Null);
             Assert.AreEqual(trns.Count(), 1);
             Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);

@@ -167,6 +167,7 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AchTransactionManagerExtension.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="IClientNotifier.cs" />
     <Compile Include="IAchFileManager.cs" />
     <Compile Include="IManager.cs" />
+    <Compile Include="Impl\AchFileEntityExtension.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\ClientNotifier.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />

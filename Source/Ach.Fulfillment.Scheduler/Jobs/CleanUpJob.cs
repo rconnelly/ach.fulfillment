@@ -7,32 +7,22 @@
 
     using Quartz;
 
-    using global::Common.Logging;
-
-    public class CleanUpJob : BaseJob
+    public class CleanUpTransactionsJob : BaseJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
-
         #region Public Properties
 
         [Dependency]
-        public IAchFileManager AchFileManager { get; set; }
+        public IAchFileManager Manager { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
 
-        protected override void InternalExecute(IJobExecutionContext context)
+        protected override void ExecuteCore(IJobExecutionContext context)
         {
-            Logger.Info("CleanUpJob started...");
-
-            this.AchFileManager.CleanUpCompletedFiles();
-
-            Logger.Info("CleanUpJob finished...");
+            this.Manager.Cleanup();
         }
 
-        #endregion
-
-
+        #endregion 
     }
 }

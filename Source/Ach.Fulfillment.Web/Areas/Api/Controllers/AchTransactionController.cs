@@ -27,7 +27,7 @@
         {
             try
             {
-                var transactionStatus = this.Manager.GetAchTransactionById(transactionId);
+                var transactionStatus = this.Manager.LoadAchTransactionStatus(transactionId);
                 return this.Json(transactionStatus, JsonRequestBehavior.AllowGet);
             }
             catch (ObjectNotFoundException ex)

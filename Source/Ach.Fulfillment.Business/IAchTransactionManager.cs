@@ -1,17 +1,23 @@
 ﻿namespace Ach.Fulfillment.Business
 {
     using System.Collections.Generic;
+
     using Data;
 
-    public interface IAchTransactionManager : IManager<AchTransactionEntity>
+    public interface IAchTransactionManager
     {
-        void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status);
+        AchTransactionEntity Create(AchTransactionEntity instance);
 
-        List<AchTransactionEntity> GetAllInQueue(bool toLock = true);
+        AchTransactionEntity Load(long id);
 
-        List<AchTransactionEntity> GetAllInQueueForPartner(PartnerEntity partner, bool toLock = true);
+        void UpdateStatus(AchTransactionStatus status, IList<AchTransactionEntity> transactions);
 
-        void UnLock(List<AchTransactionEntity> transactions);
+        IEnumerable<AchTransactionEntity> GetEnqueued(PartnerEntity partner, bool toLock = true);
 
+        void Lock(IList<AchTransactionEntity> transactions);
+
+        void UnLock(IList<AchTransactionEntity> transactions);
+
+        void SendAchTransactionNotification(IList<AchTransactionEntity> transactions);
     }
 }

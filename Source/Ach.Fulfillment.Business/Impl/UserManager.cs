@@ -18,6 +18,8 @@ namespace Ach.Fulfillment.Business.Impl
 
         internal const string HashInstance = "PasswordHashing";
 
+        private const string DefaultUserRole = "DefaultUser";
+
         #endregion
 
         #region Methods
@@ -108,13 +110,13 @@ namespace Ach.Fulfillment.Business.Impl
         public UserEntity FindByRole(string role, bool fetchDeleted = false)
         {
             Contract.Assert(role != null);
-            var user =  this.Repository.FindOne(new UserByRole(role));
+            var user = this.Repository.FindOne(new UserByRole(role));
             return user;
         }
 
         public UserEntity GetDefaultUser()
         {
-            return FindByRole("DefaultUser");
+            return this.FindByRole(DefaultUserRole);
         }
 
         public override void Delete(UserEntity instance)

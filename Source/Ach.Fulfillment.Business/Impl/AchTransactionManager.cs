@@ -17,15 +17,50 @@
         {
             Contract.Assert(transaction != null);
 
-            this.DemandValid<AchTransactionValidator>(transaction); 
-
+            this.DemandValid<AchTransactionValidator>(transaction);
             transaction.Status = AchTransactionStatus.Created;
-            var entity = base.Create(transaction);
 
-            return entity;
+            using (var tx = new Transaction())
+            {
+                var instance = base.Create(transaction);
+                this.OnTransactionCreated(instance);
+                tx.Complete();
+                return instance;
+            }
         }
-        
-        public void ChangeAchTransactionStatus(List<AchTransactionEntity> transactions, AchTransactionStatus status)
+
+        public void UpdateStatus(AchTransactionStatus status, IList<AchTransactionEntity> transactions)
+        {
+            Contract.Assert(transactions != null);
+
+            using (var tx = new Transaction())
+            {
+                foreach (var transactionEntity in transactions)
+                {
+                    transactionEntity.Status = status;
+                    this.Update(transactionEntity);
+                }
+
+                this.SendAchTransactionNotification(transactions);
+
+                tx.Complete();
+            }
+        }
+
+        public IEnumerable<AchTransactionEntity> GetEnqueued(PartnerEntity partner, bool toLock = true)
+        {
+            Contract.Assert(partner != null);
+
+            var transactions = Repository.FindAll(new AchTransactionInQueueForPartner(partner)).ToList();
+            if (toLock)
+            {
+                this.Lock(transactions);
+            }
+
+            return transactions;
+        }
+
+        public void Lock(IList<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
 
@@ -33,56 +68,15 @@
             {
                 foreach (var achTransactionEntity in transactions)
                 {
-                    achTransactionEntity.Status = status;
+                    achTransactionEntity.Locked = true;
                     this.Update(achTransactionEntity);
                 }
 
                 tx.Complete();
             }
-
         }
 
-        public List<AchTransactionEntity> GetAllInQueue(bool toLock = true)
-        {
-            List<AchTransactionEntity> transactions;
-
-            using (var tx = new Transaction())
-            {
-                transactions = Repository.FindAll(new AchTransactionInQueue()).ToList();
-
-                foreach (var achTransactionEntity in transactions)
-                {
-                    achTransactionEntity.Locked = toLock;
-                    this.Update(achTransactionEntity);
-                }
-
-                tx.Complete();
-            }
-
-            return transactions;
-        }
-
-        public List<AchTransactionEntity> GetAllInQueueForPartner(PartnerEntity partner, bool toLock = true)
-        {
-            List<AchTransactionEntity> transactions;
-            
-            using (var tx = new Transaction())
-            {
-                transactions = Repository.FindAll(new AchTransactionInQueueForPartner(partner)).ToList();
-
-                foreach (var achTransactionEntity in transactions)
-                {
-                    achTransactionEntity.Locked = toLock;
-                    this.Update(achTransactionEntity);
-                }
-
-                tx.Complete();
-            }
-
-            return transactions;
-        }
-
-        public void UnLock(List<AchTransactionEntity> transactions)
+        public void UnLock(IList<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
 
@@ -96,6 +90,22 @@
 
                 tx.Complete();
             }
+        }
+
+        public void SendAchTransactionNotification(IList<AchTransactionEntity> transactions)
+        {
+            Contract.Assert(transactions != null);
+
+            foreach (var achTransactionEntity in transactions)
+            {
+                ClientNotifier.NotificationRequest(
+                    achTransactionEntity.CallbackUrl, achTransactionEntity.Status.ToString()); // ToDo format notification
+            }
+        }
+
+        private void OnTransactionCreated(AchTransactionEntity instance)
+        {
+            this.SendAchTransactionNotification(new List<AchTransactionEntity> { instance });
         }
 
         #endregion

@@ -1,5 +1,7 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
+    using System.Diagnostics.Contracts;
+
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Scheduler.Common;
     
@@ -7,12 +9,10 @@
 
     using Quartz;
 
-    using global::Common.Logging;
+    using Renci.SshNet;
 
     public class UploadAchFilesJob : BaseJob
     {
-       private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadAchFilesJob));
-
         #region Public Properties
 
         [Dependency]
@@ -22,7 +22,7 @@
 
         #region Public Methods and Operators
 
-        protected override void InternalExecute(IJobExecutionContext context)
+        protected override void ExecuteCore(IJobExecutionContext context)
         {
             Logger.Info("UploadAchFilesJob started...");
 
@@ -31,17 +31,16 @@
             var userId = dataMap.GetString("UserId");
             var password = dataMap.GetString("Password");
 
-            if (!(string.IsNullOrEmpty(ftphost) && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
-            {
-                var achFilesToUpload = this.Manager.GetAchFilesDataForUploading();
+            Contract.Assert(!string.IsNullOrEmpty(ftphost));
+            Contract.Assert(!string.IsNullOrEmpty(userId));
+            Contract.Assert(!string.IsNullOrEmpty(password));
+            var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
 
-                Manager.Uploadfiles(ftphost, userId, password, achFilesToUpload);
-            }
+            this.Manager.Upload(connectionInfo);
 
             Logger.Info("UploadAchFilesJob finished...");
         }
 
         #endregion
-
     }
 }

@@ -22,25 +22,26 @@
 
         #endregion
 
-         #region Public Methods and Operators
+        #region Public Methods and Operators
 
         public long CreateAchTransaction(AchTransactionModel model)
         {
             Contract.Assert(model != null);
-            
+
             var user = this.UserManager.GetDefaultUser();
+
+            // todo (ng): think about more valuable exception
             Contract.Assert(user != null);
             var partner = user.Partner;
 
             var transaction = Mapper.Map<AchTransactionModel, AchTransactionEntity>(model);
             transaction.Partner = partner;
-
-            this.Manager.Create(transaction);
-
-            return transaction.Id;
+            transaction = this.Manager.Create(transaction);
+            var result = transaction.Id;
+            return result;
         }
 
-        public AchTransactionStatusModel GetAchTransactionById(long transactionId)
+        public AchTransactionStatusModel LoadAchTransactionStatus(long transactionId)
         {
             var achEntity = this.Manager.Load(transactionId);
             var achModel = new AchTransactionStatusModel
