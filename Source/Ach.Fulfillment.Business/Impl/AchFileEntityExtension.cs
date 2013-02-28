@@ -40,7 +40,8 @@
         public static File ToNacha(this AchFileEntity fileEntity)
         {
             Contract.Assert(fileEntity != null);
-            // todo: needs to be changed to settelment date??
+
+            // todo (ng): needs to be changed to settelment date??
             var transactionGroups = fileEntity.Transactions.GroupBy(tt => tt.EntryDescription);
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>>
                                       ?? transactionGroups.ToList();
@@ -77,7 +78,7 @@
                                       BatchCount = batchNumber,
                                       BlockCount = batchNumber + 2,
                                       EntryAndAddendaCount = entryCount,
-                                      EntryHash = entryHash, // TODO calculate right EntryHash
+                                      EntryHash = entryHash, // todo (ng): calculate right EntryHash
                                       TotalCreditAmount =
                                           achfile.Batches.Select(b => b.Control.TotalCreditAmount).Sum(),
                                       TotalDebitAmount =
