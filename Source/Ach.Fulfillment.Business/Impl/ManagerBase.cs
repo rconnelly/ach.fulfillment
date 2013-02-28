@@ -12,7 +12,7 @@ namespace Ach.Fulfillment.Business.Impl
     using Microsoft.Practices.ServiceLocation;
     using Microsoft.Practices.Unity;
 
-    internal class ManagerBase<T> : IManager<T>
+    public class ManagerBase<T> : IManager<T>
         where T : class, IEntity
     {
         #region Public Properties

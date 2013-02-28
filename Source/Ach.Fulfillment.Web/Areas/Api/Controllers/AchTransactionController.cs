@@ -8,8 +8,6 @@
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
 
-    using Newtonsoft.Json;
-
     [ApiValidationFilter]
     public class AchTransactionController : Controller<AchManager>
     {
@@ -19,21 +17,8 @@
         [AllowAnonymous]
         public ActionResult Create(AchTransactionModel value)
         {
-            try
-            {
-                var transactionId = this.Manager.CreateAchTransaction(value);
-                return this.Json(new { transactionId });
-            }
-            catch (BusinessException ex)
-            {
-                // todo (ng): remove all that try-catch-sendcallback. we do not need any callbacks here
-                if (value.CallbackUrl != null)
-                {
-                    this.Manager.SendCallBack(value.CallbackUrl, JsonConvert.SerializeObject(ex));
-                }
-
-                throw;
-            }
+            var transactionId = this.Manager.CreateAchTransaction(value);
+            return this.Json(new { transactionId });
         }
 
         [HttpGet]

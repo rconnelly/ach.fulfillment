@@ -87,7 +87,7 @@
                             stream.Position = 0;
 
                             sftp.UploadFile(stream, fileName);
-                            this.Manager.ChangeAchFilesStatus(achfile, AchFileStatus.Uploaded);
+                            this.Manager.UpdateStatus(achfile, AchFileStatus.Uploaded);
                             this.Manager.UnLock(achfile);
                         }
                     }

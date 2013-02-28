@@ -1,20 +1,13 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
-    using System;
-
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Common;
-
-    using global::Common.Logging;
 
     using Microsoft.Practices.Unity;
 
     using Quartz;
 
-    public class CheckStatusFilesJob : IJob
+    public class CheckStatusFilesJob : BaseJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
-
         #region Public Properties
 
         [Dependency]
@@ -25,32 +18,24 @@
 
         #endregion
 
-        public void Execute(IJobExecutionContext context)
+        #region Methods
+
+        protected override void ExecuteCore(IJobExecutionContext context)
         {
-            try
-            {
-                using (new UnitOfWork())
-                {
-                    Logger.Info("CheckStatusFilesJob started...");
+            Logger.Info("CheckStatusFilesJob started...");
 
-                    // todo (ng): why there are no implementation?
-                    // this.AchFileManager.ChangeAchFilesStatus();
+            // this.AchFileManager.ChangeAchFilesStatus();
 
-                    // switch (status)
-                    // {
-                    // case AchFileStatus.Rejected: break;
-                    // case AchFileStatus.Accepted: break;
-                    // case AchFileStatus.Completed: break;
-                    // case AchFileStatus.Uploaded: break;
-                    // }
-                    Logger.Info("CheckStatusFilesJob finished...");
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                throw new JobExecutionException(ex);
-            }
+            // switch (status)
+            // {
+            // case AchFileStatus.Rejected: break;
+            // case AchFileStatus.Accepted: break;
+            // case AchFileStatus.Completed: break;
+            // case AchFileStatus.Uploaded: break;
+            // }
+            Logger.Info("CheckStatusFilesJob finished...");
         }
+
+        #endregion
     }
 }

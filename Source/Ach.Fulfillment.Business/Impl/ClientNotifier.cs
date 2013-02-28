@@ -5,6 +5,7 @@
     using System.Net.Http.Headers;
     using System.Text;
 
+    // todo: it should not be static
     public static class ClientNotifier
     {
         public static void NotificationRequest(string callbackUrl, string data)

@@ -1,7 +1,5 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Api.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.Contracts;
 
@@ -39,17 +37,9 @@
 
             var transaction = Mapper.Map<AchTransactionModel, AchTransactionEntity>(model);
             transaction.Partner = partner;
-
-            // todo (ng): why do you need to repeat prefix "Transaction"
-            // todo (ng): why we setting status here and not in business layer
-            transaction.TransactionStatus = AchTransactionStatus.Received;
-
-            this.Manager.Create(transaction);
-
-            // todo (ng): why do we send notification from presentation
-            this.Manager.SendAchTransactionNotification(new List<AchTransactionEntity> { transaction });
-
-            return transaction.Id;
+            transaction = this.Manager.Create(transaction);
+            var result = transaction.Id;
+            return result;
         }
 
         public AchTransactionStatusModel LoadAchTransactionStatus(long transactionId)
@@ -61,12 +51,6 @@
                                     Status = achEntity.TransactionStatus.ToString()
                                };
             return achModel;
-        }
-
-        [Obsolete("todo (ng): Method should not be here")]
-        public void SendCallBack(string url, string data)
-        {
-            this.Manager.SendCallBack(url, data);
         }
 
         #endregion
