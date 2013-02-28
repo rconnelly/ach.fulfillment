@@ -25,5 +25,7 @@
         void GenerateForPartner(PartnerEntity partner);
 
         Dictionary<AchFileEntity, string> GetAchFilesDataForUploading();
+
+        void Uploadfiles(string ftphost, string userId, string password, Dictionary<AchFileEntity, string> achFilesToUpload);
     }
 }

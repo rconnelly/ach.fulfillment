@@ -173,13 +173,11 @@
     <Compile Include="IAchTransactionManager.cs" />
     <Compile Include="IClientNotifier.cs" />
     <Compile Include="IAchFileManager.cs" />
-    <Compile Include="IFileUploader.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\ClientNotifier.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\AchFileManager.cs" />
-    <Compile Include="Impl\FileUploader.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
     <Compile Include="Impl\RoleManager.cs" />

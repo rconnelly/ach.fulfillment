@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
 
     using Ach.Fulfillment.Common.Transactions;
@@ -15,6 +16,8 @@
     using Ach.Fulfillment.Nacha.Record;
 
     using Microsoft.Practices.Unity;
+
+    using Renci.SshNet;
 
     using File = Ach.Fulfillment.Nacha.Message.File;
 
@@ -160,7 +163,47 @@
 
             return generatedFiles;
         }
-            
+
+        public void Uploadfiles(string ftphost, string userId, string password, Dictionary<AchFileEntity, string> achFilesToUpload)
+        {
+            var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
+
+            using (var sftp = new SftpClient(connectionInfo))
+            {
+                try
+                {
+                    sftp.Connect();
+
+                    foreach (var achfile in achFilesToUpload)
+                    {
+                        try
+                        {
+                            using (var stream = new MemoryStream())
+                            {
+                                var fileName = achfile.Key.Name + ".ach";
+                                this.Lock(achfile.Key);
+
+                                var writer = new StreamWriter(stream);
+                                writer.Write(achfile.Value);
+                                writer.Flush();
+                                stream.Position = 0;
+                                sftp.UploadFile(stream, fileName);
+                                 this.ChangeAchFilesStatus(achfile.Key, AchFileStatus.Uploaded);
+                            }
+                        }
+                        finally
+                        {
+                             this.UnLock(achfile.Key);
+                        }
+                    }
+                }
+                finally
+                {
+                    sftp.Disconnect();
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods

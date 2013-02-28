@@ -1,21 +1,13 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Business.Impl;
-    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Scheduler.Common;
-
-    using log4net;
-
+    
     using Microsoft.Practices.Unity;
 
     using Quartz;
 
-    using Renci.SshNet;
+    using global::Common.Logging;
 
     public class UploadAchFilesJob : BaseJob
     {
@@ -41,10 +33,9 @@
 
             if (!(string.IsNullOrEmpty(ftphost) && string.IsNullOrEmpty(userId) && string.IsNullOrEmpty(password)))
             {
-                var fileUploader = new FileUploader(ftphost, userId, password);
                 var achFilesToUpload = this.Manager.GetAchFilesDataForUploading();
-                
-                fileUploader.Uploadfiles(achFilesToUpload);
+
+                Manager.Uploadfiles(ftphost, userId, password, achFilesToUpload);
             }
 
             Logger.Info("UploadAchFilesJob finished...");
