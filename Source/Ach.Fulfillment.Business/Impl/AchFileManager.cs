@@ -9,7 +9,6 @@
 
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Data.Specifications;
 
     using Microsoft.Practices.Unity;
@@ -50,9 +49,11 @@
             {
                 using (var tr = new Transaction())
                 {
+                    this.AchTransactionManager.Lock(achTransactions);
+
                     this.Create(partner, achTransactions);
 
-                    this.AchTransactionManager.UpdateStatus(AchTransactionStatus.InProgress, achTransactions);
+                    this.AchTransactionManager.UpdateStatus(AchTransactionStatus.Batched, achTransactions);
 
                     this.AchTransactionManager.UnLock(achTransactions);
 
@@ -108,26 +109,30 @@
 
         public void Upload(PasswordConnectionInfo connectionInfo)
         {
-            var files = this.GetAchFilesDataForUploading();
+            var files = this.GetAchFilesForUploading();
 
+            var achFileEntities = files as IList<AchFileEntity> ?? files.ToList();
             var contents = 
-                from file in files
+                from file in achFileEntities
                 select Tuple.Create<AchFileEntity, Func<Stream>>(file, file.ToNachaStream);
 
-            this.Upload(connectionInfo, contents);
+            try
+            {
+                this.Lock(achFileEntities);
+                this.Upload(connectionInfo, contents);
+            }
+            finally
+            {
+                this.UnLock(achFileEntities);
+            }
+
         }
 
-        public IEnumerable<AchFileEntity> GetAchFilesDataForUploading()
+        public IEnumerable<AchFileEntity> GetAchFilesForUploading()
         {
             var achFiles = this.Repository.FindAll(new AchFileCreated());
 
-            foreach (var achFile in achFiles)
-            {
-                // todo (ng): why get method changes transaction status
-                this.AchTransactionManager.UpdateStatus(AchTransactionStatus.Batched, achFile.Transactions);
-
-                yield return achFile;
-            }
+            return achFiles;
         }
 
         public void Upload(ConnectionInfo connectionInfo, IEnumerable<Tuple<AchFileEntity, Func<Stream>>> achFilesContents)
@@ -151,16 +156,8 @@
                         var fileName = achFile.Name + ".ach";
                         using (var stream = streamBuilder())
                         {
-                            try
-                            {
-                                this.Lock(achFile);
-                                sftp.UploadFile(stream, fileName);
-                                this.UpdateStatus(achFile, AchFileStatus.Uploaded);
-                            }
-                            finally
-                            {
-                                this.UnLock(achFile);
-                            }
+                            sftp.UploadFile(stream, fileName);
+                            this.UpdateStatus(achFile, AchFileStatus.Uploaded);
                         }
                     }
                 }
@@ -169,13 +166,6 @@
                     sftp.Disconnect();
                 }
             }
-        }
-
-        public void Lock(AchFileEntity achFile)
-        {
-            Contract.Assert(achFile != null);
-            achFile.Locked = true;
-            this.Update(achFile);
         }
 
         public void UpdateStatus(AchFileEntity file, AchFileStatus status)
@@ -206,11 +196,32 @@
             }
         }
 
-        public void UnLock(AchFileEntity achFile)
+        public void Lock(IEnumerable<AchFileEntity> files)
         {
-            Contract.Assert(achFile != null);
-            achFile.Locked = false;
-            this.Update(achFile);
+            using (var tx = new Transaction())
+            {
+                foreach (var file in files)
+                {
+                    file.Locked = true;
+                    this.Update(file);
+                }
+
+                tx.Complete();
+            }
+        }
+
+        public void UnLock(IEnumerable<AchFileEntity> files)
+        {
+            using (var tx = new Transaction())
+            {
+                foreach (var file in files)
+                {
+                    file.Locked = false;
+                    this.Update(file);
+                }
+
+                tx.Complete();
+            }
         }
 
         #endregion
@@ -223,26 +234,6 @@
         }
 
         #endregion
-
-        [Obsolete("Review required")]
-        public List<AchFileEntity> AchFilesToUpload(bool lockRecords = true)
-        {
-            List<AchFileEntity> achFilesList;
-            using (var tx = new Transaction())
-            {
-                achFilesList = this.Repository.FindAll(new AchFileCreated()).ToList();
-
-                foreach (var achFile in achFilesList)
-                {
-                    achFile.Locked = true;
-                    this.Update(achFile);
-                }
-
-                tx.Complete();
-            }
-
-            return achFilesList;
-        }
 
         #endregion
     }

@@ -178,8 +178,10 @@
     <Compile Include="Common\SpecificationBase.cs" />
     <Compile Include="Common\SpecificationInstanceBase.cs" />
     <Compile Include="Specifications\UserPasswordCredentialUniqness.cs" />
+    <Compile Include="Specifications\WebhooksToSend.cs" />
     <Compile Include="UserEntity.cs" />
     <Compile Include="UserPasswordCredentialEntity.cs" />
+    <Compile Include="WebhookEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">

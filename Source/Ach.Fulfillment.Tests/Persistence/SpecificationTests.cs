@@ -269,6 +269,18 @@
             Assert.That(partner.Details, Is.Not.Null);
         }
 
+        [Test]
+        public void WebhookSpecification()
+        {
+            new PersistenceSpecification<WebhookEntity>(Session)
+            .CheckProperty(c => c.Header, ShortStringGenerator.GetRandomValue())
+            .CheckProperty(c => c.Body, ShortStringGenerator.GetRandomValue())
+            .CheckProperty(c => c.LastSent, DateTime.Now)
+            .CheckProperty(c => c.Url, "http://test.com")
+            .CheckProperty(c => c.Limit, 10)
+                .VerifyTheMappings();           
+        }
+
         #endregion
     }
 }

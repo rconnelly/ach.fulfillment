@@ -143,6 +143,10 @@
     <Reference Include="QuickGenerate">
       <HintPath>..\..\_libBinary\QuickGenerate.0.4.7.0\lib\QuickGenerate.dll</HintPath>
     </Reference>
+    <Reference Include="Renci.SshNet, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ach.Fulfillment.Initialization\bin\Debug\Renci.SshNet.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\..\_libBinary\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
@@ -164,6 +168,7 @@
     <Compile Include="Business\PartnerManagerTests.cs" />
     <Compile Include="Business\RoleManagerTests.cs" />
     <Compile Include="Business\UserManagerTests.cs" />
+    <Compile Include="Business\WebhookManagerTests.cs" />
     <Compile Include="Common\NoCategoryTraceListener.cs" />
     <Compile Include="Common\TestBase.cs" />
     <Compile Include="Main.cs" />

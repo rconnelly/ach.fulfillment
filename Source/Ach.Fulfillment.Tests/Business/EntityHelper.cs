@@ -108,5 +108,16 @@ namespace Ach.Fulfillment.Tests.Business
 
             return partner;
         }
+
+        public static WebhookEntity CreateTestWebhook(this BusinessIntegrationTestBase testBase)
+        {
+            var wh = new WebhookEntity
+            {
+                Url = "http://test.com",
+                Body = ShortStringGenerator.GetRandomValue(),
+                Header = ShortStringGenerator.GetRandomValue()
+            };
+            return wh;
+        }
     }
 }

@@ -9,8 +9,13 @@
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
 
+    using Microsoft.Practices.Unity;
+
     internal class AchTransactionManager : ManagerBase<AchTransactionEntity>, IAchTransactionManager
     {
+        [Dependency]
+        public IWebhookManager WebhookManager { get; set; }
+
         #region Public Methods and Operators
 
         public override AchTransactionEntity Create(AchTransactionEntity transaction)
@@ -41,21 +46,17 @@
                     this.Update(transactionEntity);
                 }
 
-                this.SendAchTransactionNotification(transactions);
+                this.CreateWebhook(transactions);
 
                 tx.Complete();
             }
         }
 
-        public IEnumerable<AchTransactionEntity> GetEnqueued(PartnerEntity partner, bool toLock = true)
+        public IEnumerable<AchTransactionEntity> GetEnqueued(PartnerEntity partner)
         {
             Contract.Assert(partner != null);
 
             var transactions = Repository.FindAll(new AchTransactionInQueueForPartner(partner)).ToList();
-            if (toLock)
-            {
-                this.Lock(transactions);
-            }
 
             return transactions;
         }
@@ -92,20 +93,24 @@
             }
         }
 
-        public void SendAchTransactionNotification(IList<AchTransactionEntity> transactions)
+        public void CreateWebhook(IList<AchTransactionEntity> transactions)
         {
             Contract.Assert(transactions != null);
 
             foreach (var achTransactionEntity in transactions)
             {
-                ClientNotifier.NotificationRequest(
-                    achTransactionEntity.CallbackUrl, achTransactionEntity.Status.ToString()); // ToDo format notification
+                var webhook = new WebhookEntity
+                                  {
+                                      Url = achTransactionEntity.CallbackUrl,
+                                      Body = "{\"Status\":"+ achTransactionEntity.Status + "}" //todo improve
+                                  };
+                WebhookManager.Create(webhook);
             }
         }
 
         private void OnTransactionCreated(AchTransactionEntity instance)
         {
-            this.SendAchTransactionNotification(new List<AchTransactionEntity> { instance });
+            this.CreateWebhook(new List<AchTransactionEntity> { instance });
         }
 
         #endregion

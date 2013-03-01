@@ -217,31 +217,6 @@
         }
 
         [Test]
-        public void GetTransactionsInQueueWithoutLockingTest()
-        {
-            var manager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestAchTransaction();
-            transaction.Partner = partner;
-            var instance = manager.Create(transaction);
-
-            Assert.That(instance, Is.Not.Null);
-            Assert.That(instance.Id, Is.GreaterThan(0));
-
-            this.ClearSession(instance);
-
-            var trns = manager.GetEnqueued(partner, false).ToList();
-            Assert.That(trns, Is.Not.Null);
-            Assert.AreEqual(trns.Count(), 1);
-            Assert.AreEqual(trns.First().Status, AchTransactionStatus.Created);
-            Assert.IsFalse(trns.First().Locked);
-        }
-
-        [Test]
         public void GetAllInQueueForPartnerTest()
         {
             var manager = Locator.GetInstance<IAchTransactionManager>();

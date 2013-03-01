@@ -15,7 +15,6 @@
         {
             // IndividualIdNumber
             this.RuleFor(i => i.IndividualIdNumber)
-                .NotEmpty()
                 .Length(15)
                 .AlphaNumeric();
 

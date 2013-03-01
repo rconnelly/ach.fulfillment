@@ -1,5 +1,6 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
 
@@ -148,50 +149,6 @@
         }
 
         [Test]
-        public void AchFilesToUploadTest()
-        {
-            var manager = Locator.GetInstance<AchFileManager>();
-            var transactionManager = Locator.GetInstance<IAchTransactionManager>();
-            var partnerManager = Locator.GetInstance<IPartnerManager>();
-
-            var partner = this.CreateTestPartner();
-            partnerManager.Create(partner);
-
-            var transaction = this.CreateTestAchTransaction();
-            transaction.Partner = partner;
-            transactionManager.Create(transaction);
-
-            var instance = manager.Create(partner, transaction);
-
-            Assert.That(instance, Is.Not.Null);
-            Assert.That(instance.Id, Is.GreaterThan(0));
-
-            var transaction2 = this.CreateTestAchTransaction();
-            transaction2.Partner = partner;
-            transactionManager.Create(transaction2);
-
-            var achFile2 = this.CreateTestAchFile();
-            achFile2.Partner = partner;
-            achFile2.FileStatus = AchFileStatus.Uploaded;
-            achFile2.Transactions.Add(transaction2);
-            var instance2 = manager.Create(achFile2);
-
-            Assert.That(instance2, Is.Not.Null);
-            Assert.That(instance2.Id, Is.GreaterThan(0));  
-
-            var achFileList = manager.AchFilesToUpload();            
-
-            var achFile = manager.Load(instance.Id);
-            achFile2 = manager.Load(instance2.Id);
-
-            Assert.IsNotNull(achFileList);
-            Assert.GreaterOrEqual(achFileList.Count, 1);
-            CollectionAssert.Contains(achFileList, achFile);
-            CollectionAssert.DoesNotContain(achFileList, achFile2);
-            Assert.IsTrue(achFile.Locked);
-        }
-
-        [Test]
         public void LockTest()
         {
             var manager = Locator.GetInstance<AchFileManager>();
@@ -208,7 +165,7 @@
             var instance = manager.Create(partner, transaction);
             var achFile = instance;
 
-            manager.Lock(achFile);
+            manager.Lock(new List<AchFileEntity>{achFile});
 
             this.ClearSession(instance);
 
@@ -235,7 +192,7 @@
             var instance = manager.Create(partner, transaction);
             var achFile = instance;
 
-            manager.Lock(achFile);
+            manager.Lock(new List<AchFileEntity>{achFile});
 
             this.ClearSession(instance);
 
@@ -244,7 +201,7 @@
             Assert.That(achFile, Is.Not.Null);
             Assert.IsTrue(achFile.Locked);
 
-            manager.UnLock(achFile);
+            manager.UnLock(new List<AchFileEntity>{achFile});
             this.ClearSession(instance);
 
             achFile = manager.Load(instance.Id);
@@ -329,7 +286,7 @@
             Assert.IsNotNull(achFilesCreated[0].Transactions);
             Assert.AreEqual(transaction, achFilesCreated[0].Transactions[0]);
             Assert.AreEqual(AchFileStatus.Created, achFilesCreated[0].FileStatus);
-            Assert.AreEqual(AchTransactionStatus.InProgress, achFilesCreated[0].Transactions[0].Status);
+            Assert.AreEqual(AchTransactionStatus.Batched, achFilesCreated[0].Transactions[0].Status);
         }
 
         [Test]
@@ -408,19 +365,12 @@
 
             manager.Generate(partner);
 
-            var achFilesCreated = manager.FindAll(new AchFileForPartner(partner)).ToList();
-            Assert.IsNotNull(achFilesCreated);
-            Assert.AreEqual(1, achFilesCreated.Count);  
-            Assert.IsNotNull(achFilesCreated[0].Transactions);
-            Assert.AreEqual(transaction, achFilesCreated[0].Transactions[0]);
-
-            var achFiles = manager.GetAchFilesDataForUploading().ToList();
+            var achFiles = manager.GetAchFilesForUploading().ToList();
 
             Assert.IsNotNull(achFiles);
             Assert.GreaterOrEqual(achFiles.Count(), 1);
-            Assert.AreEqual(achFiles.First(), achFilesCreated.First());
-            Assert.AreEqual(AchTransactionStatus.Batched, achFilesCreated[0].Transactions[0].Status);
         }
+
 
         #endregion
     }

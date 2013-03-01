@@ -8,7 +8,7 @@ SET IDENTITY_INSERT [ach].[Partner] OFF
 
 SET IDENTITY_INSERT [ach].[PartnerDetail] ON
 	INSERT INTO [ach].[PartnerDetail] ( PartnerDetailId, PartnerId, ImmediateDestination, CompanyIdentification, Destination, OriginOrCompanyName, CompanyName, DiscretionaryData,DFIIdentification, Created)
-	       VALUES (2, 2, 'b121108250', '1234567890', 'Bank of America RIC', 'PriorityPaymentSystem', 'PPS', '', '12345678', getdate() )	
+	       VALUES (2, 2, 'b111000012', '1234567890', 'Bank of America RIC', 'PriorityPaymentSystem', 'PPS', '', '11100001', getdate() )	
 SET IDENTITY_INSERT [ach].[PartnerDetail] OFF
 
 SET IDENTITY_INSERT [ach].[User] ON

@@ -148,6 +148,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -177,7 +178,6 @@
     <Compile Include="IManager.cs" />
     <Compile Include="Impl\AchFileEntityExtension.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
-    <Compile Include="Impl\ClientNotifier.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\AchFileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
@@ -194,11 +194,13 @@
     <Compile Include="Impl\Validation\UserPasswordCredentialValidator.cs" />
     <Compile Include="Impl\Validation\UserValidator.cs" />
     <Compile Include="Impl\Validation\ValidationExtension.cs" />
+    <Compile Include="Impl\WebhookManager.cs" />
     <Compile Include="IPartnerManager.cs" />
     <Compile Include="IRoleManager.cs" />
     <Compile Include="IUserManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IWebhookManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
