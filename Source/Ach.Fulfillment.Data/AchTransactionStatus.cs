@@ -3,9 +3,10 @@
     public enum AchTransactionStatus
     {
         Created = 0,
-        Batched = 1,
-        InProgress = 2,
-        Completed = 3,
-        Error = 4
+        Grouped = 1,
+        Batched = 2,
+        Sent = 3,
+        Rejected = 4,
+        Accepted = 5
     }
 }

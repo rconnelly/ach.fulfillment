@@ -9,7 +9,9 @@
 
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data.Specifications.AchFiles;
+    using Ach.Fulfillment.Data.Specifications.AchTransactions;
+    using Ach.Fulfillment.Data.Specifications.Notifications;
 
     using Microsoft.Practices.Unity;
 
@@ -17,78 +19,152 @@
 
     public class AchFileManager : ManagerBase<AchFileEntity>, IAchFileManager
     {
+        #region Fields
+
+        private const int BulkCreationLimit = 100 * 1000;
+
+        private const int DefaultResponseCheckRepeatDelay = 5;
+
+        #endregion
+
         #region Public Properties
 
         [Dependency]
-        public IAchTransactionManager AchTransactionManager { get; set; }
+        public IPartnerManager PartnerManager { get; set; }
 
         [Dependency]
-        public IPartnerManager PartnerManager { get; set; }
+        public INotificationManager NotificationManager { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
 
-        #region Generate
-
-        public void Generate()
+        public void ProcessReadyToBeGroupedAchTransactions()
         {
-            var partners = this.PartnerManager.FindAll(new PartnerAll());
-
-            // todo: probably we will need flag for partner in future which will say that we need to genarate achfiles for it
-            foreach (var partner in partners)
+            using (var tr = new Transaction())
             {
-                this.Generate(partner);
-            }
-        }
+                // get all available transactionReferences
+                var transactionReferences = this.NotificationManager
+                    .GetNextReadyToBeGroupedAchTransactionReferences(BulkCreationLimit);
 
-        public void Generate(PartnerEntity partner)
-        {
-            var achTransactions = this.AchTransactionManager.GetEnqueued(partner).ToList();
-            if (achTransactions.Any())
-            {
-                using (var tr = new Transaction())
+                // create ach file for each partner and group transactions
+                var grouped = from r in transactionReferences
+                              group r by r.PartnerId into grps
+                              let partner = this.Repository.Get<PartnerEntity>(grps.Key)
+                              where partner != null
+                              let file = this.Create(partner)
+                              select new
+                              {
+                                  File = file,
+                                  References = grps
+                              };
+
+                foreach (var g in grouped)
                 {
-                    this.AchTransactionManager.Lock(achTransactions);
+                    var achFile = g.File;
 
-                    this.Create(partner, achTransactions);
+                    // insert ach transactions into corresponding ach files
+                    achFile.Transactions = new List<AchTransactionEntity>(
+                        from reference in g.References
+                        let id = reference.Id
+                        let achTransaction = this.Repository.LazyLoad<AchTransactionEntity>(id)
+                        select achTransaction);
 
-                    this.AchTransactionManager.UpdateStatus(AchTransactionStatus.Batched, achTransactions);
-
-                    this.AchTransactionManager.UnLock(achTransactions);
-
-                    tr.Complete();
+                    this.UpdateStatus(achFile, AchFileStatus.Created);
                 }
+
+                tr.Complete();
             }
         }
 
-        public AchFileEntity Create(PartnerEntity partner, params AchTransactionEntity[] transactionEntities)
+        public bool ProcessReadyToBeGeneratedAchFile()
         {
-            return this.Create(partner, (IList<AchTransactionEntity>)transactionEntities);
+            bool fetched;
+            using (var transaction = new Transaction())
+            {
+                AchFileEntity achFile;
+                fetched = this.NotificationManager.TryGetNextReadyToGenerateAchFile(out achFile);
+                if (achFile != null)
+                {
+                    var actionData = new CreateAchFileContent
+                                         {
+                                             AchFileId = achFile.Id,
+                                             WriteTo = achFile.ToStream
+                                         };
+                    this.Repository.Execute(actionData);
+
+                    this.UpdateStatus(achFile, AchFileStatus.Generated);
+                }
+
+                transaction.Complete();
+            }
+
+            return fetched;
         }
 
-        public AchFileEntity Create(PartnerEntity partner, IList<AchTransactionEntity> transactionEntities)
+        public bool ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo)
+        {
+            bool fetched;
+            using (var transaction = new Transaction())
+            {
+                AchFileEntity achFile;
+                fetched = this.NotificationManager.TryGetNextReadyToUploadAchFile(out achFile);
+                if (achFile != null)
+                {
+                    using (var stream = this.Repository.Load(new AchFileContentById { AchFileId = achFile.Id }))
+                    {
+                        this.Upload(connectionInfo, achFile, stream);
+                    }
+
+                    this.UpdateStatus(achFile, AchFileStatus.Uploaded);
+                }
+
+                transaction.Complete();
+            }
+
+            return fetched;
+        }
+
+        public bool ProcessReadyToBeAcceptedAchFile()
+        {
+            var processed = this.Repository
+                .ExecuteWithRetry<ReadyToBeAcceptedAchFileReference>(
+                this.CheckUploadedAchFileStatus, TimeSpan.FromSeconds(DefaultResponseCheckRepeatDelay));
+            return processed;
+        }
+
+        public void Cleanup()
+        {
+            this.Repository.Execute(new DeleteCompletedAchFiles());
+        }
+
+        #endregion
+
+        #region Methods
+
+        private AchFileEntity Create(PartnerEntity partner, IList<AchTransactionEntity> transactionEntities = null)
         {
             Contract.Assert(partner != null);
-            Contract.Assert(transactionEntities != null);
 
+            // todo: possible concurrency issue. why we need Name at all
+            // todo: generate filename before upload
             var newFileName = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             var fileEntity = new AchFileEntity
             {
                 Name = newFileName,
                 FileStatus = AchFileStatus.Created,
                 Partner = partner,
-                Transactions = transactionEntities,
+                Transactions = transactionEntities ?? new List<AchTransactionEntity>(),
                 FileIdModifier = this.GetNextIdModifier(partner)
             };
 
             return this.Create(fileEntity);
         }
 
-        public string GetNextIdModifier(PartnerEntity partner)
+        private string GetNextIdModifier(PartnerEntity partner)
         {
             var fileIdModifier =
-                this.Repository.Query<AchFileEntity>(new AchFileForPartner(partner))
+                this.Repository.Query(new AchFileForPartner(partner))
                     .Where(m => m.Created.Date == DateTime.Today.Date)
                     .Max(m => m.FileIdModifier);
 
@@ -103,63 +179,55 @@
             return result.ToString(CultureInfo.InvariantCulture);
         }
 
-        #endregion
-
-        #region Upload
-
-        public void Upload(PasswordConnectionInfo connectionInfo)
+        private void UpdateStatus(AchFileEntity file, AchFileStatus status)
         {
-            var files = this.GetAchFilesForUploading();
+            Contract.Assert(file != null);
 
-            var achFileEntities = files as IList<AchFileEntity> ?? files.ToList();
-            var contents = 
-                from file in achFileEntities
-                select Tuple.Create<AchFileEntity, Func<Stream>>(file, file.ToNachaStream);
-
-            try
+            using (var tr = new Transaction())
             {
-                this.Lock(achFileEntities);
-                this.Upload(connectionInfo, contents);
-            }
-            finally
-            {
-                this.UnLock(achFileEntities);
-            }
+                file.FileStatus = status;
+                this.Update(file, true);
 
+                var childStatus = status.ToAchTransactionStatus();
+                if (childStatus.HasValue)
+                {
+                    this.UpdateChildrenStatuses(file, childStatus.Value);
+                }
+
+                this.NotificationManager.RaiseAchFileStatusChangedNotification(file);
+
+                tr.Complete();
+            }
         }
 
-        public IEnumerable<AchFileEntity> GetAchFilesForUploading()
+        private void UpdateChildrenStatuses(AchFileEntity achFile, AchTransactionStatus status)
         {
-            var achFiles = this.Repository.FindAll(new AchFileCreated());
-
-            return achFiles;
+            Contract.Assert(achFile != null);
+            this.Repository.Execute(
+                new UpdateAchTransactionStatusByAchFileId
+                {
+                    AchFileId = achFile.Id,
+                    Status = status
+                });
         }
 
-        public void Upload(ConnectionInfo connectionInfo, IEnumerable<Tuple<AchFileEntity, Func<Stream>>> achFilesContents)
+        private void Upload(ConnectionInfo connectionInfo, AchFileEntity achFile, Stream stream)
         {
             Contract.Assert(connectionInfo != null);
-            Contract.Assert(achFilesContents != null);
+            Contract.Assert(achFile != null);
+            Contract.Assert(stream != null);
 
+            // todo: refactor SftpClient dependency
+            return;
+            
             using (var sftp = new SftpClient(connectionInfo))
             {
                 try
                 {
                     sftp.Connect();
 
-                    foreach (var tuple in achFilesContents)
-                    {
-                        Contract.Assert(tuple.Item1 != null);
-                        Contract.Assert(tuple.Item2 != null);
-
-                        var achFile = tuple.Item1;
-                        var streamBuilder = tuple.Item2;
-                        var fileName = achFile.Name + ".ach";
-                        using (var stream = streamBuilder())
-                        {
-                            sftp.UploadFile(stream, fileName);
-                            this.UpdateStatus(achFile, AchFileStatus.Uploaded);
-                        }
-                    }
+                    var fileName = achFile.Name + ".ach";
+                    sftp.UploadFile(stream, fileName);
                 }
                 finally
                 {
@@ -168,72 +236,15 @@
             }
         }
 
-        public void UpdateStatus(AchFileEntity file, AchFileStatus status)
+        private void CheckUploadedAchFileStatus(AchFileEntity achFile)
         {
-            Contract.Assert(file != null);
+            Contract.Assert(achFile != null);
 
-            using (var tr = new Transaction())
-            {
-                file.FileStatus = status;
-                this.Update(file);
-
-                switch (status)
-                {
-                    case AchFileStatus.Uploaded:
-                        this.AchTransactionManager.UpdateStatus(
-                            AchTransactionStatus.InProgress, file.Transactions.ToList());
-                        break;
-                    case AchFileStatus.Completed:
-                        this.AchTransactionManager.UpdateStatus(
-                            AchTransactionStatus.Completed, file.Transactions.ToList());
-                        break;
-                    case AchFileStatus.Rejected:
-                        this.AchTransactionManager.UpdateStatus(AchTransactionStatus.Error, file.Transactions.ToList());
-                        break;
-                }
-
-                tr.Complete();
-            }
+            // todo: implement it
+            return;
+            
+            throw new NotImplementedException();
         }
-
-        public void Lock(IEnumerable<AchFileEntity> files)
-        {
-            using (var tx = new Transaction())
-            {
-                foreach (var file in files)
-                {
-                    file.Locked = true;
-                    this.Update(file);
-                }
-
-                tx.Complete();
-            }
-        }
-
-        public void UnLock(IEnumerable<AchFileEntity> files)
-        {
-            using (var tx = new Transaction())
-            {
-                foreach (var file in files)
-                {
-                    file.Locked = false;
-                    this.Update(file);
-                }
-
-                tx.Complete();
-            }
-        }
-
-        #endregion
-
-        #region Cleanup
-
-        public void Cleanup()
-        {
-            Repository.Execute(new DeleteCompletedAchFiles());
-        }
-
-        #endregion
 
         #endregion
     }

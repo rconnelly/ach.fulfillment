@@ -10,8 +10,6 @@
 
         public virtual AchFileStatus FileStatus { get; set; }
 
-        public virtual bool Locked { get; set; }
-
         public virtual PartnerEntity Partner { get; set; }
 
         public virtual IList<AchTransactionEntity> Transactions { get; set; } 

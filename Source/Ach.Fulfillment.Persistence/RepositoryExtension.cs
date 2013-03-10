@@ -21,10 +21,10 @@ namespace Ach.Fulfillment.Data
             repository.Execute(new CommonCreateActionData<T> { Instance = instance });
         }
 
-        public static void Update<T>(this IRepository repository, T instance)
+        public static void Update<T>(this IRepository repository, T instance, bool flush = false)
         {
             Contract.Assert(repository != null);
-            repository.Execute(new CommonUpdateActionData<T> { Instance = instance });
+            repository.Execute(new CommonUpdateActionData<T> { Instance = instance }, flush);
         }
 
         public static void Delete<T>(this IRepository repository, T instance)
@@ -41,7 +41,13 @@ namespace Ach.Fulfillment.Data
         public static T Load<T>(this IRepository repository, long id)
             where T : class
         {
-            return repository.LoadOne(new CommonGetQueryData<T> { Key = id });
+            return repository.Load(new CommonGetQueryData<T> { Key = id });
+        }
+
+        public static T LazyLoad<T>(this IRepository repository, long id)
+            where T : class
+        {
+            return repository.Load(new CommonLazyGetQueryData<T> { Key = id });
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "As Designed")]
@@ -60,12 +66,11 @@ namespace Ach.Fulfillment.Data
         public static IEnumerable<T> FindAll<T>(this IRepository repository, IQueryData queryData)
         {
             Contract.Assert(queryData != null);
-            var query = repository.Query<T>(queryData);
-            var result = query.ToList();
+            var result = repository.Enumerable<T>(queryData);
             return result;
         }
 
-        public static T LoadOne<T>(this IRepository repository, IQueryData<T> queryData)
+        public static T Load<T>(this IRepository repository, IQueryData<T> queryData)
             where T : class
         {
             Contract.Assert(repository != null);
@@ -98,10 +103,19 @@ namespace Ach.Fulfillment.Data
             return result;
         }
 
+        public static IEnumerable<T> Enumerable<T>(this IRepository repository, IQueryData<T> queryData)
+        {
+            Contract.Assert(repository != null);
+            var result = repository.Enumerable<T>(queryData);
+            return result;
+        }
+
         public static IQueryable<T> Query<T>(this IRepository repository, IQueryData<T> queryData)
         {
             Contract.Assert(repository != null);
-            return repository.Query<T>(queryData);
+            var enumerable = repository.Enumerable<T>(queryData);
+            var result = enumerable.AsQueryable();
+            return result;
         }
 
         #endregion

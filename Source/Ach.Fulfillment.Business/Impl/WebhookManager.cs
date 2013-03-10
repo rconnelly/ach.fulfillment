@@ -10,6 +10,7 @@
 
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data.Specifications.WebHooks;
 
     public class WebhookManager : ManagerBase<WebhookEntity>, IWebhookManager
     {

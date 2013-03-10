@@ -33,9 +33,9 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
-        public virtual void Update(T instance)
+        public virtual void Update(T instance, bool flush = false)
         {
-            this.Repository.Update(instance);
+            this.Repository.Update(instance, flush);
         }
 
         public virtual T Load(long id)

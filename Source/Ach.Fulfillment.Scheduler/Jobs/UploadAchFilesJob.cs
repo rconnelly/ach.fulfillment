@@ -36,7 +36,7 @@
             Contract.Assert(!string.IsNullOrEmpty(password));
             var connectionInfo = new PasswordConnectionInfo(ftphost, userId, password);
 
-            this.Manager.Upload(connectionInfo);
+            this.Manager.ProcessReadyToBeUploadedAchFile(connectionInfo);
 
             Logger.Info("UploadAchFilesJob finished...");
         }

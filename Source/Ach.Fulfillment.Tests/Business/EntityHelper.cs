@@ -78,7 +78,6 @@ namespace Ach.Fulfillment.Tests.Business
                     Name = "AchFilename",
                     FileIdModifier = "A",
                     FileStatus = AchFileStatus.Created,
-                    Locked = false,
                     Transactions = new List<AchTransactionEntity>()
                 };
 

@@ -1,20 +1,17 @@
 ﻿namespace Ach.Fulfillment.Persistence
 {
-    using System.Linq;
+    using System.Collections.Generic;
 
-    using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
 
     public interface IRepository
     {
-        IQueryable<T> Query<T>(IQueryData queryData);
+        IEnumerable<T> Enumerable<T>(IQueryData queryData);
 
         T Scalar<T>(IQueryData queryData);
 
         int Count<T>(IQueryData queryData);
 
-        void Execute(IActionData actionData);
-
-        void Flush(bool force = false);
+        void Execute(IActionData actionData, bool flush = false);
     }
 }

@@ -7,6 +7,7 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Common.Utils;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data.Specifications.Roles;
 
     internal class RoleManager : ManagerBase<RoleEntity>, IRoleManager
     {
@@ -29,11 +30,11 @@ namespace Ach.Fulfillment.Business.Impl
             return instance;
         }
 
-        public override void Update(RoleEntity instance)
+        public override void Update(RoleEntity instance, bool flush = false)
         {
             Contract.Assert(instance != null);
             this.DemandValid<RoleValidator>(instance);
-            base.Update(instance);
+            base.Update(instance, flush);
         }
     }
 }

@@ -179,6 +179,7 @@
             container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonUpdateActionData<>).MakeGenericType(entityType)), typeof(RelationalUpdateCommand<>).MakeGenericType(entityType));
             container.RegisterType(typeof(IActionCommand<>).MakeGenericType(typeof(CommonDeleteActionData<>).MakeGenericType(entityType)), typeof(RelationalDeleteCommand<>).MakeGenericType(entityType));
             container.RegisterType(typeof(IQueryCommand<,>).MakeGenericType(typeof(CommonGetQueryData<>).MakeGenericType(entityType), entityType), typeof(RelationalGetByIdCommand<>).MakeGenericType(entityType));
+            container.RegisterType(typeof(IQueryCommand<,>).MakeGenericType(typeof(CommonLazyGetQueryData<>).MakeGenericType(entityType), entityType), typeof(RelationalLazyGetByIdCommand<>).MakeGenericType(entityType));
         }
 
         private void ConfigureExceptionHandling()

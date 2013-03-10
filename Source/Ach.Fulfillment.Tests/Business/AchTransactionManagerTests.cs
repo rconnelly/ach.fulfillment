@@ -132,7 +132,7 @@
             Assert.That(transaction, Is.Not.Null);
         }
 
-        [Test]
+        /*[Test]
         public void ChangeAchTransactionStatusTest()
         {
             var manager = Locator.GetInstance<IAchTransactionManager>();
@@ -151,7 +151,7 @@
 
             var changedTransaction = manager.Load(instance.Id);
             Assert.AreEqual(changedTransaction.Status, AchTransactionStatus.Batched);
-        }
+        }*/
 
         [Test]
         [Ignore]
@@ -182,7 +182,7 @@
             Assert.IsTrue(notificationRequestWasCalled);
         }
 
-        [Test]
+        /*[Test]
         public void GetTransactionsInQueueTest()
         {
             var manager = Locator.GetInstance<IAchTransactionManager>();
@@ -214,9 +214,9 @@
             Assert.AreEqual(trns.Count(), 1);
             Assert.AreEqual(trns.First().Status, AchTransactionStatus.Created);
             Assert.IsTrue(trns.First().Locked);
-        }
+        }*/
 
-        [Test]
+        /*[Test]
         public void GetAllInQueueForPartnerTest()
         {
             var manager = Locator.GetInstance<IAchTransactionManager>();
@@ -251,9 +251,9 @@
             Assert.AreEqual(trns[0].Status, AchTransactionStatus.Created);
             Assert.IsTrue(trns[0].Locked);
             Assert.AreEqual(partner, trns[0].Partner);
-        }
+        }*/
 
-        [Test]
+        /*[Test]
         public void UnLockTest()
         {
             var manager = Locator.GetInstance<IAchTransactionManager>();
@@ -282,7 +282,7 @@
 
             transaction2 = manager.Load(transaction2.Id);
             Assert.IsFalse(transaction2.Locked);
-        }
+        }*/
 
         #endregion
 

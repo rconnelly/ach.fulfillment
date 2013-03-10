@@ -1,11 +1,15 @@
 ﻿namespace Ach.Fulfillment.Data
 {
+    using System;
+
     public enum AchFileStatus
     {
         Created = 0,
-        Uploaded = 1,
-        Accepted = 2,
+        Generated = 1,
+        Uploaded = 2,
         Rejected = 3,
-        Completed = 4
+        Accepted = 4,
+        [Obsolete("not clear when should be set")]
+        Finalized = 5
     }
 }

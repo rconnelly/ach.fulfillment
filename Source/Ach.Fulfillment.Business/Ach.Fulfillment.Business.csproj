@@ -104,6 +104,10 @@
     </AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ach.Fulfillment.Initialization\bin\Debug\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation">
       <HintPath>..\..\_libBinary\FluentValidation.3.4.6.0\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
@@ -168,7 +172,6 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AchTransactionManagerExtension.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
@@ -181,7 +184,9 @@
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\AchFileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
+    <Compile Include="Impl\NotificationManager.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
+    <Compile Include="Impl\RetryingProcessingStrategyExtension.cs" />
     <Compile Include="Impl\RoleManager.cs" />
     <Compile Include="Impl\UserManager.cs">
       <SubType>Code</SubType>
@@ -195,6 +200,7 @@
     <Compile Include="Impl\Validation\UserValidator.cs" />
     <Compile Include="Impl\Validation\ValidationExtension.cs" />
     <Compile Include="Impl\WebhookManager.cs" />
+    <Compile Include="INotificationManager.cs" />
     <Compile Include="IPartnerManager.cs" />
     <Compile Include="IRoleManager.cs" />
     <Compile Include="IUserManager.cs">

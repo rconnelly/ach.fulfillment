@@ -16,16 +16,14 @@
 
     public static class AchFileEntityExtension
     {
-        public static Stream ToNachaStream(this AchFileEntity fileEntity)
+        public static void ToStream(this AchFileEntity fileEntity, Stream stream)
         {
             Contract.Assert(fileEntity != null);
+            Contract.Assert(stream != null);
             var content = fileEntity.ToNachaContent();
-            var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
             writer.Write(content);
             writer.Flush();
-            stream.Seek(0, SeekOrigin.Begin);
-            return stream;
         }
 
         public static string ToNachaContent(this AchFileEntity fileEntity)

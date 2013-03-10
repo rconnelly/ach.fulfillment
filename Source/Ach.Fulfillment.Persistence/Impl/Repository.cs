@@ -1,9 +1,9 @@
 ﻿namespace Ach.Fulfillment.Persistence.Impl
 {
     using System;
+    using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.Contracts;
-    using System.Linq;
 
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence.Impl.Commands;
@@ -50,7 +50,7 @@
 
         #region Methods
 
-        public IQueryable<T> Query<T>(IQueryData queryData)
+        public IEnumerable<T> Enumerable<T>(IQueryData queryData)
         {
             Contract.Assert(queryData != null);
             var command = this.ResolveCommand<T>(queryData);
@@ -74,12 +74,16 @@
             return count;
         }
 
-        public void Execute(IActionData actionData)
+        public void Execute(IActionData actionData, bool flush)
         {
             var command = this.ResolveCommand(actionData);
             try
             {
                 command.Execute(actionData);
+                if (flush)
+                {
+                    this.Session.Flush();
+                }
             }
             catch (Exception ex)
             {

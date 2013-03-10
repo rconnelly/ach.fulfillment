@@ -4,10 +4,14 @@
 
     public interface IAchFileManager
     {
-        void Generate();
+        void ProcessReadyToBeGroupedAchTransactions();
 
-        void Upload(PasswordConnectionInfo connectionInfo);
+        bool ProcessReadyToBeGeneratedAchFile();
+
+        bool ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo);
 
         void Cleanup();
+
+        bool ProcessReadyToBeAcceptedAchFile();
     }
 }

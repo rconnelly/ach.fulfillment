@@ -9,6 +9,7 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data.Specifications.Users;
 
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;
 
@@ -127,18 +128,17 @@ namespace Ach.Fulfillment.Business.Impl
                 instance.Deleted = true;
 
                 instance.UserPasswordCredential = null;
-                this.Repository.Update(instance);
-                this.Repository.Flush(true);
+                this.Repository.Update(instance, true);
 
                 transaction.Complete();
             }
         }
 
-        public override void Update(UserEntity instance)
+        public override void Update(UserEntity instance, bool flush = false)
         {
             Contract.Assert(instance != null);
             this.DemandValid<UserValidator>(instance);
-            base.Update(instance);
+            base.Update(instance, flush);
         }
 
         private static string GetSaltedPassword(string password, string salt)

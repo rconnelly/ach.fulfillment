@@ -21,8 +21,6 @@ namespace Ach.Fulfillment.Tests.Business
 
         protected readonly StringGenerator NormalStringGenerator = new StringGenerator(5, MetadataInfo.StringNormal);
 
-        private Transaction transaction;
-
         private UnitOfWork unitOfWork;
 
         #endregion
@@ -39,6 +37,8 @@ namespace Ach.Fulfillment.Tests.Business
             } 
         }
 
+        protected Transaction Transaction { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -47,14 +47,14 @@ namespace Ach.Fulfillment.Tests.Business
         public virtual void SetUp()
         {
             this.unitOfWork = new UnitOfWork();
-            this.transaction = new Transaction();
+            this.Transaction = new Transaction();
             this.Session = ServiceLocator.Current.GetInstance<ISession>();
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            this.transaction.Dispose();
+            this.Transaction.Dispose();
             this.unitOfWork.Dispose();
         }
 

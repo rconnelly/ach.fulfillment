@@ -1,12 +1,12 @@
 namespace Ach.Fulfillment.Persistence.Impl.Commands
 {
-    using System.Linq;
+    using System.Collections.Generic;
 
     using Ach.Fulfillment.Data.Common;
 
     internal interface IQueryCommand<out TResult>
     {
-        IQueryable<TResult> Execute(IQueryData queryData);
+        IEnumerable<TResult> Execute(IQueryData queryData);
 
         TResult ExecuteScalar(IQueryData queryData);
 

@@ -153,6 +153,9 @@
     <Reference Include="NHibernate.Logging.CommonLogging">
       <HintPath>..\..\_libBinary\NHibernate.Logging.1.3.2\lib\net35\NHibernate.Logging.CommonLogging.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\_libBinary\ServiceStack.Text.3.9.38\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -172,18 +175,38 @@
     <Compile Include="..\Common\GlobalVersionInfo.cs">
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Impl\Commands\ActionCommandBase.cs" />
+    <Compile Include="Impl\Commands\AchFile\CreateAchFileContentCommand.cs" />
+    <Compile Include="Impl\Commands\AchFile\GetAchFileContentByIdCommand.cs" />
+    <Compile Include="Impl\Commands\ActionCommand.Base.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic1.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic2.cs" />
+    <Compile Include="Impl\Commands\Notifications\EndConversationCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\EnqueueAchFileStatusChangedNotificationCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\EnqueueAchTransactionCreatedNotificationCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\EnqueueCallbackNotificationCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetReadyToBeProcessedCallbackNotificationReferenceCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetReadyToCheckResponseAchFileReferenceCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetReadyToUploadAchFileReferenceCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetReadyToGenerateAchFileReferenceCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetReadyToBeGroupedAchTransactionReferenceCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetRetriableContentFromQueueCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\GetSimpleContentFromQueueCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\BaseEnqueueCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\RescheduleConversationCommand.cs" />
+    <Compile Include="Impl\Commands\Notifications\SessionHelper.cs" />
+    <Compile Include="Impl\Commands\ActionCommand.Relational.cs" />
     <Compile Include="Impl\Commands\RelationalDeleteByQueryCommand.cs" />
     <Compile Include="Impl\Commands\QueryCommand.Base.cs" />
     <Compile Include="Impl\Commands\QueryCommand.Relational.cs" />
     <Compile Include="Impl\Commands\RelationalCreateCommand.cs" />
     <Compile Include="Impl\Commands\RelationalDeleteCommand.cs" />
     <Compile Include="Impl\Commands\RelationalGetByIdCommand.cs" />
+    <Compile Include="Impl\Commands\RelationalLazyGetByIdCommand.cs" />
+    <Compile Include="Impl\Commands\QueryCommand.Relational.Scalar.cs" />
     <Compile Include="Impl\Commands\RelationalUpdateCommand.cs" />
     <Compile Include="Impl\Commands\SpecificationCommand.Relational.cs" />
     <Compile Include="Impl\Commands\SpecificationExtension.cs" />
+    <Compile Include="Impl\Commands\AchTransaction\UpdateAchTransactionStatusByAchFileIdCommand.cs" />
     <Compile Include="Impl\Mappings\AchTransactionMapping.cs" />
     <Compile Include="Impl\Mappings\AchFileMapping.cs" />
     <Compile Include="Impl\Mappings\PartnerDetailMapping.cs" />

@@ -1,7 +1,5 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
-    using System.Diagnostics.Contracts;
-
     using Ach.Fulfillment.Scheduler.Common;
 
     using Business;
@@ -9,8 +7,6 @@
     using Microsoft.Practices.Unity;
 
     using Quartz;
-
-    using Renci.SshNet;
 
     [DisallowConcurrentExecution]
     public class GenerateAchFilesJob : BaseJob
@@ -26,7 +22,7 @@
 
         protected override void ExecuteCore(IJobExecutionContext context)
         {
-            this.Manager.Generate();
+            this.Manager.ProcessReadyToBeGroupedAchTransactions();
         }
 
         #endregion

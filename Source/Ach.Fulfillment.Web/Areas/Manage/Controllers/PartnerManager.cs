@@ -7,6 +7,7 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications;
+    using Ach.Fulfillment.Data.Specifications.Partners;
     using Ach.Fulfillment.Web.Areas.Manage.Models;
 
     using Microsoft.Practices.Unity;

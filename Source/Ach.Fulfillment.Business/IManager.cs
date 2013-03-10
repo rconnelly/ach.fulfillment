@@ -8,7 +8,7 @@ namespace Ach.Fulfillment.Business
     {
         T Create(T instance);
 
-        void Update(T instance);
+        void Update(T instance, bool flush = false);
 
         T Load(long id);
 
