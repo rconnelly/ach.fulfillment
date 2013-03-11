@@ -2,25 +2,25 @@
 /* Queues                                                       */
 /*==============================================================*/
 if exists (select * from sys.objects where object_id = OBJECT_ID(N'ach.DefaultSendQueueAutoend') and type in (N'P', N'PC'))
-	drop procedure ach.DefaultSendQueueAutoend
+    drop procedure ach.DefaultSendQueueAutoend
 GO
 
 create procedure ach.DefaultSendQueueAutoend
 as
 begin
-	declare @h uniqueidentifier;
-	while(1=1)begin
-		begin transaction
-		waitfor(
-			receive top (1)
-				@h = conversation_handle
-			from ach.DefaultSendQueue), timeout 5000
-		if(@@rowcount > 0)
-		begin
-			end conversation @h;
-		end
-		commit transaction;
-	end
+    declare @h uniqueidentifier;
+    while(1=1)begin
+        begin transaction
+        waitfor(
+            receive top (1)
+                @h = conversation_handle
+            from ach.DefaultSendQueue), timeout 5000
+        if(@@rowcount > 0)
+        begin
+            end conversation @h;
+        end
+        commit transaction;
+    end
 end
 GO
 
@@ -74,27 +74,27 @@ GO
 /* Services                                                     */
 /*==============================================================*/
 create service DefaultSendService
-	on queue ach.DefaultSendQueue
+    on queue ach.DefaultSendQueue
 GO
 
 create service FireAchTransactionCreated
-	on queue ach.CreatedAchTransactionQueue ([DEFAULT])
+    on queue ach.CreatedAchTransactionQueue ([DEFAULT])
 GO
 
 create service FireAchFileCreated
-	on queue ach.CreatedAchFileQueue ([DEFAULT])
+    on queue ach.CreatedAchFileQueue ([DEFAULT])
 GO
 
 create service FireAchFileGenerated
-	on queue ach.GeneratedAchFileQueue ([DEFAULT])
+    on queue ach.GeneratedAchFileQueue ([DEFAULT])
 GO
 
 create service FireAchFileUploaded
-	on queue ach.UploadedAchFileQueue ([DEFAULT])
+    on queue ach.UploadedAchFileQueue ([DEFAULT])
 GO
 
 create service EnqueueCallbackNotification
-	on queue ach.CallbackNotificationQueue ([DEFAULT])
+    on queue ach.CallbackNotificationQueue ([DEFAULT])
 GO
 
 
@@ -103,7 +103,7 @@ GO
 /* Procedure: SendReference                                     */
 /*==============================================================*/
 if exists (select * from sys.objects where object_id = OBJECT_ID(N'ach.SendReference') and type in (N'P', N'PC'))
-	drop procedure ach.SendReference
+    drop procedure ach.SendReference
 GO
 
 create procedure ach.SendReference
@@ -111,26 +111,26 @@ create procedure ach.SendReference
     @DestinationService nvarchar(256)
 as
 begin
-	declare @DialogHandle uniqueidentifier;
-	set NOCOUNT on
+    declare @DialogHandle uniqueidentifier;
+    set NOCOUNT on
     begin transaction;
-	begin try
-		begin dialog conversation @DialogHandle
-			from service DefaultSendService
-			to service @DestinationService
-			on CONTRACT [DEFAULT]
-			WITH ENCRYPTION = OFF;
+    begin try
+        begin dialog conversation @DialogHandle
+            from service DefaultSendService
+            to service @DestinationService
+            on CONTRACT [DEFAULT]
+            WITH ENCRYPTION = OFF;
         send on conversation @DialogHandle
-			message type [DEFAULT] (@Content);
-		commit transaction;
-	end try
-	begin catch
-		if @@TRANCOUNT > 0
-			rollback transaction
-		declare @em nvarchar(4000);
-		declare @es int;
-		select @em = ERROR_MESSAGE(), @es = ERROR_SEVERITY();
-		raiserror (@em, @es, 1);
-	end catch
+            message type [DEFAULT] (@Content);
+        commit transaction;
+    end try
+    begin catch
+        if @@TRANCOUNT > 0
+            rollback transaction
+        declare @em nvarchar(4000);
+        declare @es int;
+        select @em = ERROR_MESSAGE(), @es = ERROR_SEVERITY();
+        raiserror (@em, @es, 1);
+    end catch
 end
 GO

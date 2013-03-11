@@ -53,62 +53,62 @@ GO
 /*==============================================================*/
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'DefaultSendService')
-	DROP SERVICE [DefaultSendService]
+    DROP SERVICE [DefaultSendService]
 GO
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'FireAchTransactionCreated')
-	DROP SERVICE [FireAchTransactionCreated]
+    DROP SERVICE [FireAchTransactionCreated]
 GO
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'FireAchFileCreated')
-	DROP SERVICE [FireAchFileCreated]
+    DROP SERVICE [FireAchFileCreated]
 GO
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'FireAchFileGenerated')
-	DROP SERVICE [FireAchFileGenerated]
+    DROP SERVICE [FireAchFileGenerated]
 GO
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'FireAchFileUploaded')
-	DROP SERVICE [FireAchFileUploaded]
+    DROP SERVICE [FireAchFileUploaded]
 GO
 
 IF  EXISTS (SELECT * FROM sys.services WHERE name = N'EnqueueCallbackNotification')
-	DROP SERVICE [EnqueueCallbackNotification]
+    DROP SERVICE [EnqueueCallbackNotification]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'DefaultSendQueue')
-	DROP QUEUE [ach].[DefaultSendQueue]
+    DROP QUEUE [ach].[DefaultSendQueue]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'CreatedAchTransactionQueue')
-	DROP QUEUE [ach].[CreatedAchTransactionQueue]
+    DROP QUEUE [ach].[CreatedAchTransactionQueue]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'CreatedAchFileQueue')
-	DROP QUEUE [ach].[CreatedAchFileQueue]
+    DROP QUEUE [ach].[CreatedAchFileQueue]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'GeneratedAchFileQueue')
-	DROP QUEUE [ach].[GeneratedAchFileQueue]
+    DROP QUEUE [ach].[GeneratedAchFileQueue]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'UploadedAchFileQueue')
-	DROP QUEUE [ach].[UploadedAchFileQueue]
+    DROP QUEUE [ach].[UploadedAchFileQueue]
 GO
 
 IF  EXISTS (SELECT * FROM sys.service_queues WHERE name = N'CallbackNotificationQueue')
-	DROP QUEUE [ach].[CallbackNotificationQueue]
+    DROP QUEUE [ach].[CallbackNotificationQueue]
 GO
 
 /*==============================================================*/
 /* Procedures                                                   */
 /*==============================================================*/
 if exists (select * from sys.objects where object_id = OBJECT_ID(N'ach.DefaultSendQueueAutoend') and type in (N'P', N'PC'))
-	drop procedure ach.DefaultSendQueueAutoend
+    drop procedure ach.DefaultSendQueueAutoend
 GO
 
 if exists (select * from sys.objects where object_id = OBJECT_ID(N'ach.SendReference') and type in (N'P', N'PC'))
-	drop procedure ach.SendReference
+    drop procedure ach.SendReference
 GO
 
 

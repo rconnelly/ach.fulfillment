@@ -267,7 +267,7 @@ GO
 /* Table: AchFileContent                                        */
 /*==============================================================*/
 create table ach.AchFileContent(
-	AchFileContentId uniqueidentifier ROWGUIDCOL constraint DF_ACHFILECONTENTID_ACHFILECONTENT default (newid()) not null,
+    AchFileContentId uniqueidentifier ROWGUIDCOL constraint DF_ACHFILECONTENTID_ACHFILECONTENT default (newid()) not null,
     AchFileId int not null,
     SystemFile varbinary(max) filestream null,
     constraint PK_ACHFILECONTENT primary key nonclustered (AchFileContentId)
@@ -288,7 +288,7 @@ GO
 alter table ach.AchFileContent
    add constraint FK_ACHFILECONTENT_ACHFILE foreign key (AchFileId)
       references ach.AchFile (AchFileId)
-		on delete cascade
+        on delete cascade
 GO
 
 
@@ -323,4 +323,4 @@ alter table ach.AchFileTransaction
    add constraint FK_ACHFILETRANSACTION_FILE foreign key (AchFileId)
       references ach.AchFile (AchFileId)
         on delete cascade
-GO	
+GO    
