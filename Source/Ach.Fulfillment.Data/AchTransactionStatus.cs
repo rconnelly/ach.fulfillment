@@ -2,11 +2,12 @@
 {
     public enum AchTransactionStatus
     {
-        Created = 0,
-        Grouped = 1,
-        Batched = 2,
-        Sent = 3,
-        Rejected = 4,
-        Accepted = 5
+        None = 0,
+        Created = 1,
+        Grouped = 2,
+        Batched = 3,
+        Sent = 4,
+        Rejected = 5,
+        Accepted = 6
     }
 }

@@ -176,7 +176,10 @@
       <Link>Properties\GlobalVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Impl\Commands\AchFile\CreateAchFileContentCommand.cs" />
+    <Compile Include="Impl\Commands\AchFile\DeleteCompletedAchFilesCommand.cs" />
     <Compile Include="Impl\Commands\AchFile\GetAchFileContentByIdCommand.cs" />
+    <Compile Include="Impl\Commands\AchTransaction\ActualizeAchTransactionNotificationStatusCommand.cs" />
+    <Compile Include="Impl\Commands\AchTransaction\GetUnnotifiedAchTransactionsCommand.cs" />
     <Compile Include="Impl\Commands\ActionCommand.Base.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic1.cs" />
     <Compile Include="Impl\Commands\IActionCommand.Generic2.cs" />

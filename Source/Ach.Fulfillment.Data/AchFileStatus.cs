@@ -4,12 +4,13 @@
 
     public enum AchFileStatus
     {
-        Created = 0,
-        Generated = 1,
-        Uploaded = 2,
-        Rejected = 3,
-        Accepted = 4,
+        None = 0,
+        Created = 1,
+        Generated = 2,
+        Uploaded = 3,
+        Rejected = 4,
+        Accepted = 5,
         [Obsolete("not clear when should be set")]
-        Finalized = 5
+        Finalized = 6
     }
 }

@@ -308,3 +308,8 @@ BEGIN CONVERSATION TIMER (@conversation_handle) timeout = 5
 -- end conversation 'AAE9B215-0D89-E211-8A7F-70568189F040' @conversation_handle;
 
 */
+
+alter table ach.AchTransaction
+	add NotifiedTransactionStatus int constraint DF_NotifiedTransactionStatus DEFAULT (0) not null
+	
+	

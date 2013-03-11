@@ -26,6 +26,9 @@ namespace Ach.Fulfillment.Persistence.Impl.Configuration
             var configuration = MsSqlConfiguration.MsSql2005
                 .DefaultSchema("ach")
                 .ConnectionString(this.RuntimeConnectionString);
+#if DEBUG
+            configuration = configuration.FormatSql();
+#endif
             return configuration;
         }
 

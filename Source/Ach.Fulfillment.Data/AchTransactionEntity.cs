@@ -32,6 +32,8 @@
         
         public virtual AchTransactionStatus Status { get; set; }
 
+        public virtual AchTransactionStatus NotifiedStatus { get; set; }
+
         public virtual bool Locked { get; set; }
     }
 }

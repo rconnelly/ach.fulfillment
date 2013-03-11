@@ -66,12 +66,21 @@
                     new ContainerControlledLifetimeManager(),
                     new InjectionFactory(CreateSessionFactory))
                 .RegisterType<ISession>(new UnitOfWorkLifetimeManager(), new InjectionFactory(this.CreateSession))
+                .RegisterType<IStatelessSession>(new UnitOfWorkLifetimeManager(), new InjectionFactory(this.CreateStatelessSession))
                 .RegisterType<Func<ISession>>(
                     new ContainerControlledLifetimeManager(), 
                     new InjectionFactory(
                         c =>
                         {
                             Func<ISession> func = () => c.Resolve<ISession>();
+                            return func;
+                        }))
+                .RegisterType<Func<IStatelessSession>>(
+                    new ContainerControlledLifetimeManager(),
+                    new InjectionFactory(
+                        c =>
+                        {
+                            Func<IStatelessSession> func = () => c.Resolve<IStatelessSession>();
                             return func;
                         }))
                 .RegisterType(typeof(IRepository), typeof(Repository), new ContainerControlledLifetimeManager())
@@ -121,6 +130,14 @@
             var session = sessionFactory.OpenSession();
             Contract.Assert(session != null);
             session.FlushMode = this.flushMode;
+            return session;
+        }
+
+        private IStatelessSession CreateStatelessSession(IUnityContainer container)
+        {
+            var sessionFactory = container.Resolve<ISessionFactory>();
+            var session = sessionFactory.OpenStatelessSession();
+            Contract.Assert(session != null);
             return session;
         }
 

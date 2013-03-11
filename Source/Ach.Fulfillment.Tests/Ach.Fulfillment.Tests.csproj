@@ -200,6 +200,10 @@
       <Project>{24E18145-C312-4628-99B6-5703CB223297}</Project>
       <Name>Ach.Fulfillment.Initialization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ach.Fulfillment.Persistence\Ach.Fulfillment.Persistence.csproj">
+      <Project>{5AB0AE05-BBCB-4337-8390-3A06E4776932}</Project>
+      <Name>Ach.Fulfillment.Persistence</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

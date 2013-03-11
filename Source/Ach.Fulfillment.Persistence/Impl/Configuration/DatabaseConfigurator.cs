@@ -129,7 +129,7 @@
                                 config.SetInterceptor(new AuditInterceptor());
                                 var type = this.GetSqlExceptionConverterType();
                                 if (type != null)
-                                {
+                                {                                    
                                     config.SetProperty(
                                         NHibernate.Cfg.Environment.SqlExceptionConverter, 
                                         type.AssemblyQualifiedName);

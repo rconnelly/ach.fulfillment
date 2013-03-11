@@ -5,8 +5,10 @@
     using System.Diagnostics.Contracts;
     using System.Globalization;
 
+    using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Common;
+    using Ach.Fulfillment.Data.Specifications.AchTransactions;
     using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
@@ -168,9 +170,53 @@
         {
             Contract.Assert(achFile != null);
 
+            var transactionEntities = this.Repository.FindAll(new UnnotifiedAchTransactions { AchFileId = achFile.Id });
+            foreach (var transactionEntity in transactionEntities)
+            {
+                this.PerformCallbackNotification(achFile, transactionEntity);
+            }
+        }
+
+        private void PerformCallbackNotification(AchFileEntity achFile, AchTransactionEntity transactionEntity)
+        {
+            var previousNotifiedStatus = transactionEntity.NotifiedStatus;
+            var actionData = new ActualizeAchTransactionNotificationStatus
+                                 {
+                                     Id = transactionEntity.Id,
+                                     Status = transactionEntity.Status,
+                                     NotifiedStatus = transactionEntity.Status
+                                 };
+            this.Repository.Execute(actionData);
+            if (actionData.Updated)
+            {
+                try
+                {
+                    this.Post(achFile, transactionEntity);
+                }
+                catch (RootException ex)
+                {
+                    actionData.NotifiedStatus = previousNotifiedStatus;
+                    actionData.Updated = false;
+                    this.Repository.Execute(actionData);
+                    if (!actionData.Updated)
+                    {
+                        Logger.FatalFormat(CultureInfo.InvariantCulture, "Post callback compensation error. It should never happen.");
+                        throw new InvalidOperationException("Unable to compensate callback notification error.", ex);
+                    }
+
+                    throw;
+                }
+            }
+        }
+
+        private void Post(AchFileEntity achFile, AchTransactionEntity transactionEntity)
+        {
+            // - read status
+            // - create notification message based on status (add error message for Failed status)
+            // - post to callbackurl
             //todo: implement it
-            return;
-            throw new NotImplementedException();
+
+            Logger.DebugFormat(CultureInfo.InvariantCulture, "Post to '{0}' about status '{1}'", transactionEntity.CallbackUrl, transactionEntity.Status);
         }
 
         #endregion

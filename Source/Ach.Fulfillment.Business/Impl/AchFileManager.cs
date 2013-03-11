@@ -13,6 +13,8 @@
     using Ach.Fulfillment.Data.Specifications.AchTransactions;
     using Ach.Fulfillment.Data.Specifications.Notifications;
 
+    using global::Common.Logging;
+
     using Microsoft.Practices.Unity;
 
     using Renci.SshNet;
@@ -24,6 +26,8 @@
         private const int BulkCreationLimit = 100 * 1000;
 
         private const int DefaultResponseCheckRepeatDelay = 5;
+
+        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
 
         #endregion
 
@@ -218,6 +222,8 @@
             Contract.Assert(stream != null);
 
             // todo: refactor SftpClient dependency
+            Logger.Warn("------------------------- Upload is mock");
+            
             return;
             
             using (var sftp = new SftpClient(connectionInfo))
@@ -241,9 +247,9 @@
             Contract.Assert(achFile != null);
 
             // todo: implement it
-            return;
+            Logger.Warn("------------------------- CheckUploadedAchFileStatus is mock");
             
-            throw new NotImplementedException();
+            this.UpdateStatus(achFile, AchFileStatus.Accepted);
         }
 
         #endregion

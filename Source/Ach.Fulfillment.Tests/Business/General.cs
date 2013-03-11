@@ -1,10 +1,8 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
-    using System;
-
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
-    using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Persistence;
     using Ach.Fulfillment.Tests.Common;
 
     using Microsoft.Practices.ServiceLocation;
@@ -68,20 +66,24 @@
             }
         }
 
+        public IRepository Repository
+        {
+            get
+            {
+                return this.Locator.GetInstance<IRepository>();
+            }
+        }
+
         [Test]
         public void Default()
         {
             /*using (new UnitOfWork())
             {
-                this.NotificationManager.RaiseAchFileStatusChangedNotification(new AchFileEntity { Id = 2, FileStatus = AchFileStatus.Created });
-
-                AchFileEntity file;
-                this.NotificationManager.TryGetNextReadyToGenerateAchFile(out file);
-                this.NotificationManager.DeliverRemoteNotifications();
+                this.AchFileManager.Cleanup();
             }
 
-            return;
-*/
+            return;*/
+
             // - obtain ach transaction from client
             using (new UnitOfWork())
             {
@@ -93,7 +95,6 @@
                 this.AchTransactionManager.Create(achTransaction);
             }
 
-            
             // - group several ach transactions into one ach batch file
             using (new UnitOfWork())
             {
