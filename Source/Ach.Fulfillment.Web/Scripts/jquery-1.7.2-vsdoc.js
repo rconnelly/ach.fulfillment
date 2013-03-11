@@ -2880,7 +2880,7 @@
             // convert relative number strings (+= or -=) to relative numbers. #7345
             if (type === "string" && (ret = rrelNum.exec(value))) {
                 value = (+(ret[1] + 1) * +ret[2]) + parseFloat(jQuery.css(elem, name));
-                // Fixes bug #9237
+                // Fixes b_u_g #9237
                 type = "number";
             }
 
@@ -2897,7 +2897,7 @@
             // If a hook was provided, use that value, otherwise just set the specified value
             if (!hooks || !("set" in hooks) || (value = hooks.set(elem, value)) !== undefined) {
                 // Wrapped to prevent IE from throwing errors when 'invalid' values are provided
-                // Fixes bug #5509
+                // Fixes b_u_g #5509
                 try {
                     style[name] = value;
                 } catch (e) { }
@@ -4194,7 +4194,7 @@
 						// the original fragment (which might have attached data) instead of
 						// using it; in addition, use the original fragment object for the last
 						// item instead of first because it can end up being emptied incorrectly
-						// in certain situations (Bug #8070).
+						// in certain situations (b_u_g #8070).
 						// Fragments from the fragment cache must always be cloned and never used
 						// in place.
 						results.cacheable || (l > 1 && i < lastIndex) ?

@@ -35,11 +35,13 @@
             return achFileString;
         }
 
+        // todo: do not use extension - move to separate class
         public static File ToNacha(this AchFileEntity fileEntity)
         {
             Contract.Assert(fileEntity != null);
 
             // todo (ng): needs to be changed to settelment date??
+            // todo: do not use fileEntity.Transactions because of performance
             var transactionGroups = fileEntity.Transactions.GroupBy(tt => tt.EntryDescription);
             var groupedTransactions = transactionGroups as List<IGrouping<string, AchTransactionEntity>>
                                       ?? transactionGroups.ToList();

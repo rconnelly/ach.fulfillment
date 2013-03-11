@@ -63,7 +63,7 @@ ko.utils = new (function () {
         }
     }
 
-    // Detect IE versions for bug workarounds (uses IE conditionals, not UA string, for robustness)
+    // Detect IE versions for b_u_g workarounds (uses IE conditionals, not UA string, for robustness)
     var ieVersion = (function() {
         var version = 3, div = document.createElement('div'), iElems = div.getElementsByTagName('i');
         
@@ -349,7 +349,7 @@ ko.utils = new (function () {
                                    : element.textContent = value;
                                    
             if (ieVersion >= 9) {
-                // Believe it or not, this actually fixes an IE9 rendering bug. Insane. https://github.com/SteveSanderson/knockout/issues/209
+                // Believe it or not, this actually fixes an IE9 rendering b_u_g. Insane. https://github.com/SteveSanderson/knockout/issues/209
                 element.innerHTML = element.innerHTML;
             }
         },
@@ -2114,7 +2114,7 @@ ko.bindingHandlers['value'] = {
             var applyValueAction = function () { ko.selectExtensions.writeValue(element, newValue); };
             applyValueAction();
 
-            // Workaround for IE6 bug: It won't reliably apply values to SELECT nodes during the same execution thread
+            // Workaround for IE6 b_u_g: It won't reliably apply values to SELECT nodes during the same execution thread
             // right after you've changed the set of OPTION nodes on it. So for that node type, we'll schedule a second thread
             // to apply the value as well.
             var alsoApplyAsynchronously = element.tagName == "SELECT";
@@ -2141,7 +2141,7 @@ ko.bindingHandlers['options'] = {
             return ko.selectExtensions.readValue(node) || node.innerText || node.textContent;
         });
         var previousScrollTop = element.scrollTop;
-        element.scrollTop = 0; // Workaround for a Chrome rendering bug. Note that we restore the scroll position later. (https://github.com/SteveSanderson/knockout/issues/215)
+        element.scrollTop = 0; // Workaround for a Chrome rendering b_u_g. Note that we restore the scroll position later. (https://github.com/SteveSanderson/knockout/issues/215)
 
         var value = ko.utils.unwrapObservable(valueAccessor());
         var selectedValue = element.value;

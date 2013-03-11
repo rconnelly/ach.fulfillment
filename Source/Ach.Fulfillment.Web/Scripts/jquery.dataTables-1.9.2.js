@@ -4627,7 +4627,7 @@
 		 *  @param {object} oExtender Object from which the properties will be applied to oOut
 		 *  @returns {object} oOut Reference, just for convenience - oOut === the return.
 		 *  @memberof DataTable#oApi
-		 *  @todo This doesn't take account of arrays inside the deep copied objects.
+		 *  @T_O_D_O: This doesn't take account of arrays inside the deep copied objects.
 		 */
 		function _fnExtend( oOut, oExtender )
 		{
@@ -6560,7 +6560,7 @@
 			 * Cache the header, body and footer as required, creating them if needed
 			 */
 			
-			// Work around for Webkit bug 83867 - store the caption-side before removing from doc
+			// Work around for Webkit b_u_g 83867 - store the caption-side before removing from doc
 			var captions = $(this).children('caption').each( function () {
 				this._captionSide = $(this).css('caption-side');
 			} );
@@ -10335,7 +10335,7 @@
 	 * NOT be manipulated outside of DataTables. Any configuration should be done
 	 * through the initialisation options.
 	 *  @namespace
-	 *  @todo Really should attach the settings object to individual instances so we
+	 *  @T_O_D_O: Really should attach the settings object to individual instances so we
 	 *    don't need to create new instances on each $().dataTable() call (if the
 	 *    table already exists). It would also save passing oSettings around and
 	 *    into every single function. However, this is a very significant 
@@ -10645,7 +10645,7 @@
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
 		 *  @type array
-		 *  @todo These inner arrays should really be objects
+		 *  @T_O_D_O: These inner arrays should really be objects
 		 */
 		"aaSorting": null,
 		
@@ -11139,7 +11139,7 @@
 		/**
 		 * Set the display end point - aiDisplay index
 		 *  @type function
-		 *  @todo Should do away with _iDisplayEnd and calculate it on-the-fly here
+		 *  @T_O_D_O: Should do away with _iDisplayEnd and calculate it on-the-fly here
 		 */
 		"fnDisplayEnd": function ()
 		{

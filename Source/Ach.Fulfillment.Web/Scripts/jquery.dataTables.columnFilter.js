@@ -669,7 +669,7 @@
 
                     if (fnServerDataOriginal != null) {
                         try {
-                            fnServerDataOriginal(sSource, aoData, fnCallback, oTable.fnSettings()); //TODO: See Issue 18
+                            fnServerDataOriginal(sSource, aoData, fnCallback, oTable.fnSettings()); //T_O_D_O: See Issue 18
                         } catch (ex) {
                             fnServerDataOriginal(sSource, aoData, fnCallback);
                         }

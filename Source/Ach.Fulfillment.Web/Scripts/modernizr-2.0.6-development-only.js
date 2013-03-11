@@ -695,14 +695,14 @@ window.Modernizr = (function( window, document, undefined ) {
         var elem = document.createElement('video'),
             bool = false;
             
-        // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
+        // IE9 Running on Windows Server SKU can cause an exception to be thrown, b_u_g #224
         try {
             if ( bool = !!elem.canPlayType ) {
                 bool      = new Boolean(bool);
                 bool.ogg  = elem.canPlayType('video/ogg; codecs="theora"');
 
                 // Workaround required for IE9, which doesn't report video support without audio codec specified.
-                //   bug 599718 @ msft connect
+                //   b_u_g 599718 @ msft connect
                 var h264 = 'video/mp4; codecs="avc1.42E01E';
                 bool.h264 = elem.canPlayType(h264 + '"') || elem.canPlayType(h264 + ', mp4a.40.2"');
 
@@ -871,7 +871,7 @@ window.Modernizr = (function( window, document, undefined ) {
                       bool = inputElem.checkValidity && inputElem.checkValidity() === false;
 
                     } else if ( /^color$/.test(inputElemType) ) {
-                        // chuck into DOM and force reflow for Opera bug in 11.00
+                        // chuck into DOM and force reflow for Opera b_u_g in 11.00
                         // github.com/Modernizr/Modernizr/issues#issue/159
                         docElement.appendChild(inputElem);
                         docElement.offsetWidth;
@@ -897,7 +897,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
 
     // Run through all tests and detect their support in the current UA.
-    // todo: hypothetically we could be doing an array of tests and use a basic loop here.
+    // T_O_D_O: hypothetically we could be doing an array of tests and use a basic loop here.
     for ( var feature in tests ) {
         if ( hasOwnProperty(tests, feature) ) {
             // run the test, throw the return value into the Modernizr,

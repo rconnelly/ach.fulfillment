@@ -68,6 +68,7 @@
                     var achFile = g.File;
 
                     // insert ach transactions into corresponding ach files
+                    // todo: is it good idea to fill all items into list?
                     achFile.Transactions = new List<AchTransactionEntity>(
                         from reference in g.References
                         let id = reference.Id

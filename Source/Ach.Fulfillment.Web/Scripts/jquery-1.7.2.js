@@ -1567,7 +1567,7 @@ jQuery.support = (function() {
 		// table row; if so, offsetWidth/Height are not reliable for use when
 		// determining if an element has been hidden directly using
 		// display:none (it is still safe to use offsets if a parent element is
-		// hidden; don safety goggles and see bug #4512 for more information).
+		// hidden; don safety goggles and see b_u_g #4512 for more information).
 		// (only IE 8 fails this test)
 		div.innerHTML = "<table><tr><td style='" + paddingMarginBorder + "0;display:none'></td><td>t</td></tr></table>";
 		tds = div.getElementsByTagName( "td" );
@@ -1582,9 +1582,9 @@ jQuery.support = (function() {
 
 		// Check if div with explicit width and no margin-right incorrectly
 		// gets computed margin-right based on width of container. For more
-		// info see bug #3333
+		// info see b_u_g #3333
 		// Fails in WebKit before Feb 2011 nightlies
-		// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+		// WebKit b_u_g 13343 - getComputedStyle returns wrong value for margin-right
 		if ( window.getComputedStyle ) {
 			div.innerHTML = "";
 			marginDiv = document.createElement( "div" );
@@ -2474,7 +2474,7 @@ jQuery.extend({
 					}
 				}
 
-				// Fixes Bug #2551 -- select.val() broken in IE after form.reset()
+				// Fixes b_u_g #2551 -- select.val() broken in IE after form.reset()
 				if ( one && !values.length && options.length ) {
 					return jQuery( options[ index ] ).val();
 				}
@@ -2768,7 +2768,7 @@ if ( !getSetAttribute ) {
 	// Apply the nodeHook to tabindex
 	jQuery.attrHooks.tabindex.set = nodeHook.set;
 
-	// Set width and height to auto instead of 0 on empty string( Bug #8150 )
+	// Set width and height to auto instead of 0 on empty string( b_u_g #8150 )
 	// This is for removals
 	jQuery.each([ "width", "height" ], function( i, name ) {
 		jQuery.attrHooks[ name ] = jQuery.extend( jQuery.attrHooks[ name ], {
@@ -3154,7 +3154,7 @@ jQuery.event = {
 		// Handle a global trigger
 		if ( !elem ) {
 
-			// TODO: Stop taunting the data cache; remove global events and always attach to document
+			// T_O_D_O: Stop taunting the data cache; remove global events and always attach to document
 			cache = jQuery.cache;
 			for ( i in cache ) {
 				if ( cache[ i ].events && cache[ i ].events[ type ] ) {
@@ -4509,7 +4509,7 @@ var Expr = Sizzle.selectors = {
 				Sizzle.error( match[0] );
 			}
 
-			// TODO: Move to normal caching system
+			// T_O_D_O: Move to normal caching system
 			match[0] = done++;
 
 			return match;
@@ -6054,7 +6054,7 @@ jQuery.fn.extend({
 						// the original fragment (which might have attached data) instead of
 						// using it; in addition, use the original fragment object for the last
 						// item instead of first because it can end up being emptied incorrectly
-						// in certain situations (Bug #8070).
+						// in certain situations (B_u_g #8070).
 						// Fragments from the fragment cache must always be cloned and never used
 						// in place.
 						results.cacheable || ( l > 1 && i < lastIndex ) ?
@@ -6635,7 +6635,7 @@ jQuery.extend({
 			// convert relative number strings (+= or -=) to relative numbers. #7345
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
 				value = ( +( ret[1] + 1) * +ret[2] ) + parseFloat( jQuery.css( elem, name ) );
-				// Fixes bug #9237
+				// Fixes b_u_g #9237
 				type = "number";
 			}
 
@@ -6652,7 +6652,7 @@ jQuery.extend({
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value )) !== undefined ) {
 				// Wrapped to prevent IE from throwing errors when 'invalid' values are provided
-				// Fixes bug #5509
+				// Fixes b_u_g #5509
 				try {
 					style[ name ] = value;
 				} catch(e) {}
@@ -6913,7 +6913,7 @@ jQuery(function() {
 	if ( !jQuery.support.reliableMarginRight ) {
 		jQuery.cssHooks.marginRight = {
 			get: function( elem, computed ) {
-				// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
+				// WebKit b_u_g 13343 - getComputedStyle returns wrong value for margin-right
 				// Work around by temporarily setting element display to inline-block
 				return jQuery.swap( elem, { "display": "inline-block" }, function() {
 					if ( computed ) {
@@ -8118,7 +8118,7 @@ jQuery.ajaxTransport( "script", function(s) {
 						}
 					}
 				};
-				// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
+				// Use insertBefore instead of appendChild  to circumvent an IE6 b_u_g.
 				// This arises when a base node is used (#2709 and #4378).
 				head.insertBefore( script, head.firstChild );
 			},

@@ -150,7 +150,7 @@
                 }
                 else
                 {
-                    throw new NotImplementedException(string.Format("Serialiation for type \"{0}\" is not supported at this time", valueType));
+                    throw new NotSupportedException(string.Format("Serialiation for type \"{0}\" is not supported at this time", valueType));
                 }
 
                 if (valueString.Length > attribute.Length)

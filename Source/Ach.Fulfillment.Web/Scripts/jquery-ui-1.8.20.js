@@ -221,7 +221,7 @@ $(function() {
 	var body = document.body,
 		div = body.appendChild( div = document.createElement( "div" ) );
 
-	// access offsetHeight before setting the style to prevent a layout bug
+	// access offsetHeight before setting the style to prevent a layout b_u_g
 	// in IE 9 which causes the elemnt to continue to take up space even
 	// after it is removed from the DOM (#8026)
 	div.offsetHeight;
@@ -236,7 +236,7 @@ $(function() {
 	$.support.minHeight = div.offsetHeight === 100;
 	$.support.selectstart = "onselectstart" in div;
 
-	// set display to none to avoid a layout bug in IE
+	// set display to none to avoid a layout b_u_g in IE
 	// http://dev.jquery.com/ticket/4014
 	body.removeChild( div ).style.display = "none";
 });
@@ -292,7 +292,7 @@ $.extend( $.ui, {
 			return true;
 		}
 	
-		// TODO: determine which cases actually cause this to happen
+		// T_O_D_O: determine which cases actually cause this to happen
 		// if the element doesn't have the scroll set, see if it's possible to
 		// set the scroll
 		el[ scroll ] = 1;
@@ -413,7 +413,7 @@ $.widget.bridge = function( name, object ) {
 					methodValue = instance && $.isFunction( instance[options] ) ?
 						instance[ options ].apply( instance, args ) :
 						instance;
-				// TODO: add this back in 1.9 and use $.error() (see #5972)
+				// T_O_D_O: add this back in 1.9 and use $.error() (see #5972)
 //				if ( !instance ) {
 //					throw "cannot call methods on " + name + " prior to initialization; " +
 //						"attempted to call method '" + options + "'";
@@ -609,7 +609,7 @@ $.widget("ui.mouse", {
 		this.started = false;
 	},
 
-	// TODO: make sure destroying one instance of mouse doesn't mess with
+	// T_O_D_O: make sure destroying one instance of mouse doesn't mess with
 	// other instances of mouse
 	_mouseDestroy: function() {
 		this.element.unbind('.'+this.widgetName);
@@ -629,7 +629,7 @@ $.widget("ui.mouse", {
 
 		var self = this,
 			btnIsLeft = (event.which == 1),
-			// event.target.nodeName works around a bug in IE 8 with
+			// event.target.nodeName works around a b_u_g in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = (typeof this.options.cancel == "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
@@ -1921,7 +1921,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				// Apply zIndex to all handles - see #7960
 				axis.css({ zIndex: o.zIndex });
 
-				//TODO : What's going on here?
+				//T_O_D_O: What's going on here?
 				if ('se' == handle) {
 					axis.addClass('ui-icon ui-icon-gripsmall-diagonal-se');
 				};
@@ -1962,14 +1962,14 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				}
 
-				//TODO: What's that good for? There's not anything to be executed left
+				//T_O_D_O: What's that good for? There's not anything to be executed left
 				if(!$(this.handles[i]).length)
 					continue;
 
 			}
 		};
 
-		//TODO: make renderAxis a prototype function
+		//T_O_D_O: make renderAxis a prototype function
 		this._renderAxis(this.element);
 
 		this._handles = $('.ui-resizable-handle', this.element)
@@ -2018,7 +2018,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				.removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
 		};
 
-		//TODO: Unwrap at same DOM position
+		//T_O_D_O: Unwrap at same DOM position
 		if (this.elementIsWrapper) {
 			_destroy(this.element);
 			var wrapper = this.element;
@@ -2137,7 +2137,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if(this._helper) {
 			var pr = this._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
-				soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+				soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* T_O_D_O:- jump height */ ? 0 : self.sizeDiff.height,
 				soffsetw = ista ? 0 : self.sizeDiff.width;
 
 			var s = { width: (self.helper.width()  - soffsetw), height: (self.helper.height() - soffseth) },
@@ -2237,7 +2237,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		if (isminh && ch)	data.top = dh - o.minHeight;
 		if (ismaxh && ch)	data.top = dh - o.maxHeight;
 
-		// fixing jump error on top/left - bug #2330
+		// fixing jump error on top/left - b_u_g #2330
 		var isNotwh = !data.width && !data.height;
 		if (isNotwh && !data.left && data.top) data.top = null;
 		else if (isNotwh && !data.top && data.left) data.left = null;
@@ -2286,7 +2286,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 			this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
 
-			// fix ie6 offset TODO: This seems broken
+			// fix ie6 offset T_O_D_O: This seems broken
 			var ie6 = $.browser.msie && $.browser.version < 7, ie6offset = (ie6 ? 1 : 0),
 			pxyoffset = ( ie6 ? 2 : -1 );
 
@@ -2296,7 +2296,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				position: 'absolute',
 				left: this.elementOffset.left - ie6offset +'px',
 				top: this.elementOffset.top - ie6offset +'px',
-				zIndex: ++o.zIndex //TODO: Don't modify option
+				zIndex: ++o.zIndex //T_O_D_O: Don't modify option
 			});
 
 			this.helper
@@ -2431,7 +2431,7 @@ $.ui.plugin.add("resizable", "animate", {
 		var self = $(this).data("resizable"), o = self.options;
 
 		var pr = self._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
-					soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+					soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* T_O_D_O:- jump height */ ? 0 : self.sizeDiff.height,
 						soffsetw = ista ? 0 : self.sizeDiff.width;
 
 		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
@@ -3024,7 +3024,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		};
 
 		// Only after we got the offset, we can change the helper's position to absolute
-		// TODO: Still need to figure out a way to make relative sorting possible
+		// T_O_D_O: Still need to figure out a way to make relative sorting possible
 		this.helper.css("position", "absolute");
 		this.cssPosition = this.helper.css("position");
 
@@ -3555,7 +3555,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		//Append it after the actual current item
 		self.currentItem.after(self.placeholder);
 
-		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
+		//Update the size of the placeholder (T_O_D_O: Logic to fuzzy, see line 316/317)
 		o.placeholder.update(self, self.placeholder);
 
 	},
@@ -4195,7 +4195,7 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 				$.each(classAnimationActions, function(i, action) {
 					if (value[action]) { that[action + 'Class'](value[action]); }
 				});
-				// work around bug in IE by clearing the cssText before setting it
+				// work around b_u_g in IE by clearing the cssText before setting it
 				if (typeof that.attr('style') == 'object') {
 					that.attr('style').cssText = '';
 					that.attr('style').cssText = originalStyleAttr;
@@ -4419,7 +4419,7 @@ function standardSpeed( speed ) {
 $.fn.extend({
 	effect: function(effect, options, speed, callback) {
 		var args = _normalizeArguments.apply(this, arguments),
-			// TODO: make effects take actual parameters instead of a hash
+			// T_O_D_O: make effects take actual parameters instead of a hash
 			args2 = {
 				options: args[1],
 				duration: args[2],
@@ -5662,7 +5662,7 @@ $.widget( "ui.accordion", {
 	},
 
 	activate: function( index ) {
-		// TODO this gets called on init, changing the option without an explicit call for that
+		// T_O_D_O:this gets called on init, changing the option without an explicit call for that
 		this.options.active = index;
 		// call clickHandler with custom event
 		var active = this._findActive( index )[ 0 ];
@@ -5681,7 +5681,7 @@ $.widget( "ui.accordion", {
 				: this.headers.filter( ":eq(0)" );
 	},
 
-	// TODO isn't event.target enough? why the separate target argument?
+	// T_O_D_O:isn't event.target enough? why the separate target argument?
 	_clickHandler: function( event, target ) {
 		var options = this.options;
 		if ( options.disabled ) {
@@ -5717,8 +5717,8 @@ $.widget( "ui.accordion", {
 		var clicked = $( event.currentTarget || target ),
 			clickedIsActive = clicked[0] === this.active[0];
 
-		// TODO the option is changed, is that correct?
-		// TODO if it is correct, shouldn't that happen after determining that the click is valid?
+		// T_O_D_O:the option is changed, is that correct?
+		// T_O_D_O:if it is correct, shouldn't that happen after determining that the click is valid?
 		options.active = options.collapsible && clickedIsActive ?
 			false :
 			this.headers.index( clicked );
@@ -5742,7 +5742,7 @@ $.widget( "ui.accordion", {
 			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
 
 		// when the call to ._toggle() comes after the class changes
-		// it causes a very odd bug in IE 8 (see #6720)
+		// it causes a very odd b_u_g in IE 8 (see #6720)
 		this.active = clickedIsActive ? $([]) : clicked;
 		this._toggle( toShow, toHide, data, clickedIsActive, down );
 
@@ -5854,7 +5854,7 @@ $.widget( "ui.accordion", {
 			complete( true );
 		}
 
-		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
+		// T_O_D_O:assert that the blur and focus triggers are really necessary, remove otherwise
 		toHide.prev()
 			.attr({
 				"aria-expanded": "false",
@@ -5886,7 +5886,7 @@ $.widget( "ui.accordion", {
 
 		// other classes are removed before the animation; this one needs to stay until completed
 		this.toHide.removeClass( "ui-accordion-content-active" );
-		// Work around for rendering bug in IE (#5421)
+		// Work around for rendering b_u_g in IE (#5421)
 		if ( this.toHide.length ) {
 			this.toHide.parent()[0].className = this.toHide.parent()[0].className;
 		}
@@ -6018,7 +6018,7 @@ $.widget( "ui.autocomplete", {
 		this.element
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" )
-			// TODO verify these actually work as intended
+			// T_O_D_O:verify these actually work as intended
 			.attr({
 				role: "textbox",
 				"aria-autocomplete": "list",
@@ -6178,7 +6178,7 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
-			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
+			// workaround for jQuery b_u_g #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
 			.hide()
 			.data( "menu" );
@@ -6341,7 +6341,7 @@ $.widget( "ui.autocomplete", {
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
-		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
+		// T_O_D_O:refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
 
@@ -6360,7 +6360,7 @@ $.widget( "ui.autocomplete", {
 	_resizeMenu: function() {
 		var ul = this.menu.element;
 		ul.outerWidth( Math.max(
-			// Firefox wraps long text (possibly a rounding bug)
+			// Firefox wraps long text (possibly a rounding b_u_g)
 			// so we add 1px to avoid the wrapping (#7513)
 			ul.width( "" ).outerWidth() + 1,
 			this.element.outerWidth()
@@ -6540,10 +6540,10 @@ $.widget("ui.menu", {
 		}
 	},
 
-	// TODO merge with previousPage
+	// T_O_D_O:merge with previousPage
 	nextPage: function(event) {
 		if (this.hasScroll()) {
-			// TODO merge with no-scroll-else
+			// T_O_D_O:merge with no-scroll-else
 			if (!this.active || this.last()) {
 				this.activate(event, this.element.children(".ui-menu-item:first"));
 				return;
@@ -6552,11 +6552,11 @@ $.widget("ui.menu", {
 				height = this.element.height(),
 				result = this.element.children(".ui-menu-item").filter(function() {
 					var close = $(this).offset().top - base - height + $(this).height();
-					// TODO improve approximation
+					// T_O_D_O:improve approximation
 					return close < 10 && close > -10;
 				});
 
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
+			// T_O_D_O:try to catch this earlier when scrollTop indicates the last page anyway
 			if (!result.length) {
 				result = this.element.children(".ui-menu-item:last");
 			}
@@ -6567,10 +6567,10 @@ $.widget("ui.menu", {
 		}
 	},
 
-	// TODO merge with nextPage
+	// T_O_D_O:merge with nextPage
 	previousPage: function(event) {
 		if (this.hasScroll()) {
-			// TODO merge with no-scroll-else
+			// T_O_D_O:merge with no-scroll-else
 			if (!this.active || this.first()) {
 				this.activate(event, this.element.children(".ui-menu-item:last"));
 				return;
@@ -6580,11 +6580,11 @@ $.widget("ui.menu", {
 				height = this.element.height(),
 				result = this.element.children(".ui-menu-item").filter(function() {
 					var close = $(this).offset().top - base + height - $(this).height();
-					// TODO improve approximation
+					// T_O_D_O:improve approximation
 					return close < 10 && close > -10;
 				});
 
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
+			// T_O_D_O:try to catch this earlier when scrollTop indicates the last page anyway
 			if (!result.length) {
 				result = this.element.children(".ui-menu-item:first");
 			}
@@ -6790,14 +6790,14 @@ $.widget( "ui.button", {
 			if ( this.buttonElement.is("a") ) {
 				this.buttonElement.keyup(function(event) {
 					if ( event.keyCode === $.ui.keyCode.SPACE ) {
-						// TODO pass through original event correctly (just as 2nd argument doesn't work)
+						// T_O_D_O:pass through original event correctly (just as 2nd argument doesn't work)
 						$( this ).click();
 					}
 				});
 			}
 		}
 
-		// TODO: pull out $.Widget's handling for the disabled option into
+		// T_O_D_O: pull out $.Widget's handling for the disabled option into
 		// $.Widget.prototype._setOptionDisabled so it's easy to proxy and can
 		// be overridden by individual plugins
 		this._setOption( "disabled", options.disabled );
@@ -7123,7 +7123,7 @@ $.extend(Datepicker.prototype, {
 			console.log.apply('', arguments);
 	},
 	
-	// TODO rename to "widget" when switching to widget factory
+	// T_O_D_O:rename to "widget" when switching to widget factory
 	_widgetDatepicker: function() {
 		return this.dpDiv;
 	},
@@ -8989,7 +8989,7 @@ $.widget("ui.dialog", {
 
 		//handling of deprecated beforeclose (vs beforeClose) option
 		//Ticket #4669 http://dev.jqueryui.com/ticket/4669
-		//TODO: remove in 1.9pre
+		//T_O_D_O: remove in 1.9pre
 		if ($.isFunction(options.beforeclose) && !$.isFunction(options.beforeClose)) {
 			options.beforeClose = options.beforeclose;
 		}
@@ -9351,7 +9351,7 @@ $.widget("ui.dialog", {
 			this.uiDialog.show();
 		}
 		this.uiDialog
-			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
+			// workaround for jQuery b_u_g #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
 			.position($.extend({ of: window }, position));
 		if (!isVisible) {
@@ -9390,7 +9390,7 @@ $.widget("ui.dialog", {
 		switch (key) {
 			//handling of deprecated beforeclose (vs beforeClose) option
 			//Ticket #4669 http://dev.jqueryui.com/ticket/4669
-			//TODO: remove in 1.9pre
+			//T_O_D_O: remove in 1.9pre
 			case "beforeclose":
 				key = "beforeClose";
 				break;
@@ -9713,7 +9713,7 @@ $.fn.position = function( options ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	// TODO: use $.isWindow() in 1.9
+	// T_O_D_O: use $.isWindow() in 1.9
 	} else if ( targetElem.setTimeout ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
@@ -10313,7 +10313,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			}
 		});
 
-		// workaround for bug #3736 (if both handles of a range are at 0,
+		// workaround for b_u_g #3736 (if both handles of a range are at 0,
 		// the first is always used as the one with least distance,
 		// and moving it is obviously prevented by preventing negative ranges)
 		if( o.range === true && this.values(1) === o.min ) {
@@ -10840,7 +10840,7 @@ $.widget( "ui.tabs", {
 				// required for restore on destroy
 				$.data( a, "href.tabs", href );
 
-				// TODO until #3808 is fixed strip fragment identifier from url
+				// T_O_D_O:until #3808 is fixed strip fragment identifier from url
 				// (IE fails to load from such url)
 				$.data( a, "load.tabs", href.replace( /#.*$/, "" ) );
 
@@ -10890,7 +10890,7 @@ $.widget( "ui.tabs", {
 					o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
 				}
 				o.selected = o.selected || ( this.lis.length ? 0 : -1 );
-			} else if ( o.selected === null ) { // usage of null is deprecated, TODO remove in next release
+			} else if ( o.selected === null ) { // usage of null is deprecated, T_O_D_O:remove in next release
 				o.selected = -1;
 			}
 
@@ -10930,7 +10930,7 @@ $.widget( "ui.tabs", {
 			}
 
 			// clean up to avoid memory leaks in certain versions of IE 6
-			// TODO: namespace this event
+			// T_O_D_O: namespace this event
 			$( window ).bind( "unload", function() {
 				self.lis.add( self.anchors ).unbind( ".tabs" );
 				self.lis = self.anchors = self.panels = null;
@@ -10941,7 +10941,7 @@ $.widget( "ui.tabs", {
 		}
 
 		// update collapsible
-		// TODO: use .toggleClass()
+		// T_O_D_O: use .toggleClass()
 		this.element[ o.collapsible ? "addClass" : "removeClass" ]( "ui-tabs-collapsible" );
 
 		// set or update cookie after init and add/remove respectively
@@ -10952,7 +10952,7 @@ $.widget( "ui.tabs", {
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
 			$( li )[ $.inArray( i, o.disabled ) != -1 &&
-				// TODO: use .toggleClass()
+				// T_O_D_O: use .toggleClass()
 				!$( li ).hasClass( "ui-tabs-selected" ) ? "addClass" : "removeClass" ]( "ui-state-disabled" );
 		}
 
@@ -10999,7 +10999,7 @@ $.widget( "ui.tabs", {
 		}
 
 		// Reset certain styles left over from animation
-		// and prevent IE's ClearType bug...
+		// and prevent IE's ClearType b_u_g...
 		function resetStyle( $el, fx ) {
 			$el.css( "display", "" );
 			if ( !$.support.opacity && fx.opacity ) {
@@ -11087,7 +11087,7 @@ $.widget( "ui.tabs", {
 						showTab( el, $show );
 					});
 
-					// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
+					// T_O_D_O:make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
 					self.load( self.anchors.index( this ) );
 
 					this.blur();
