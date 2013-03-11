@@ -82,7 +82,7 @@
             // CallbackUrl
             this.RuleFor(i => i.CallbackUrl)
                 .NotEmpty()
-                .Length(1, 255)
+                .Length(1, 2000)
                 .Matches(UrlRegex).WithMessage("{PropertyName} format is wrong");
 
             // Partner
