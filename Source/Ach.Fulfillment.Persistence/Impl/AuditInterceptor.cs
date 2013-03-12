@@ -37,7 +37,7 @@
                 var dateIndex = Array.FindIndex(
                     propertyNames, n => CreatedDatePropertyName.Equals(n, StringComparison.Ordinal));
                 Contract.Assert(dateIndex > -1);
-                state[dateIndex] = DateTime.Now;
+                state[dateIndex] = DateTime.UtcNow;
 
                 changed = true;
             }
@@ -59,7 +59,7 @@
                 var dateIndex = Array.FindIndex(
                     propertyNames, n => ModifiedDatePropertyName.Equals(n, StringComparison.Ordinal));
                 Contract.Assert(dateIndex > -1);
-                currentState[dateIndex] = DateTime.Now;
+                currentState[dateIndex] = DateTime.UtcNow;
 
                 changed = true;
             }

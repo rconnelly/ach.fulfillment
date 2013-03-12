@@ -131,16 +131,15 @@
         {
             Contract.Assert(partner != null);
 
-            // todo: possible concurrency issue. why we need Name at all
-            // todo: generate filename before upload
-            var newFileName = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            var name = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            var fileIdModifier = this.GetNextIdModifier(partner);
             var fileEntity = new AchFileEntity
             {
-                Name = newFileName,
-                FileStatus = AchFileStatus.Created,
+                Name = name,
+                FileIdModifier = fileIdModifier,
                 Partner = partner,
                 Transactions = transactionEntities ?? new List<AchTransactionEntity>(),
-                FileIdModifier = this.GetNextIdModifier(partner)
+                FileStatus = AchFileStatus.Created
             };
 
             return this.Create(fileEntity);
@@ -148,20 +147,22 @@
 
         private string GetNextIdModifier(PartnerEntity partner)
         {
-            var fileIdModifier =
-                this.Repository.Query(new AchFileForPartner(partner))
-                    .Where(m => m.Created.Date == DateTime.Today.Date)
+            var previousIdModifier = 
+                this.Repository
+                    .Query(new AchFileForPartner(partner))
+                    .Where(m => m.Created.Date == DateTime.UtcNow.Date)
                     .Max(m => m.FileIdModifier);
 
-            var result = 'A';
-
-            if (!string.IsNullOrEmpty(fileIdModifier) && !string.Equals(fileIdModifier, "Z", StringComparison.InvariantCultureIgnoreCase))
+            var previous = (previousIdModifier ?? "Z").FirstOrDefault();
+            var current = 'A';
+            if (previous >= 'A' && previous < 'Z')
             {
-                var prev = fileIdModifier.First();
-                result = (char)(prev + 1);
+                current = (char)(previous + 1);
             }
 
-            return result.ToString(CultureInfo.InvariantCulture);
+            var nextIdModifier = current.ToString(CultureInfo.InvariantCulture);
+
+            return nextIdModifier;
         }
 
         private void UpdateChildrenStatuses(AchFileEntity achFile, AchTransactionStatus status)

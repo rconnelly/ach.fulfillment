@@ -3,8 +3,11 @@
     using System;
 
     using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Scheduler.Configuration;
 
     using global::Common.Logging;
+
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     using Quartz;
 
@@ -25,18 +28,15 @@
                 using (new UnitOfWork())
                 {
                     this.ExecuteCore(context);
-                    this.ScheduleNextJob(context);
                 }
-            }
-            catch (JobExecutionException)
-            {
-                throw;
             }
             catch (Exception ex)
             {
-                // todo (ng): use EHAB to log
-                Logger.Error(ex);
-                throw new JobExecutionException(ex);
+                var rethrow = ExceptionPolicy.HandleException(ex, SchedulerContainerExtension.JobPolicy);
+                if (rethrow)
+                {
+                    throw;
+                }
             }
         }
 
@@ -45,14 +45,6 @@
         #region Methods
 
         protected abstract void ExecuteCore(IJobExecutionContext context);
-
-        protected void ScheduleNextJob(IJobExecutionContext context)
-        {
-            var jobDataMap = context.MergedJobDataMap;
-            var nextJob = jobDataMap.GetString("NEXT_JOB");
-
-            // todo: fire next job here
-        }
 
         #endregion
     }

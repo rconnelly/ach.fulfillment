@@ -38,9 +38,6 @@ namespace Ach.Fulfillment.Business.Impl.Validation
         {
             var validator = new UniquePropertyValidator<TBase>(repository, queryData);
             ruleBuilder.SetValidator(validator);
-
-            // TODO: use state
-            /*validator.CustomStateProvider = t => new ValidationFailureState(ViolationCodeNames.NonUniqueState);*/
             return ruleBuilder;
         }
 

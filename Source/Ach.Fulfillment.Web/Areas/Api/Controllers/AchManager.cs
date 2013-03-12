@@ -3,6 +3,7 @@
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Exceptions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Web.Areas.Api.Models;
 
@@ -29,11 +30,12 @@
             Contract.Assert(model != null);
 
             var user = this.UserManager.GetDefaultUser();
-
-            // todo (ng): think about more valuable exception
-            Contract.Assert(user != null);
+            if (user == null)
+            {
+                throw new BusinessException("Cannot find default user associated with partner");
+            }
+            
             var partner = user.Partner;
-
             var transaction = Mapper.Map<AchTransactionModel, AchTransactionEntity>(model);
             transaction.Partner = partner;
             transaction = this.Manager.Create(transaction);

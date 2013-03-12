@@ -1,7 +1,14 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
+    using Ach.Fulfillment.Common.Transactions;
+    using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Persistence;
     using Ach.Fulfillment.Tests.Common;
 
@@ -77,12 +84,21 @@
         [Test]
         public void Default()
         {
-            /*using (new UnitOfWork())
+            using (new UnitOfWork())
             {
-                this.AchFileManager.Cleanup();
+                using (var tr = new Transaction())
+                {
+                    var partner = EntityHelper.CreateTestPartner(null);
+                    this.Repository.Create(partner);
+                    var previous =
+                        this.Repository.Query(new AchFileForPartner(partner))
+                            .Where(m => m.Created.Date == DateTime.UtcNow.Date)
+                            .Max(m => m.FileIdModifier);
+                    Trace.WriteLine(previous);
+                }
             }
 
-            return;*/
+            return;
 
             // - obtain ach transaction from client
             using (new UnitOfWork())

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.IO;
 
     using Ach.Fulfillment.Business.Impl.Strategies.Enumerators;
     using Ach.Fulfillment.Data;
@@ -38,9 +39,21 @@
         protected override void ExecuteCore(AchFileEntity achFile)
         {
             Contract.Assert(achFile != null);
-            var actionData = new CreateAchFileContent { AchFileId = achFile.Id, WriteTo = achFile.ToStream };
+
+            var actionData = new CreateAchFileContent
+                                 {
+                                     AchFileId = achFile.Id,
+                                     WriteTo = stream => Serialize(achFile, stream)
+                                 };
             this.Repository.Execute(actionData);
             this.manager.UpdateStatus(achFile, AchFileStatus.Generated);
+        }
+
+        private static void Serialize(AchFileEntity achFile, Stream stream)
+        {
+            // todo: do not use achFile.Transactions because of performance
+            var achTransactionEntities = achFile.Transactions;
+            achFile.ToStream(achTransactionEntities, stream);
         }
 
         #endregion
