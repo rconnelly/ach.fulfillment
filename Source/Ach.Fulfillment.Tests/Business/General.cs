@@ -58,11 +58,11 @@
             }
         }
 
-        public INotificationManager NotificationManager
+        public ICallbackNotificationManager CallbackNotificationManager
         {
             get
             {
-                return this.Locator.GetInstance<INotificationManager>();
+                return this.Locator.GetInstance<ICallbackNotificationManager>();
             }
         }
 
@@ -123,9 +123,7 @@
             // - clean old data
             using (new UnitOfWork())
             {
-                while (this.NotificationManager.DeliverRemoteNotifications())
-                {
-                }
+                this.CallbackNotificationManager.DeliverRemoteNotifications();
             }
 
             // - clean old data

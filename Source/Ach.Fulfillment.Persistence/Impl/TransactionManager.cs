@@ -65,6 +65,12 @@
             }
         }
 
+        public void Cleanup()
+        {
+            var session = this.GetSession();
+            session.Clear();
+        }
+
         #endregion
 
         #region Nested Types

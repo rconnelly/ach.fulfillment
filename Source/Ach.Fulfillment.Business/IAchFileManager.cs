@@ -1,17 +1,21 @@
 ﻿namespace Ach.Fulfillment.Business
 {
+    using Ach.Fulfillment.Data;
+
     using Renci.SshNet;
 
     public interface IAchFileManager
     {
         void ProcessReadyToBeGroupedAchTransactions();
 
-        bool ProcessReadyToBeGeneratedAchFile();
+        void ProcessReadyToBeGeneratedAchFile();
 
-        bool ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo);
+        void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo);
 
         void Cleanup();
 
-        bool ProcessReadyToBeAcceptedAchFile();
+        void ProcessReadyToBeAcceptedAchFile();
+
+        void UpdateStatus(AchFileEntity file, AchFileStatus status);
     }
 }

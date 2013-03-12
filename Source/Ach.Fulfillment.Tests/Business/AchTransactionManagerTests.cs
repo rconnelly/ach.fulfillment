@@ -153,7 +153,7 @@
             Assert.AreEqual(changedTransaction.Status, AchTransactionStatus.Batched);
         }*/
 
-        [Test]
+        /*[Test]
         [Ignore]
         public void SendNotificationWhenAchTransactionCreatedTest()
         {
@@ -180,7 +180,7 @@
             Assert.That(instance, Is.Not.Null);
             Assert.That(instance.Id, Is.GreaterThan(0));
             Assert.IsTrue(notificationRequestWasCalled);
-        }
+        }*/
 
         /*[Test]
         public void GetTransactionsInQueueTest()

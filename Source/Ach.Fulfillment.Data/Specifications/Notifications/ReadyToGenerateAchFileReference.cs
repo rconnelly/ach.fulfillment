@@ -2,7 +2,7 @@
 {
     using Ach.Fulfillment.Data.Common;
 
-    public class ReadyToGenerateAchFileReference : IQueryData<ReferenceEntity>
+    public class ReadyToGenerateAchFileReference : IQueueQueryData<ReferenceEntity>
     {
     }
 }

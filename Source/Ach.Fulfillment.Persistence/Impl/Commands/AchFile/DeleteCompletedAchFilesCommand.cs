@@ -35,7 +35,6 @@ where AchFileId = :id";
 
         public override void Execute(DeleteCompletedAchFiles actionData)
         {
-            // todo: add cascades
             // todo: replace many-to-many with one-to-many
             var ids =
                 this.Session.CreateSQLQuery(FindSql)

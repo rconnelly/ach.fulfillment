@@ -168,7 +168,6 @@
     <Compile Include="Business\PartnerManagerTests.cs" />
     <Compile Include="Business\RoleManagerTests.cs" />
     <Compile Include="Business\UserManagerTests.cs" />
-    <Compile Include="Business\WebhookManagerTests.cs" />
     <Compile Include="Common\NoCategoryTraceListener.cs" />
     <Compile Include="Common\TestBase.cs" />
     <Compile Include="Main.cs" />

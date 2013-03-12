@@ -2,7 +2,7 @@
 {
     using Ach.Fulfillment.Data.Common;
 
-    public class ReadyToUploadAchFileReference : IQueryData<ReferenceEntity>
+    public class ReadyToUploadAchFileReference : IQueueQueryData<ReferenceEntity>
     {
     }
 }

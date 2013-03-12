@@ -8,7 +8,7 @@
     using ServiceStack.Text;
 
     internal abstract class BaseEnqueueCommand<TActionData> : RelationalActionCommand<TActionData>
-        where TActionData : class, IActionData, ICommonEnqueueData
+        where TActionData : class, IActionData, IEnqueueData
     {
         #region Constants
 

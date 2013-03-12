@@ -5,23 +5,20 @@
     using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Common;
 
+    using global::Common.Logging;
+
     using Microsoft.Practices.Unity;
 
     using Quartz;
 
-    using global::Common.Logging;
-
-    public class SendWebhooksJob : IJob
+    public class CallbackNotificationJob : IJob
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
 
         #region Public Properties
 
         [Dependency]
-        public IWebhookManager WebhookManager { get; set; }
-
-        [Dependency]
-        public IClientNotifier ClientNotifier { get; set; }
+        public ICallbackNotificationManager CallbackNotificationManager { get; set; }
 
         #endregion
 
@@ -33,7 +30,7 @@
                 {
                     Logger.Info("SendWebhookJob started...");
 
-                    WebhookManager.Send();
+                    this.CallbackNotificationManager.DeliverRemoteNotifications();
 
                     Logger.Info("SendWebhookJob finished...");
                 }

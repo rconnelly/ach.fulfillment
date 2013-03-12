@@ -2,7 +2,7 @@
 {
     using Ach.Fulfillment.Data.Common;
 
-    public class ReadyToBeGroupedAchTransactionReference : IQueryData<AchTransactionReferenceEntity>
+    public class ReadyToBeGroupedAchTransactionReference : IQueueQueryData<AchTransactionReferenceEntity>
     {
     }
 }

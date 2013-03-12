@@ -2,11 +2,11 @@
 {
     using Ach.Fulfillment.Data.Common;
 
-    public class CommonEnqueueData<TEntity> : IInstanceActionData<TEntity>, ICommonEnqueueData
+    public class CommonEnqueueData<TEntity> : IInstanceActionData<TEntity>, IEnqueueData<TEntity>
     {
         public TEntity Instance { get; set; }
 
-        object ICommonEnqueueData.Instance 
+        object IEnqueueData.Instance 
         { 
             get
             {

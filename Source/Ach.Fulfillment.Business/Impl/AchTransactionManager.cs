@@ -13,7 +13,7 @@
         #region Public Properties
 
         [Dependency]
-        public INotificationManager NotificationManager { get; set; }
+        public IApplicationEventRaiseManager ApplicationEventRaiseManager { get; set; }
 
         #endregion
 
@@ -30,7 +30,7 @@
             using (var tx = new Transaction())
             {
                 instance = base.Create(transaction);
-                this.NotificationManager.RaiseAchTransactionCreatedNotification(instance);
+                this.ApplicationEventRaiseManager.RaiseAchTransactionCreatedNotification(instance);
 
                 tx.Complete();
             }

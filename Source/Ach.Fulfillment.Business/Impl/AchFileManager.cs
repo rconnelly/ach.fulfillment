@@ -4,16 +4,15 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
 
+    using Ach.Fulfillment.Business.Impl.Strategies.Enumerators;
+    using Ach.Fulfillment.Business.Impl.Strategies.Processors;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Data.Specifications.AchTransactions;
-    using Ach.Fulfillment.Data.Specifications.Notifications;
-
-    using global::Common.Logging;
+    using Ach.Fulfillment.Persistence;
 
     using Microsoft.Practices.Unity;
 
@@ -25,10 +24,6 @@
 
         private const int BulkCreationLimit = 100 * 1000;
 
-        private const int DefaultResponseCheckRepeatDelay = 5;
-
-        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
-
         #endregion
 
         #region Public Properties
@@ -37,7 +32,10 @@
         public IPartnerManager PartnerManager { get; set; }
 
         [Dependency]
-        public INotificationManager NotificationManager { get; set; }
+        public IApplicationEventRaiseManager ApplicationEventRaiseManager { get; set; }
+
+        [Dependency]
+        public IQueue Queue { get; set; }
 
         #endregion
 
@@ -47,100 +45,82 @@
         {
             using (var tr = new Transaction())
             {
+                // todo: rewrite method to use transactionReferences one-by-one without loading all records
+
                 // get all available transactionReferences
-                var transactionReferences = this.NotificationManager
-                    .GetNextReadyToBeGroupedAchTransactionReferences(BulkCreationLimit);
-
-                // create ach file for each partner and group transactions
-                var grouped = from r in transactionReferences
-                              group r by r.PartnerId into grps
-                              let partner = this.Repository.Get<PartnerEntity>(grps.Key)
-                              where partner != null
-                              let file = this.Create(partner)
-                              select new
-                              {
-                                  File = file,
-                                  References = grps
-                              };
-
-                foreach (var g in grouped)
+                using (var transactionReferences = new ReadyToBeGroupedAchTransactionReferenceEnumerator(this.Queue, BulkCreationLimit))
                 {
-                    var achFile = g.File;
+                    // create ach file for each partner and group transactions
+                    var grouped = from r in transactionReferences
+                                  group r by r.PartnerId
+                                  into grps 
+                                  let partner = this.Repository.Get<PartnerEntity>(grps.Key)
+                                  where partner != null 
+                                  let file = this.Create(partner)
+                                  select new { File = file, References = grps };
 
-                    // insert ach transactions into corresponding ach files
-                    // todo: is it good idea to fill all items into list?
-                    achFile.Transactions = new List<AchTransactionEntity>(
-                        from reference in g.References
-                        let id = reference.Id
-                        let achTransaction = this.Repository.LazyLoad<AchTransactionEntity>(id)
-                        select achTransaction);
+                    foreach (var g in grouped)
+                    {
+                        var achFile = g.File;
 
-                    this.UpdateStatus(achFile, AchFileStatus.Created);
+                        // insert ach transactions into corresponding ach files
+                        // todo: is it good idea to fill all items into list?
+                        achFile.Transactions = new List<AchTransactionEntity>(
+                            from reference in g.References
+                            let id = reference.Id
+                            let achTransaction = this.Repository.LazyLoad<AchTransactionEntity>(id)
+                            select achTransaction);
+
+                        this.UpdateStatus(achFile, AchFileStatus.Created);
+                    }
                 }
 
                 tr.Complete();
             }
         }
 
-        public bool ProcessReadyToBeGeneratedAchFile()
+        public void ProcessReadyToBeGeneratedAchFile()
         {
-            bool fetched;
-            using (var transaction = new Transaction())
-            {
-                AchFileEntity achFile;
-                fetched = this.NotificationManager.TryGetNextReadyToGenerateAchFile(out achFile);
-                if (achFile != null)
-                {
-                    var actionData = new CreateAchFileContent
-                                         {
-                                             AchFileId = achFile.Id,
-                                             WriteTo = achFile.ToStream
-                                         };
-                    this.Repository.Execute(actionData);
-
-                    this.UpdateStatus(achFile, AchFileStatus.Generated);
-                }
-
-                transaction.Complete();
-            }
-
-            return fetched;
+            var processor = new AchFileGenerateProcessor(this.Queue, this.Repository, this);
+            processor.Execute();
         }
 
-        public bool ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo)
+        public void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo)
         {
-            bool fetched;
-            using (var transaction = new Transaction())
-            {
-                AchFileEntity achFile;
-                fetched = this.NotificationManager.TryGetNextReadyToUploadAchFile(out achFile);
-                if (achFile != null)
-                {
-                    using (var stream = this.Repository.Load(new AchFileContentById { AchFileId = achFile.Id }))
-                    {
-                        this.Upload(connectionInfo, achFile, stream);
-                    }
-
-                    this.UpdateStatus(achFile, AchFileStatus.Uploaded);
-                }
-
-                transaction.Complete();
-            }
-
-            return fetched;
+            var processor = new AchFileUploadProcessor(this.Queue, this.Repository, this, connectionInfo);
+            processor.Execute();
         }
 
-        public bool ProcessReadyToBeAcceptedAchFile()
+        public void ProcessReadyToBeAcceptedAchFile()
         {
-            var processed = this.Repository
-                .ExecuteWithRetry<ReadyToBeAcceptedAchFileReference>(
-                this.CheckUploadedAchFileStatus, TimeSpan.FromSeconds(DefaultResponseCheckRepeatDelay));
-            return processed;
+            var processor = new AchFileStatusCheckProcessor(this.Queue, this.Repository, this);
+            processor.Execute();
         }
 
         public void Cleanup()
         {
             this.Repository.Execute(new DeleteCompletedAchFiles());
+        }
+
+        public void UpdateStatus(AchFileEntity file, AchFileStatus status)
+        {
+            Contract.Assert(file != null);
+
+            using (var tr = new Transaction())
+            {
+                file.FileStatus = status;
+                this.Update(file, true);
+
+                var childStatus = status.ToAchTransactionStatus();
+                if (childStatus.HasValue)
+                {
+                    this.UpdateChildrenStatuses(file, childStatus.Value);
+                }
+
+                this.ApplicationEventRaiseManager.RaiseAchFileStatusChangedNotification(file);
+
+                tr.Complete();
+            }
         }
 
         #endregion
@@ -184,27 +164,6 @@
             return result.ToString(CultureInfo.InvariantCulture);
         }
 
-        private void UpdateStatus(AchFileEntity file, AchFileStatus status)
-        {
-            Contract.Assert(file != null);
-
-            using (var tr = new Transaction())
-            {
-                file.FileStatus = status;
-                this.Update(file, true);
-
-                var childStatus = status.ToAchTransactionStatus();
-                if (childStatus.HasValue)
-                {
-                    this.UpdateChildrenStatuses(file, childStatus.Value);
-                }
-
-                this.NotificationManager.RaiseAchFileStatusChangedNotification(file);
-
-                tr.Complete();
-            }
-        }
-
         private void UpdateChildrenStatuses(AchFileEntity achFile, AchTransactionStatus status)
         {
             Contract.Assert(achFile != null);
@@ -214,43 +173,6 @@
                     AchFileId = achFile.Id,
                     Status = status
                 });
-        }
-
-        private void Upload(ConnectionInfo connectionInfo, AchFileEntity achFile, Stream stream)
-        {
-            Contract.Assert(connectionInfo != null);
-            Contract.Assert(achFile != null);
-            Contract.Assert(stream != null);
-
-            // todo: refactor SftpClient dependency
-            Logger.Warn("------------------------- Upload is mock");
-            
-            return;
-            
-            using (var sftp = new SftpClient(connectionInfo))
-            {
-                try
-                {
-                    sftp.Connect();
-
-                    var fileName = achFile.Name + ".ach";
-                    sftp.UploadFile(stream, fileName);
-                }
-                finally
-                {
-                    sftp.Disconnect();
-                }
-            }
-        }
-
-        private void CheckUploadedAchFileStatus(AchFileEntity achFile)
-        {
-            Contract.Assert(achFile != null);
-
-            // todo: implement it
-            Logger.Warn("------------------------- CheckUploadedAchFileStatus is mock");
-            
-            this.UpdateStatus(achFile, AchFileStatus.Accepted);
         }
 
         #endregion

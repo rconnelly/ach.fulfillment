@@ -83,7 +83,8 @@
                             Func<IStatelessSession> func = () => c.Resolve<IStatelessSession>();
                             return func;
                         }))
-                .RegisterType(typeof(IRepository), typeof(Repository), new ContainerControlledLifetimeManager())
+                .RegisterType<IRepository, Repository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IQueue, QueueIml>(new ContainerControlledLifetimeManager())
                 .RegisterType<ITransactionManager, TransactionManager>();
 
             LoggerProvider.SetLoggersFactory(new NHibernate.Logging.CommonLogging.CommonLoggingLoggerFactory());

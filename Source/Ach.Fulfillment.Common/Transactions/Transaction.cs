@@ -30,7 +30,7 @@
 
         #region Public Methods and Operators
 
-        public void Complete()
+        public void Complete(bool cleanup = false)
         {
             if (this.disposed)
             {
@@ -38,6 +38,11 @@
             }
 
             this.transactionManager.CommitTransaction(this.transaction);
+            if (cleanup)
+            {
+                this.transactionManager.Cleanup();
+            }
+
             this.isCompleted = true;
         }
 

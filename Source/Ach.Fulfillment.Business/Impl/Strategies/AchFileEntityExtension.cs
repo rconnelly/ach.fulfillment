@@ -1,4 +1,4 @@
-﻿namespace Ach.Fulfillment.Business.Impl
+﻿namespace Ach.Fulfillment.Business.Impl.Strategies
 {
     using System;
     using System.Collections.Generic;

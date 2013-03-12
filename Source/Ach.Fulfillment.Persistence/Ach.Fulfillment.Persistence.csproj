@@ -217,7 +217,9 @@
     <Compile Include="Impl\Mappings\PermissionMapping.cs" />
     <Compile Include="Impl\Mappings\RoleMapping.cs" />
     <Compile Include="Impl\Mappings\UserMapping.cs" />
-    <Compile Include="Impl\Mappings\WebhookMapping.cs" />
+    <Compile Include="Impl\QueueIml.cs" />
+    <Compile Include="IQueue.cs" />
+    <Compile Include="QueueExtension.cs" />
     <Compile Include="RepositoryExtension.cs" />
     <Compile Include="Impl\AuditInterceptor.cs" />
     <Compile Include="Impl\Commands\IQueryCommand.Generic1.cs" />

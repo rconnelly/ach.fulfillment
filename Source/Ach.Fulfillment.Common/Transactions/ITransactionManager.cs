@@ -12,6 +12,8 @@ namespace Ach.Fulfillment.Common.Transactions
 
         void RollbackTransaction(IDisposable transactionToken);
 
+        void Cleanup();
+
         #endregion
     }
 }

@@ -141,10 +141,14 @@
     <Compile Include="Common\CommonLazyGetQueryData.cs" />
     <Compile Include="Common\CommonUpdateActionData.cs" />
     <Compile Include="Common\CommonGetQueryData.Generic2.cs" />
+    <Compile Include="Common\IEnqueueData.cs" />
     <Compile Include="Common\IDeleteByQueryActionData.cs" />
     <Compile Include="Common\IActionData.cs" />
     <Compile Include="Common\IActionData.Generic.cs" />
     <Compile Include="Common\IActionData.Instance.cs" />
+    <Compile Include="Common\IEnqueueData.Generic.cs" />
+    <Compile Include="Common\IQueueQueryData.cs" />
+    <Compile Include="Common\IQueueQueryData.Generic.cs" />
     <Compile Include="IRetryReferenceEntity.cs" />
     <Compile Include="RetryReferenceEntity.cs" />
     <Compile Include="ReferenceEntity.cs" />
@@ -166,7 +170,6 @@
     <Compile Include="Specifications\Notifications\EnqueueAchTransactionCreatedNotification.cs" />
     <Compile Include="Specifications\AchFiles\DeleteCompletedAchFiles.cs" />
     <Compile Include="Specifications\Notifications\CommonEnqueueData.cs" />
-    <Compile Include="Specifications\Notifications\ICommonEnqueueData.cs" />
     <Compile Include="Specifications\AchTransactions\UpdateAchTransactionStatusByAchFileId.cs" />
     <Compile Include="Specifications\Users\UserAll.cs" />
     <Compile Include="Specifications\Users\UserByRole.cs" />
@@ -191,10 +194,8 @@
     <Compile Include="Common\SpecificationBase.cs" />
     <Compile Include="Common\SpecificationInstanceBase.cs" />
     <Compile Include="Specifications\Users\UserPasswordCredentialUniqness.cs" />
-    <Compile Include="Specifications\WebHooks\WebhooksToSend.cs" />
     <Compile Include="UserEntity.cs" />
     <Compile Include="UserPasswordCredentialEntity.cs" />
-    <Compile Include="WebhookEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">

@@ -2,7 +2,7 @@
 {
     using Ach.Fulfillment.Data.Common;
 
-    public class ReadyToBeProcessedCallbackNotificationReference : IQueryData<RetryReferenceEntity>
+    public class ReadyToBeProcessedCallbackNotificationReference : IQueueQueryData<RetryReferenceEntity>
     {
     }
 }

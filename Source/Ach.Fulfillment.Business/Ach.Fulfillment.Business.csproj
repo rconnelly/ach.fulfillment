@@ -148,6 +148,10 @@
     <Reference Include="Renci.SshNet">
       <HintPath>..\..\_libBinary\SSH.NET.2012.3.9\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.38.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_libBinary\ServiceStack.Text.3.9.38\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -176,18 +180,31 @@
     <Compile Include="Exceptions\BusinessValidationException.cs" />
     <Compile Include="Exceptions\ValidationFailureInfo.cs" />
     <Compile Include="IAchTransactionManager.cs" />
-    <Compile Include="IClientNotifier.cs" />
     <Compile Include="IAchFileManager.cs" />
+    <Compile Include="ICallbackNotificationManager.cs" />
     <Compile Include="IManager.cs" />
-    <Compile Include="Impl\AchFileEntityExtension.cs" />
+    <Compile Include="Impl\Strategies\AchFileEntityExtension.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
+    <Compile Include="Impl\Strategies\Processors\AchFileGenerateProcessor.cs" />
+    <Compile Include="Impl\Strategies\Processors\AchFileUploadProcessor.cs" />
+    <Compile Include="Impl\Strategies\Processors\BaseAchFileRetryingProcessor.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\BaseEnumerator.cs" />
+    <Compile Include="Impl\Strategies\Processors\BaseEnumeratorProcessor.cs" />
+    <Compile Include="Impl\Strategies\Processors\CallbackNotificationProcessor.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\ReadyForOperationAchFileEnumerator.Generic1.cs" />
+    <Compile Include="Impl\CallbackNotificationManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
     <Compile Include="Impl\AchFileManager.cs" />
     <Compile Include="Impl\ManagerBase.cs" />
-    <Compile Include="Impl\NotificationManager.cs" />
+    <Compile Include="Impl\ApplicationEventRaiseManager.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
-    <Compile Include="Impl\RetryingProcessingStrategyExtension.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\ReadyForOperationAchFileEnumerator.Generic2.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\ReadyToBeGroupedAchTransactionReferenceEnumerator.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\ReadyToGenerateAchFileEnumerator.cs" />
+    <Compile Include="Impl\Strategies\Enumerators\ReadyToUploadAchFileEnumerator.cs" />
+    <Compile Include="Impl\Strategies\Processors\BaseRetryingProcessor.cs" />
     <Compile Include="Impl\RoleManager.cs" />
+    <Compile Include="Impl\Strategies\Processors\AchFileStatusCheckProcessor.cs" />
     <Compile Include="Impl\UserManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -199,14 +216,12 @@
     <Compile Include="Impl\Validation\UserPasswordCredentialValidator.cs" />
     <Compile Include="Impl\Validation\UserValidator.cs" />
     <Compile Include="Impl\Validation\ValidationExtension.cs" />
-    <Compile Include="Impl\WebhookManager.cs" />
-    <Compile Include="INotificationManager.cs" />
+    <Compile Include="IApplicationEventRaiseManager.cs" />
     <Compile Include="IPartnerManager.cs" />
     <Compile Include="IRoleManager.cs" />
     <Compile Include="IUserManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IWebhookManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
