@@ -8,7 +8,6 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Data.Specifications.Users;
 
     using Microsoft.Practices.EnterpriseLibrary.Security.Cryptography;

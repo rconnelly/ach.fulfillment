@@ -1,9 +1,11 @@
 namespace Ach.Fulfillment.Business
 {
+    using System;
     using System.Collections.Generic;
 
     using Ach.Fulfillment.Data.Common;
 
+    [Obsolete("do we really need it??")]
     public interface IManager<T>
     {
         T Create(T instance);

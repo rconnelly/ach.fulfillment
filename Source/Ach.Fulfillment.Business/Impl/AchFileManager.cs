@@ -41,6 +41,27 @@
 
         #region Public Methods and Operators
 
+        public void UpdateStatus(AchFileEntity file, AchFileStatus status)
+        {
+            Contract.Assert(file != null);
+
+            using (var tr = new Transaction())
+            {
+                file.FileStatus = status;
+                this.Update(file, true);
+
+                var childStatus = status.ToAchTransactionStatus();
+                if (childStatus.HasValue)
+                {
+                    this.UpdateChildrenStatuses(file, childStatus.Value);
+                }
+
+                this.ApplicationEventRaiseManager.RaiseAchFileStatusChangedNotification(file);
+
+                tr.Complete();
+            }
+        }
+
         public void ProcessReadyToBeGroupedAchTransactions()
         {
             using (var tr = new Transaction())
@@ -100,27 +121,6 @@
         public void Cleanup()
         {
             this.Repository.Execute(new DeleteCompletedAchFiles());
-        }
-
-        public void UpdateStatus(AchFileEntity file, AchFileStatus status)
-        {
-            Contract.Assert(file != null);
-
-            using (var tr = new Transaction())
-            {
-                file.FileStatus = status;
-                this.Update(file, true);
-
-                var childStatus = status.ToAchTransactionStatus();
-                if (childStatus.HasValue)
-                {
-                    this.UpdateChildrenStatuses(file, childStatus.Value);
-                }
-
-                this.ApplicationEventRaiseManager.RaiseAchFileStatusChangedNotification(file);
-
-                tr.Complete();
-            }
         }
 
         #endregion

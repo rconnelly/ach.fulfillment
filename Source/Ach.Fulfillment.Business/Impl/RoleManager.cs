@@ -6,7 +6,6 @@ namespace Ach.Fulfillment.Business.Impl
     using Ach.Fulfillment.Common.Exceptions;
     using Ach.Fulfillment.Common.Utils;
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Data.Specifications.Roles;
 
     internal class RoleManager : ManagerBase<RoleEntity>, IRoleManager

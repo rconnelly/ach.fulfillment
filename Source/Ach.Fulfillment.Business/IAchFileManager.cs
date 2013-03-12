@@ -6,16 +6,16 @@
 
     public interface IAchFileManager
     {
+        void UpdateStatus(AchFileEntity file, AchFileStatus status);
+
         void ProcessReadyToBeGroupedAchTransactions();
 
         void ProcessReadyToBeGeneratedAchFile();
 
         void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo);
 
-        void Cleanup();
-
         void ProcessReadyToBeAcceptedAchFile();
 
-        void UpdateStatus(AchFileEntity file, AchFileStatus status);
+        void Cleanup();
     }
 }
