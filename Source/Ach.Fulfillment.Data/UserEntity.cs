@@ -10,13 +10,13 @@ namespace Ach.Fulfillment.Data
 
         private ICollection<PartnerEntity> partners;
 
+        public virtual RoleEntity Role { get; set; }
+
         public virtual string Name { get; set; }
 
         public virtual string Email { get; set; }
 
         public virtual bool Deleted { get; set; }
-
-        public virtual RoleEntity Role { get; set; }
 
         public virtual PartnerEntity Partner
         {

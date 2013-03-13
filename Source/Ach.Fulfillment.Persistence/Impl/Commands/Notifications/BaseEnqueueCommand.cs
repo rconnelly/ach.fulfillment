@@ -3,7 +3,6 @@
     using System.Diagnostics.Contracts;
 
     using Ach.Fulfillment.Data.Common;
-    using Ach.Fulfillment.Data.Specifications.Notifications;
 
     using ServiceStack.Text;
 

@@ -3,10 +3,10 @@
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.Notifications;
 
-    internal class GetReadyToGenerateAchFileReferenceCommand : GetSimpleContentFromQueueCommand<ReadyToGenerateAchFileReference, ReferenceEntity>
+    internal class GetReadyToGenerateAchFileReferenceCommand : GetRetriableReadyToOperationAchFileReferenceCommand<ReadyToGenerateAchFileReference>
     {
         public GetReadyToGenerateAchFileReferenceCommand()
-            : base("CreatedAchFileQueue")
+            : base(AchFileStatus.Created)
         {
         }
     }

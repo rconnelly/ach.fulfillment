@@ -9,7 +9,7 @@ namespace Ach.Fulfillment.Persistence.Impl.Mappings
     {
         public void Override(AutoMapping<PermissionEntity> mapping)
         {
-            mapping.References(x => x.Role, "RoleId")
+            mapping.References(x => x.Role)
                 .Fetch.Join();
         }
     }

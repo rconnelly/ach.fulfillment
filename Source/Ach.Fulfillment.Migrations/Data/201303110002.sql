@@ -45,14 +45,14 @@ GO
 create queue ach.CreatedAchFileQueue
    with
      STATUS = on,
-     RETENTION = off,
+     RETENTION = on,
      POISON_MESSAGE_HANDLING (STATUS = off)
 GO
 
 create queue ach.GeneratedAchFileQueue
    with
      STATUS = on,
-     RETENTION = off,
+     RETENTION = on,
      POISON_MESSAGE_HANDLING (STATUS = off)
 GO
 

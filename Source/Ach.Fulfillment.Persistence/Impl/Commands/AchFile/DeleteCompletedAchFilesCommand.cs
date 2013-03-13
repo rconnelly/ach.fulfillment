@@ -6,15 +6,15 @@
 
     internal class DeleteCompletedAchFilesCommand : RelationalActionCommand<DeleteCompletedAchFiles>
     {
+        // todo: try to use linq
         private const string FindSql = @"
 select AchFileId from ach.AchFile f
 where 
 	f.FileStatus in (:fileStatusAccepted,:fileStatusRejected)
 	and not exists (
 		select 1 from ach.AchTransaction t
-		inner join ach.AchFileTransaction ft
-			on ft.AchTransactionId = t.AchTransactionId
-			and ft.AchFileId = f.AchFileId
+        where 
+		    t.AchFileId = f.AchFileId
 			and 
 			(
 				t.NotifiedTransactionStatus != t.TransactionStatus
@@ -23,19 +23,13 @@ where
 	)
 ";
 
+        // todo: try to use linq
         private const string DeleteTransactionsSql = @"
-delete from [ach].[AchTransaction]
-where AchTransactionId in (
-	select ft.AchTransactionId 
-	from [ach].[AchFileTransaction] ft
-	where ft.AchFileId = :id
-);
 delete from [ach].[AchFile]
 where AchFileId = :id";
 
         public override void Execute(DeleteCompletedAchFiles actionData)
         {
-            // todo: replace many-to-many with one-to-many
             var ids =
                 this.Session.CreateSQLQuery(FindSql)
                     .SetInt32("fileStatusAccepted", (int)AchFileStatus.Accepted)

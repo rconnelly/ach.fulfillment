@@ -7,8 +7,7 @@
     using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
-    internal class AchFileStatusCheckProcessor :
-        BaseAchFileRetryingProcessor<ReadyToBeAcceptedAchFileReference>
+    internal class AchFileStatusCheckProcessor : BaseAchFileRetryingProcessor<ReadyToBeAcceptedAchFileReference>
     {
         #region Fields
 
@@ -37,6 +36,7 @@
             Contract.Assert(achFile != null);
 
             // todo: implement it
+            // todo: use ehab here to wrap necessary exceptions into BusinessException
             this.Logger.Warn("------------------------- CheckUploadedAchFileStatus is mock");
 
             this.manager.UpdateStatus(achFile, AchFileStatus.Accepted);

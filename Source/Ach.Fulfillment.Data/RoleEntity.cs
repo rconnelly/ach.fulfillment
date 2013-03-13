@@ -4,8 +4,8 @@ namespace Ach.Fulfillment.Data
 
     public class RoleEntity : BaseEntity
     {
-        public virtual string Name { get; set; }
-
         public virtual ICollection<PermissionEntity> Permissions { get; set; } 
+
+        public virtual string Name { get; set; }
     }
 }

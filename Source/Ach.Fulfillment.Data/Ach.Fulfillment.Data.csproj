@@ -172,6 +172,7 @@
     <Compile Include="Specifications\AchFiles\DeleteCompletedAchFiles.cs" />
     <Compile Include="Specifications\Notifications\CommonEnqueueData.cs" />
     <Compile Include="Specifications\AchTransactions\UpdateAchTransactionStatusByAchFileId.cs" />
+    <Compile Include="Specifications\Partners\DefaultPartner.cs" />
     <Compile Include="Specifications\Users\UserAll.cs" />
     <Compile Include="Specifications\Users\UserByRole.cs" />
     <Compile Include="Specifications\Users\UserPasswordCredentialByLogin.cs" />

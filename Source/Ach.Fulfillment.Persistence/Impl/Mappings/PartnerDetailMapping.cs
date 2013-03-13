@@ -8,7 +8,7 @@
     {
         public void Override(AutoMapping<PartnerDetailEntity> mapping)
         {          
-            mapping.References(x => x.Partner).Column("PartnerId");
+            mapping.References(x => x.Partner);
         }
     }
 }

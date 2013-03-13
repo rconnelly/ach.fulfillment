@@ -120,7 +120,6 @@
             Contract.Assert(data != null);
             Contract.Assert(entryClassCode != null);
 
-            // todo: can fail because entryClassCode it is any 3 chars
             var standardEntryClassCode = (StandardEntryClassCode)Enum.Parse(typeof(StandardEntryClassCode), entryClassCode.ToUpper());
             var result = new BatchHeaderGeneralRecord
                        {
@@ -154,7 +153,6 @@
             Contract.Assert(transaction.TransactionCode != null);
             Contract.Assert(transaction.TransitRoutingNumber != null);
             
-            // todo: how it works if TransactionCode = "22"
             var transactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode), transaction.TransactionCode);
             var record = new EntryDetailGeneralRecord
                              {

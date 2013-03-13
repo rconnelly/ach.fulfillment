@@ -8,7 +8,8 @@
     {
         public void Override(AutoMapping<AchTransactionEntity> mapping)
         {
-            mapping.References(x => x.Partner, "PartnerId").Cascade.None();
+            mapping.References(x => x.Partner);
+            mapping.References(x => x.AchFile);
             mapping.Map(x => x.Status).CustomType<AchTransactionStatus>().Column("TransactionStatus").Not.Nullable();
             mapping.Map(x => x.NotifiedStatus).CustomType<AchTransactionStatus>().Column("NotifiedTransactionStatus").Not.Nullable();
         }

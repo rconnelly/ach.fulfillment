@@ -8,7 +8,7 @@ GO
 /*==============================================================*/
 /* Table: Partner                                               */
 /*==============================================================*/
-create table ach.Partner (
+create table ach."Partner" (
    PartnerId            int                  identity,
    Name                 nvarchar(255)        not null,
    Disabled             bit                  not null constraint DF_DISABLED_PARTNER default 0,
@@ -21,7 +21,7 @@ GO
 /*==============================================================*/
 /* Index: UX_PARTNER                                            */
 /*==============================================================*/
-create unique index UX_PARTNER on ach.Partner (
+create unique index UX_PARTNER on ach."Partner" (
    Name ASC
 )
 GO
@@ -73,7 +73,7 @@ GO
 /*==============================================================*/
 /* Table: Role                                                  */
 /*==============================================================*/
-create table ach.Role (
+create table ach."Role" (
    RoleId               int                  identity,
    Name                 nvarchar(255)        not null,
    Created              datetime             not null,
@@ -145,18 +145,18 @@ GO
 
 alter table ach.PartnerUser
    add constraint FK_PARTNERUSER_PARTNER foreign key (PartnerId)
-      references ach.Partner (PartnerId)
+      references ach."Partner" (PartnerId)
 GO
 
 alter table ach.Permission
    add constraint FK_PERMISSION_ROLE foreign key (RoleId)
-      references ach.Role (RoleId)
+      references ach."Role" (RoleId)
         on delete cascade
 GO
 
 alter table ach."User"
    add constraint FK_USER_ROLE foreign key (RoleId)
-      references ach.Role (RoleId)
+      references ach."Role" (RoleId)
 GO
 
 alter table ach.UserPasswordCredential
@@ -185,55 +185,19 @@ create table ach.PartnerDetail (
 GO
 
 /*==============================================================*/
+/* Index: UX_PARTNERID                                          */
+/*==============================================================*/
+create unique index UX_PARTNERID on ach.PartnerDetail (
+   PartnerId ASC
+)
+GO
+
+/*==============================================================*/
 /* References: PartnerDetail                                    */
 /*==============================================================*/
 alter table ach.PartnerDetail
    add constraint FK_PARTNERDETAIL_PARTNER foreign key (PartnerId)
-      references ach.Partner (PartnerId)
-        on delete cascade
-GO
-
-
-/*==============================================================*/
-/* Table: AchTransaction                                        */
-/*==============================================================*/
-create table ach.AchTransaction (
-   AchTransactionId     int                  identity,
-   PartnerId            int                  not null,
-   IndividualIdNumber   nvarchar(15)         not null,
-   ReceiverName         nvarchar(22)         not null,
-   EntryDescription     nvarchar(10)         not null,
-   EntryDate            datetime             null,
-   TransactionCode      nvarchar(2)          not null,
-   TransitRoutingNumber nvarchar(9)          not null,
-   DFIAccountId         nvarchar(17)         not null,
-   Amount               decimal(10,2)        not null,
-   ServiceClassCode     nvarchar(3)          not null,
-   EntryClassCode       nvarchar(3)          not null,
-   PaymentRelatedInfo   nvarchar(80)         null,
-   CallbackUrl          nvarchar(2000)       not null,
-   TransactionStatus    int                  not null,
-   NotifiedTransactionStatus int constraint DF_NOTIFIEDTRANSACTIONSTATUS_ACHTRANSACTION DEFAULT (0) not null,
-   Created              datetime             not null,
-   Modified             datetime             null,
-   constraint PK_ACHTRANSACTION primary key (AchTransactionId)
-)
-GO
-
-/*==============================================================*/
-/* Index: UX_ACHTRANSACTION                                     */
-/*==============================================================*/
-create unique index UX_ACHTRANSACTION on ach.AchTransaction (
-   AchTransactionId ASC
-)
-GO
-
-/*==============================================================*/
-/* References: AchTransaction                                   */
-/*==============================================================*/
-alter table ach.AchTransaction
-   add constraint FK_ACHTRANSACTION_PARTNER foreign key (PartnerId)
-      references ach.Partner (PartnerId)
+      references ach."Partner" (PartnerId)
         on delete cascade
 GO
 
@@ -266,7 +230,7 @@ GO
 /*==============================================================*/
 alter table ach.AchFile
    add constraint FK_ACHFILE_PARTNER foreign key (PartnerId)
-      references ach.Partner (PartnerId)
+      references ach."Partner" (PartnerId)
         on delete cascade
 GO
 
@@ -301,34 +265,42 @@ GO
 
 
 /*==============================================================*/
-/* Table: AchFileTransaction                                    */
+/* Table: AchTransaction                                        */
 /*==============================================================*/
-create table ach.AchFileTransaction (
-   AchFileTransactionId int                 identity,
-   AchFileId            int                 not null,
-   AchTransactionId     int                 not null,
-   constraint PK_ACHFILETRANSACTION primary key nonclustered (AchFileTransactionId)
+create table ach.AchTransaction (
+   AchTransactionId     int                  identity,
+   PartnerId            int                  not null,
+   AchFileId            int                  null,
+   IndividualIdNumber   nvarchar(15)         not null,
+   ReceiverName         nvarchar(22)         not null,
+   EntryDescription     nvarchar(10)         not null,
+   EntryDate            datetime             null,
+   TransactionCode      nvarchar(2)          not null,
+   TransitRoutingNumber nvarchar(9)          not null,
+   DFIAccountId         nvarchar(17)         not null,
+   Amount               decimal(10,2)        not null,
+   ServiceClassCode     nvarchar(3)          not null,
+   EntryClassCode       nvarchar(3)          not null,
+   PaymentRelatedInfo   nvarchar(80)         null,
+   CallbackUrl          nvarchar(2000)       not null,
+   TransactionStatus    int                  not null,
+   NotifiedTransactionStatus int constraint DF_NOTIFIEDTRANSACTIONSTATUS_ACHTRANSACTION DEFAULT (0) not null,
+   Created              datetime             not null,
+   Modified             datetime             null,
+   constraint PK_ACHTRANSACTION primary key (AchTransactionId)
 )
 GO
 
 /*==============================================================*/
-/* Index: UX_ACHFILETRANSACTION                                 */
+/* References: AchTransaction                                   */
 /*==============================================================*/
-create unique clustered index UX_ACHFILEID on ach.AchFileTransaction (
-   AchFileId ASC,
-   AchTransactionId ASC
-)
+alter table ach.AchTransaction
+   add constraint FK_ACHTRANSACTION_PARTNER foreign key (PartnerId)
+      references ach."Partner" (PartnerId)
 GO
 
-/*==============================================================*/
-/* References: AchFileTransaction                               */
-/*==============================================================*/
-alter table ach.AchFileTransaction
-   add constraint FK_ACHFILETRANSACTION_TRANSACTION foreign key (AchTransactionId)
-      references ach.AchTransaction (AchTransactionId)
-
-alter table ach.AchFileTransaction
-   add constraint FK_ACHFILETRANSACTION_FILE foreign key (AchFileId)
+alter table ach.AchTransaction
+   add constraint FK_ACHTRANSACTION_FILE foreign key (AchFileId)
       references ach.AchFile (AchFileId)
         on delete cascade
-GO    
+GO

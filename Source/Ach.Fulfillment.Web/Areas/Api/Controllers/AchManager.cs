@@ -19,7 +19,7 @@
         public IAchTransactionManager Manager { get; set; }
 
         [Dependency]
-        public IUserManager UserManager { get; set; }
+        public IPartnerManager PartnerManager { get; set; }
 
         #endregion
 
@@ -29,13 +29,12 @@
         {
             Contract.Assert(model != null);
 
-            var user = this.UserManager.GetDefaultUser();
-            if (user == null)
+            var partner = this.PartnerManager.GetDefault();
+            if (partner == null)
             {
-                throw new BusinessException("Cannot find default user associated with partner");
+                throw new BusinessException("Cannot find default partner");
             }
             
-            var partner = user.Partner;
             var transaction = Mapper.Map<AchTransactionModel, AchTransactionEntity>(model);
             transaction.Partner = partner;
             transaction = this.Manager.Create(transaction);

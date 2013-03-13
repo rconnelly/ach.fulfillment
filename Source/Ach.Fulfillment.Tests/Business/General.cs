@@ -103,9 +103,7 @@
             // - obtain ach transaction from client
             using (new UnitOfWork())
             {
-                var user = this.UserManager.GetDefaultUser();
-                var partner = user.Partner;
-
+                var partner = this.PartnerManager.GetDefault();
                 var achTransaction = EntityHelper.CreateTestAchTransaction(null);
                 achTransaction.Partner = partner;
                 this.AchTransactionManager.Create(achTransaction);

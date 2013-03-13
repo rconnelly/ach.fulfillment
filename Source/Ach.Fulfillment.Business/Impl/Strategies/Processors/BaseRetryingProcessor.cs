@@ -21,6 +21,8 @@
 
         protected readonly ILog Logger = LogManager.GetCurrentClassLogger();
 
+        private const int DefaultMaxOperationCount = 100;
+
         private readonly TimeSpan timeout;
 
         #endregion
@@ -34,11 +36,14 @@
             this.Repository = repository;
             this.Queue = queue;
             this.timeout = timeout;
+            this.MaxOperationCount = DefaultMaxOperationCount;
         }
 
         #endregion
 
         #region Properties
+
+        public int MaxOperationCount { get; set; }
 
         protected IQueue Queue { get; set; }
 
@@ -50,22 +55,25 @@
 
         public void Execute()
         {
-            var fetched = false;
+            TReference reference;
+            var operationCount = 0;
             do
             {
                 using (var transaction = new Transaction())
                 {
-                    var reference = this.Queue.Dequeue(new TActionData());
+                    reference = this.Queue.Dequeue(new TActionData());
                     if (reference != null)
                     {
                         this.Process(reference);
-                        fetched = true;
                     }
 
+                    // we should flush to not waste memory
                     transaction.Complete(true);
                 }
+
+                operationCount++;
             }
-            while (fetched);
+            while (this.ShouldRepeat(reference, operationCount));
         }
 
         #endregion
@@ -83,35 +91,47 @@
             }
             catch (BusinessException ex)
             {
-                var rescheduled = this.Reschedule(reference);
-                var message = rescheduled
+                requiresCompletion = !this.ShouldBeRescheduled(reference);
+                var message = requiresCompletion
                                   ? "Unable to complete operation. Reschedule declined."
-                                  : "Unable to complete operation. Rescheduled.";
+                                  : "Unable to complete operation. Operation will be rescheduled.";
                 this.Logger.WarnFormat(CultureInfo.InvariantCulture, message, ex);
-                requiresCompletion = !rescheduled;
             }
 
             if (requiresCompletion)
             {
                 this.Complete(reference);
             }
+            else
+            {
+                this.Reschedule(reference);
+            }
+        }
+
+        protected virtual bool ShouldBeRescheduled(TReference reference)
+        {
+            // always reschedule
+            return true;
         }
 
         protected abstract void ProcessCore(TReference reference);
 
-        protected virtual bool Reschedule(TReference reference)
+        protected void Reschedule(TReference reference)
         {
             var actionData = new RescheduleConversation { Handle = reference.Handle, Timeout = this.timeout };
             this.Repository.Execute(actionData);
-
-            // always reschedule
-            return true;
         }
 
         protected void Complete(TReference reference)
         {
             var actionData = new EndConversation { Handle = reference.Handle };
             this.Repository.Execute(actionData);
+        }
+
+        protected virtual bool ShouldRepeat(TReference reference, int operationCount)
+        {
+            var result = reference != null && operationCount < this.MaxOperationCount;
+            return result;
         }
 
         #endregion

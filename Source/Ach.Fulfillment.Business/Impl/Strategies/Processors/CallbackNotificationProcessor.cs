@@ -121,6 +121,7 @@
 
         private void Post(Uri uri, string payload)
         {
+            return;
             try
             {
                 using (var client = new HttpClient())

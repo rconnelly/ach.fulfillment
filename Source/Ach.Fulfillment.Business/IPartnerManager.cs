@@ -7,5 +7,7 @@ namespace Ach.Fulfillment.Business
         void Disable(PartnerEntity partner);
         
         PartnerEntity AddUser(PartnerEntity partner, UserEntity user);
+
+        PartnerEntity GetDefault();
     }
 }

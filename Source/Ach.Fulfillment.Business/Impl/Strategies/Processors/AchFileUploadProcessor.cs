@@ -1,19 +1,21 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Strategies.Processors
 {
-    using System.Collections.Generic;
+    using System;
     using System.Diagnostics.Contracts;
     using System.IO;
 
-    using Ach.Fulfillment.Business.Impl.Strategies.Enumerators;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.AchFiles;
+    using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
     using Renci.SshNet;
 
-    internal class AchFileUploadProcessor : BaseEnumeratorProcessor
+    internal class AchFileUploadProcessor : BaseAchFileRetryingProcessor<ReadyToUploadAchFileReference>
     {
         #region Fields
+
+        private const int DefaultFileUploadRepeatDelay = 60;
 
         private readonly IAchFileManager manager;
 
@@ -24,7 +26,7 @@
         #region Constructors and Destructors
 
         public AchFileUploadProcessor(IQueue queue, IRepository repository, IAchFileManager manager, PasswordConnectionInfo connectionInfo)
-            : base(queue, repository)
+            : base(queue, repository, TimeSpan.FromSeconds(DefaultFileUploadRepeatDelay))
         {
             Contract.Assert(manager != null);
             Contract.Assert(connectionInfo != null);
@@ -36,13 +38,7 @@
 
         #region Methods
 
-        protected override IEnumerator<AchFileEntity> CreateEnumerator()
-        {
-            var enumerator = new ReadyToUploadAchFileEnumerator(this.Queue, this.Repository);
-            return enumerator;
-        }
-
-        protected override void ExecuteCore(AchFileEntity achFile)
+        protected override void ProcessCore(RetryReferenceEntity reference, AchFileEntity achFile)
         {
             using (var stream = this.Repository.Load(new AchFileContentById { AchFileId = achFile.Id }))
             {
@@ -57,6 +53,7 @@
             Contract.Assert(achFile != null);
             Contract.Assert(stream != null);
 
+            // todo: use ehab here to wrap necessary exceptions into BusinessException
             // todo: refactor SftpClient dependency
             this.Logger.Warn("------------------------- Upload is mock");
 
@@ -80,5 +77,7 @@
 
 
         #endregion
+
+        
     }
 }

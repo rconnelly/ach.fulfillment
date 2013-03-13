@@ -9,21 +9,21 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[AchFi
     DROP TABLE [ach].[AchFileTransaction]
 GO
 
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[AchTransaction]') AND type in (N'U'))
+    DROP TABLE [ach].[AchTransaction]
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[AchFileContent]') AND type in (N'U'))
     DROP TABLE [ach].[AchFileContent]
 GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[AchFile]') AND type in (N'U'))
     DROP TABLE [ach].[AchFile]
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[AchTransaction]') AND type in (N'U'))
-    DROP TABLE [ach].[AchTransaction]
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[Permission]') AND type in (N'U'))
     DROP TABLE [ach].[Permission]
 GO
-
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ach].[PartnerUser]') AND type in (N'U'))
     DROP TABLE [ach].[PartnerUser]

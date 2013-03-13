@@ -5,6 +5,7 @@ namespace Ach.Fulfillment.Business.Impl
 
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Data;
+    using Ach.Fulfillment.Data.Specifications.Partners;
 
     internal class PartnerManager : ManagerBase<PartnerEntity>, IPartnerManager
     {
@@ -56,6 +57,12 @@ namespace Ach.Fulfillment.Business.Impl
 
             Repository.Update(partner);
 
+            return partner;
+        }
+
+        public PartnerEntity GetDefault()
+        {
+            var partner = this.Repository.FindOne(new DefaultPartner());
             return partner;
         }
     }

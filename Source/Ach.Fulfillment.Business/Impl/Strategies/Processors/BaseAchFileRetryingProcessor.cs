@@ -21,7 +21,6 @@
             Contract.Assert(reference != null);
             var achFile = this.Repository.Get<AchFileEntity>(reference.Id);
 
-            // todo: looks the same with AchEnumerators + ForEach
             if (achFile != null)
             {
                 this.ProcessCore(reference, achFile);

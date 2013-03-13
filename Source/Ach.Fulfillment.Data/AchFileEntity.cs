@@ -6,16 +6,16 @@
 
     public class AchFileEntity : BaseEntity, INachaFileData
     {
-        public virtual string Name { get; set; }
-
-        public virtual string FileIdModifier { get; set; }
-
         public virtual PartnerEntity Partner { get; set; }
 
         /// <summary>
         /// AchFileEntity can contain a lot of AchTransactionEntities, so it is preferable to not load Transactions that way
         /// </summary>
         public virtual IList<AchTransactionEntity> Transactions { get; set; }
+
+        public virtual string Name { get; set; }
+
+        public virtual string FileIdModifier { get; set; }
 
         public virtual AchFileStatus FileStatus { get; set; }
 

@@ -1,17 +1,19 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Strategies.Processors
 {
-    using System.Collections.Generic;
+    using System;
     using System.Diagnostics.Contracts;
     using System.IO;
 
-    using Ach.Fulfillment.Business.Impl.Strategies.Enumerators;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.AchFiles;
+    using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
-    internal class AchFileGenerateProcessor : BaseEnumeratorProcessor
+    internal class AchFileGenerateProcessor : BaseAchFileRetryingProcessor<ReadyToGenerateAchFileReference>
     {
         #region Fields
+
+        private const int DefaultFileGenerateRepeatDelay = 60;
 
         private readonly IAchFileManager manager;
 
@@ -20,7 +22,7 @@
         #region Constructors and Destructors
 
         public AchFileGenerateProcessor(IQueue queue, IRepository repository, IAchFileManager manager)
-            : base(queue, repository)
+            : base(queue, repository, TimeSpan.FromSeconds(DefaultFileGenerateRepeatDelay))
         {
             Contract.Assert(manager != null);
             this.manager = manager;
@@ -30,13 +32,7 @@
 
         #region Methods
 
-        protected override IEnumerator<AchFileEntity> CreateEnumerator()
-        {
-            var enumerator = new ReadyToGenerateAchFileEnumerator(this.Queue, this.Repository);
-            return enumerator;
-        }
-
-        protected override void ExecuteCore(AchFileEntity achFile)
+        protected override void ProcessCore(RetryReferenceEntity reference, AchFileEntity achFile)
         {
             Contract.Assert(achFile != null);
 
@@ -51,6 +47,7 @@
 
         private static void Serialize(AchFileEntity achFile, Stream stream)
         {
+            // todo: use ehab here to wrap necessary exceptions into BusinessException
             // todo: do not use achFile.Transactions because of performance
             var achTransactionEntities = achFile.Transactions;
             achFile.ToStream(achTransactionEntities, stream);

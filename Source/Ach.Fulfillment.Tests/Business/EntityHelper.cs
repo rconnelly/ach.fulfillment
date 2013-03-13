@@ -97,7 +97,6 @@ namespace Ach.Fulfillment.Tests.Business
                     CompanyName = new StringGenerator(5, 16).GetRandomValue(),
                     DfiIdentification = new StringGenerator(8, 8).GetRandomValue(),
                     Destination = new StringGenerator(5, 23).GetRandomValue(),
-                    DiscretionaryData = new StringGenerator(5, 20).GetRandomValue(),
                     ImmediateDestination = new StringGenerator(5, 10).GetRandomValue(),
                     OriginOrCompanyName = new StringGenerator(5, 23).GetRandomValue(),
                     Partner = partner
