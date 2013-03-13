@@ -14,7 +14,7 @@
 
     using File = Ach.Fulfillment.Nacha.Message.File;
 
-    public static class AchFileEntityExtension
+    internal static class AchFileEntityExtension
     {
         public static void ToStream(this INachaFileData data, IEnumerable<AchTransactionEntity> transactions, Stream stream)
         {

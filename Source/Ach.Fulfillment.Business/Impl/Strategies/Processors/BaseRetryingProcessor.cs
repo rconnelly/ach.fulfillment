@@ -13,7 +13,7 @@
 
     using global::Common.Logging;
 
-    public abstract class BaseRetryingProcessor<TActionData, TReference>
+    internal abstract class BaseRetryingProcessor<TActionData, TReference>
         where TReference : class, IRetryReferenceEntity
         where TActionData : IQueueQueryData<TReference>, new()
     {

@@ -7,7 +7,7 @@
     using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
-    public class AchFileStatusCheckProcessor :
+    internal class AchFileStatusCheckProcessor :
         BaseAchFileRetryingProcessor<ReadyToBeAcceptedAchFileReference>
     {
         #region Fields

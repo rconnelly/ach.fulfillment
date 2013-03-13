@@ -18,7 +18,7 @@
 
     using Renci.SshNet;
 
-    public class AchFileManager : ManagerBase<AchFileEntity>, IAchFileManager
+    internal class AchFileManager : ManagerBase<AchFileEntity>, IAchFileManager
     {
         #region Fields
 

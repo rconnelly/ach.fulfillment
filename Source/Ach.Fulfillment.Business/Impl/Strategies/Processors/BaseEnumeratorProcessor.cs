@@ -9,7 +9,7 @@
 
     using global::Common.Logging;
 
-    public abstract class BaseEnumeratorProcessor
+    internal abstract class BaseEnumeratorProcessor
     {
         #region Static Fields
 

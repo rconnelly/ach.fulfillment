@@ -3,7 +3,7 @@
     using System.Collections;
     using System.Collections.Generic;
 
-    public abstract class BaseEnumerator<T> : IEnumerator<T>, IEnumerable<T>
+    internal abstract class BaseEnumerator<T> : IEnumerator<T>, IEnumerable<T>
     {
         #region Public Properties
 

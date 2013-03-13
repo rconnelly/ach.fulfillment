@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("Quad IO, Inc.")]
@@ -13,3 +14,4 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: ComVisible(false)]
+[assembly: InternalsVisibleTo("Ach.Fulfillment.Tests")]

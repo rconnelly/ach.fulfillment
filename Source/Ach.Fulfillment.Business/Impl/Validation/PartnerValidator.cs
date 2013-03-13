@@ -1,7 +1,6 @@
 namespace Ach.Fulfillment.Business.Impl.Validation
 {
     using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications;
     using Ach.Fulfillment.Data.Specifications.Partners;
     using Ach.Fulfillment.Persistence;
 

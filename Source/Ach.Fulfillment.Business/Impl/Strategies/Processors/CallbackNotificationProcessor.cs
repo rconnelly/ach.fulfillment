@@ -15,7 +15,7 @@
 
     using ServiceStack.Text;
 
-    public class CallbackNotificationProcessor : BaseAchFileRetryingProcessor<ReadyToBeProcessedCallbackNotificationReference>
+    internal class CallbackNotificationProcessor : BaseAchFileRetryingProcessor<ReadyToBeProcessedCallbackNotificationReference>
     {
         #region Constants
 

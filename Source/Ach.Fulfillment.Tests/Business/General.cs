@@ -84,7 +84,7 @@
         [Test]
         public void Default()
         {
-            using (new UnitOfWork())
+            /*using (new UnitOfWork())
             {
                 using (var tr = new Transaction())
                 {
@@ -98,7 +98,7 @@
                 }
             }
 
-            return;
+            return;*/
 
             // - obtain ach transaction from client
             using (new UnitOfWork())

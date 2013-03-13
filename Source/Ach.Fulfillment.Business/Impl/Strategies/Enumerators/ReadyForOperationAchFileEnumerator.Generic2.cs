@@ -4,7 +4,7 @@
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence;
 
-    public class ReadyForOperationAchFileEnumerator<TQuery> : ReadyForOperationAchFileEnumerator<TQuery, ReferenceEntity>
+    internal class ReadyForOperationAchFileEnumerator<TQuery> : ReadyForOperationAchFileEnumerator<TQuery, ReferenceEntity>
         where TQuery : IQueueQueryData<ReferenceEntity>, new() 
     {
         public ReadyForOperationAchFileEnumerator(IQueue queue, IRepository repository, string operation)

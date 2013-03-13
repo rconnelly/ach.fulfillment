@@ -9,7 +9,7 @@
     using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Persistence;
 
-    public class AchFileGenerateProcessor : BaseEnumeratorProcessor
+    internal class AchFileGenerateProcessor : BaseEnumeratorProcessor
     {
         #region Fields
 

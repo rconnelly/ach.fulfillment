@@ -6,7 +6,7 @@
     using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
 
-    public class ReadyToBeGroupedAchTransactionReferenceEnumerator : BaseEnumerator<AchTransactionReferenceEntity>
+    internal class ReadyToBeGroupedAchTransactionReferenceEnumerator : BaseEnumerator<AchTransactionReferenceEntity>
     {
         #region Fields
 

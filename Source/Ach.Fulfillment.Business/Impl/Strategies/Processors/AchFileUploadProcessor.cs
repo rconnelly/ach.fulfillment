@@ -11,7 +11,7 @@
 
     using Renci.SshNet;
 
-    public class AchFileUploadProcessor : BaseEnumeratorProcessor
+    internal class AchFileUploadProcessor : BaseEnumeratorProcessor
     {
         #region Fields
 

@@ -8,7 +8,7 @@
     using Ach.Fulfillment.Data.Common;
     using Ach.Fulfillment.Persistence;
 
-    public abstract class BaseAchFileRetryingProcessor<TActionData> : BaseRetryingProcessor<TActionData, RetryReferenceEntity>
+    internal abstract class BaseAchFileRetryingProcessor<TActionData> : BaseRetryingProcessor<TActionData, RetryReferenceEntity>
         where TActionData : IQueueQueryData<RetryReferenceEntity>, new()
     {
         protected BaseAchFileRetryingProcessor(IQueue queue, IRepository repository, TimeSpan timeout)

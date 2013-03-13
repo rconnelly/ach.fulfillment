@@ -149,6 +149,7 @@
     <Compile Include="Common\IEnqueueData.Generic.cs" />
     <Compile Include="Common\IQueueQueryData.cs" />
     <Compile Include="Common\IQueueQueryData.Generic.cs" />
+    <Compile Include="INachaFileData.cs" />
     <Compile Include="IRetryReferenceEntity.cs" />
     <Compile Include="RetryReferenceEntity.cs" />
     <Compile Include="ReferenceEntity.cs" />

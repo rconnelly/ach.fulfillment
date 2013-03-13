@@ -9,7 +9,7 @@
 
     using global::Common.Logging;
 
-    public class ReadyForOperationAchFileEnumerator<TQuery, TReference> : BaseEnumerator<AchFileEntity>
+    internal class ReadyForOperationAchFileEnumerator<TQuery, TReference> : BaseEnumerator<AchFileEntity>
         where TQuery : IQueueQueryData<TReference>, new() 
         where TReference : class, IIdentified
     {
