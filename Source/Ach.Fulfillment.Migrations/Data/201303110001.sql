@@ -177,7 +177,6 @@ create table ach.PartnerDetail (
    Destination           nvarchar(23)         null,
    OriginOrCompanyName   nvarchar(23)         null,
    CompanyName           nvarchar(16)         null,
-   DiscretionaryData     nvarchar(20)         null,
    DFIIdentification     nvarchar(8)          null,
    Created               datetime             not null,
    Modified              datetime             null,

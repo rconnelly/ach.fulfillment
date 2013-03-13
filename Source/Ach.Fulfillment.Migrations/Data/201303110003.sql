@@ -15,7 +15,7 @@ set IDENTITY_INSERT [ach].[Partner] on
 set IDENTITY_INSERT [ach].[Partner] off
 
 set IDENTITY_INSERT [ach].[PartnerDetail] on
-    insert into [ach].[PartnerDetail] ( PartnerDetailId, PartnerId, ImmediateDestination, CompanyIdentification, Destination, OriginOrCompanyName, CompanyName, DiscretionaryData, DFIIdentification, Created) values (1, 2, 'b111000012', '1234567890', 'Bank of America RIC', 'PriorityPaymentSystem', 'PPS', '', '11100001', getdate())
+    insert into [ach].[PartnerDetail] ( PartnerDetailId, PartnerId, ImmediateDestination, CompanyIdentification, Destination, OriginOrCompanyName, CompanyName, DFIIdentification, Created) values (1, 2, 'b111000012', '1234567890', 'Bank of America RIC', 'PriorityPaymentSystem', 'PPS', '11100001', getdate())
 set IDENTITY_INSERT [ach].[PartnerDetail] off
 
 set IDENTITY_INSERT [ach].[User] on

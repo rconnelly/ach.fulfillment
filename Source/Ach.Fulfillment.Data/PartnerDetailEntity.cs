@@ -14,9 +14,6 @@
 
         public virtual string CompanyName { get; set; }
 
-        // todo: remove unused field
-        public virtual string DiscretionaryData { get; set; }
-
         public virtual string DfiIdentification { get; set; }
     }
 }
