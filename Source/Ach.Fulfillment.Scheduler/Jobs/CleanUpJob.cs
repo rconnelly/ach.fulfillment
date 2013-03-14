@@ -7,6 +7,7 @@
 
     using Quartz;
 
+    [DisallowConcurrentExecution]
     public class CleanUpTransactionsJob : BaseJob
     {
         #region Public Properties

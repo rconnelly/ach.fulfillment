@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
 
     using Ach.Fulfillment.Data;
@@ -16,18 +15,7 @@
 
     internal static class AchFileEntityExtension
     {
-        public static void ToStream(this INachaFileData data, IEnumerable<AchTransactionEntity> transactions, Stream stream)
-        {
-            Contract.Assert(data != null);
-            Contract.Assert(stream != null);
-
-            var content = data.ToNachaContent(transactions);
-            var writer = new StreamWriter(stream);
-            writer.Write(content);
-            writer.Flush();
-        }
-
-        // todo: it wastes too many resources - transform to the same nacha hierarchy + serialize hierarchy to string
+        // warn: it wastes too many resources because of transformation to the same nacha hierarchy + serialization hierarchy to string
         public static string ToNachaContent(this INachaFileData data, IEnumerable<AchTransactionEntity> transactions)
         {
             Contract.Assert(data != null);
@@ -36,6 +24,8 @@
             var achFileString = file.Serialize();
             return achFileString;
         }
+
+        #region ToNacha
 
         public static File ToNacha(this INachaFileData data, IEnumerable<AchTransactionEntity> transactions)
         {
@@ -82,35 +72,27 @@
             Contract.Assert(data != null);
             Contract.Assert(transactions != null);
 
-            // todo (ng): needs to be changed to settelment date??
             var batches = transactions
-                .GroupBy(tt => tt.EntryDescription)
-                .SelectMany((g, i) => CreateBatchRecords(i, data, g.Key, g))
+                .GroupBy(tt => new { tt.EntryDescription, tt.EntryClassCode })
+                .Select((g, i) => CreateBatch(i, data, g.Key.EntryDescription, g.Key.EntryClassCode, g))
                 .ToList();
 
             return batches;
         }
 
-        private static IEnumerable<GeneralBatch> CreateBatchRecords(int batchNumber, INachaFileData data, string description, IEnumerable<AchTransactionEntity> transactions)
+        private static GeneralBatch CreateBatch(int batchNumber, INachaFileData data, string description, string entryClassCode, IEnumerable<AchTransactionEntity> transactions)
         {
-            Contract.Assert(data != null);
-            Contract.Assert(transactions != null);
+            var header = CreateBatchHeader(batchNumber, data, description, entryClassCode);
+            var entries = CreateBatchEntries(transactions);
+            var control = CreateBatchControlRecord(batchNumber, header, entries);
 
-            // ReSharper disable ImplicitlyCapturedClosure
-            var enumerable =
-                from t in transactions
-                group t by t.EntryClassCode into g
-                let header = CreateBatchHeader(batchNumber, data, description, g.Key)
-                let entries = CreateBatchEntries(g)
-                let control = CreateBatchControlRecord(batchNumber, header, entries)
-                select new GeneralBatch
-                            {
-                                Header = header, 
-                                Entries = entries, 
-                                Control = control
-                            };
-            // ReSharper restore ImplicitlyCapturedClosure
-            return enumerable;
+            var result = new GeneralBatch
+                {
+                    Header = header,
+                    Entries = entries,
+                    Control = control
+                };
+            return result;
         }
 
         #region BatchHeaderGeneralRecord
@@ -150,10 +132,9 @@
         private static EntryDetailGeneralRecord CreateEntryDetailRecord(AchTransactionEntity transaction)
         {
             Contract.Assert(transaction != null);
-            Contract.Assert(transaction.TransactionCode != null);
             Contract.Assert(transaction.TransitRoutingNumber != null);
             
-            var transactionCode = (TransactionCode)Enum.Parse(typeof(TransactionCode), transaction.TransactionCode);
+            var transactionCode = (TransactionCode)transaction.TransactionCode;
             var record = new EntryDetailGeneralRecord
                              {
                                  AddendaRecordIndicator = transaction.PaymentRelatedInfo != null ? "1" : "0", 
@@ -193,9 +174,10 @@
 
         private static string GenerateEntryHash(IEnumerable<EntryDetailGeneralRecord> entries)
         {
+            // todo: reread documentation and check hashing algorithm
             Contract.Assert(entries != null);
             var entryHash = entries
-                .Select(e => Convert.ToInt32(e.RdfiRoutingTransitNumber))
+                .Select(e => Convert.ToInt64(e.RdfiRoutingTransitNumber))
                 .Sum()
                 .ToString(CultureInfo.InvariantCulture);
             if (entryHash.Length > 10)
@@ -254,9 +236,8 @@
         {
             Contract.Assert(batches != null);
 
-            // todo (ng): calculate right EntryHash
             var entryHash = batches
-                .Select(o => Convert.ToInt32(o.Control.EntryHash))
+                .Select(o => Convert.ToInt64(o.Control.EntryHash))
                 .Sum()
                 .ToString(CultureInfo.InvariantCulture);
             if (entryHash.Length > 10)
@@ -280,6 +261,8 @@
             var amount = batches.Select(b => b.Control.TotalDebitAmount).Sum();
             return amount;
         }
+
+        #endregion
 
         #endregion
     }

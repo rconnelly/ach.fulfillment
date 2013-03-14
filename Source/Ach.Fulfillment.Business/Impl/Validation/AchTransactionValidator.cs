@@ -1,6 +1,7 @@
 ﻿namespace Ach.Fulfillment.Business.Impl.Validation
 {
     using System;
+    using System.Collections.Generic;
 
     using Ach.Fulfillment.Data;
 
@@ -35,15 +36,16 @@
                 .NotEmpty();
 
             // TransactionCode
+            var validTransactionCodes = new List<int> { 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39 };
             this.RuleFor(i => i.TransactionCode)
-                .NotEmpty()
-                .Length(2)
-                .Matches(@"^(22|23|24|27|28|29|32|33|34|37|38|39)$").WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
+                .Must(validTransactionCodes.Contains)
+                .GreaterThan(0)
+                .WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
 
             // TransitRoutingNumber
             this.RuleFor(i => i.TransitRoutingNumber)
                 .NotEmpty()
-                .Length(9)                
+                .Length(9)
                 .Matches(@"^[0-9]+$").WithMessage("{PropertyName} must have numeric data");
 
             // DfiAccountId
@@ -65,15 +67,15 @@
                     }).WithMessage("{PropertyName} must be amount of dollars with two decimal places after ',' ");
 
             // ServiceClassCode
+            var validServiceClassCodes = new List<int> { 200, 220, 225 };
             this.RuleFor(i => i.ServiceClassCode)
-                .Length(3)
-                .Matches(@"^(200|220|225)$").WithMessage("Valid codes for {PropertyName} are 200, 220, 225");
+                .Must(validServiceClassCodes.Contains)
+                .WithMessage("Valid codes for {PropertyName} are 200, 220, 225");
 
             // EntryClassCode
             this.RuleFor(i => i.EntryClassCode)
                 .NotEmpty()
-                .Length(3)
-                .Matches(@"^[A-Z]*$").WithMessage("{PropertyName} must have 3 uppercase characters");
+                .Matches(@"^(CCD|PPD)$").WithMessage("Valid codes for {PropertyName} are CCD, PPD");
 
             // PaymentRelatedInfo
             this.RuleFor(i => i.PaymentRelatedInfo)

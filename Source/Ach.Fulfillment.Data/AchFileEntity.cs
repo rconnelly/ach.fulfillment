@@ -82,6 +82,18 @@
             }
         }
 
+        public override string ToString()
+        {
+            var result = string.Format(
+                CultureInfo.InvariantCulture, 
+                "AchFile#{0} ({1} {2} {3})]",
+                this.Id,
+                this.Name,
+                this.FileIdModifier,
+                this.FileStatus);
+            return result;
+        }
+
         private void CheckPartnerDetails()
         {
             Contract.Assert(this.Partner != null);

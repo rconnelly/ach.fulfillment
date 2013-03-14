@@ -157,7 +157,8 @@
     <Compile Include="Specifications\AchFiles\AchFileContentById.cs" />
     <Compile Include="Specifications\AchFiles\AchFileForPartner.cs" />
     <Compile Include="Specifications\AchFiles\CreateAchFileContent.cs" />
-    <Compile Include="Specifications\AchTransactions\UnnotifiedAchTransactions.cs" />
+    <Compile Include="Specifications\AchTransactions\UntrackingAchTransactionByAchFileId.cs" />
+    <Compile Include="Specifications\AchTransactions\UntrackingUnnotifiedAchTransactionByAchFileId.cs" />
     <Compile Include="Specifications\AchTransactions\ActualizeAchTransactionNotificationStatus.cs" />
     <Compile Include="Specifications\Notifications\ReadyToUploadAchFileReference.cs" />
     <Compile Include="Specifications\Notifications\ReadyToBeProcessedCallbackNotificationReference.cs" />

@@ -14,6 +14,8 @@
     using Ach.Fulfillment.Data.Specifications.AchTransactions;
     using Ach.Fulfillment.Persistence;
 
+    using global::Common.Logging;
+
     using Microsoft.Practices.Unity;
 
     using Renci.SshNet;
@@ -24,6 +26,8 @@
 
         private const int BulkCreationLimit = 100 * 1000;
 
+        private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
+
         #endregion
 
         #region Public Properties
@@ -33,6 +37,9 @@
 
         [Dependency]
         public IApplicationEventRaiseManager ApplicationEventRaiseManager { get; set; }
+
+        [Dependency]
+        public IRemoteAccessManager RemoteAccessManager { get; set; }
 
         [Dependency]
         public IQueue Queue { get; set; }
@@ -64,9 +71,10 @@
 
         public void ProcessReadyToBeGroupedAchTransactions()
         {
+            Logger.Info("Started ach transaction grouping process.");
             using (var tr = new Transaction())
             {
-                // todo: rewrite method to use transactionReferences one-by-one without loading all records
+                // todo: rewrite method to use transactionReferences one by one without loading all records
 
                 // get all available transactionReferences
                 using (var transactionReferences = new ReadyToBeGroupedAchTransactionReferenceEnumerator(this.Queue, BulkCreationLimit))
@@ -93,11 +101,15 @@
                             select achTransaction);
 
                         this.UpdateStatus(achFile, AchFileStatus.Created);
+
+                        Logger.InfoFormat(CultureInfo.InvariantCulture, "Creating '{0}'", achFile);
                     }
                 }
 
                 tr.Complete();
             }
+
+            Logger.Info("Finished ach transaction grouping process.");
         }
 
         public void ProcessReadyToBeGeneratedAchFile()
@@ -108,13 +120,13 @@
 
         public void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo)
         {
-            var processor = new AchFileUploadProcessor(this.Queue, this.Repository, this, connectionInfo);
+            var processor = new AchFileUploadProcessor(this.Queue, this.Repository, this, this.RemoteAccessManager, connectionInfo);
             processor.Execute();
         }
 
         public void ProcessReadyToBeAcceptedAchFile()
         {
-            var processor = new AchFileStatusCheckProcessor(this.Queue, this.Repository, this);
+            var processor = new AchFileStatusCheckProcessor(this.Queue, this.Repository, this, this.RemoteAccessManager);
             processor.Execute();
         }
 

@@ -112,7 +112,7 @@ namespace Ach.Fulfillment.Web
                     var login = authTicket.Name;
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
 
-                    // WARN: we are going to use login as cache key we should not allow to change login?!
+                    // warn: we are going to use login as cache key we should not allow to change login?!
                     var session = cache.Get(login) as PrincipalSession;
                     if (session == null)
                     {

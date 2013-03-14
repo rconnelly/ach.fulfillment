@@ -19,7 +19,7 @@
     {
         #region Static Fields
 
-        protected readonly ILog Logger = LogManager.GetCurrentClassLogger();
+        protected readonly ILog Logger;
 
         private const int DefaultMaxOperationCount = 100;
 
@@ -33,6 +33,7 @@
         {
             Contract.Assert(queue != null);
             Contract.Assert(repository != null);
+            this.Logger = LogManager.GetLogger(this.GetType());
             this.Repository = repository;
             this.Queue = queue;
             this.timeout = timeout;
@@ -53,7 +54,7 @@
 
         #region Public Methods and Operators
 
-        public void Execute()
+        public virtual void Execute()
         {
             TReference reference;
             var operationCount = 0;
@@ -64,6 +65,12 @@
                     reference = this.Queue.Dequeue(new TActionData());
                     if (reference != null)
                     {
+                        this.Logger.DebugFormat(
+                            CultureInfo.InvariantCulture, 
+                            "Retrieved '{0}#{1}' to be processed by '{2}'", 
+                            reference.GetType().Name, 
+                            reference.Handle, 
+                            this.GetType().Name);
                         this.Process(reference);
                     }
 
@@ -84,17 +91,17 @@
         {
             Contract.Assert(reference != null);
 
-            var requiresCompletion = true;
+            bool requiresCompletion;
             try
             {
-                this.ProcessCore(reference);
+                requiresCompletion = this.ProcessCore(reference);
             }
             catch (BusinessException ex)
             {
                 requiresCompletion = !this.ShouldBeRescheduled(reference);
                 var message = requiresCompletion
-                                  ? "Unable to complete operation. Reschedule declined."
-                                  : "Unable to complete operation. Operation will be rescheduled.";
+                                  ? "Unable to complete operation '" + reference.Handle + "'. Reschedule declined."
+                                  : "Unable to complete operation '" + reference.Handle + "'. Operation will be rescheduled.";
                 this.Logger.WarnFormat(CultureInfo.InvariantCulture, message, ex);
             }
 
@@ -114,9 +121,9 @@
             return true;
         }
 
-        protected abstract void ProcessCore(TReference reference);
+        protected abstract bool ProcessCore(TReference reference);
 
-        protected void Reschedule(TReference reference)
+        protected virtual void Reschedule(TReference reference)
         {
             var actionData = new RescheduleConversation { Handle = reference.Handle, Timeout = this.timeout };
             this.Repository.Execute(actionData);

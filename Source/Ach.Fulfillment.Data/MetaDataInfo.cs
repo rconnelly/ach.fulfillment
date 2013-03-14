@@ -1,5 +1,6 @@
 ﻿namespace Ach.Fulfillment.Data
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
 
     public static class MetadataInfo
@@ -17,6 +18,14 @@
         public const int StringShort = 20;
 
         public const int StringTiny = 3;
+
+        public static readonly TimeSpan RepeatIntervalForNachaFileGeneration = TimeSpan.FromMinutes(5);
+
+        public static readonly TimeSpan RepeatIntervalForNachaFileUpload = TimeSpan.FromMinutes(10);
+
+        public static readonly TimeSpan RepeatIntervalForResponseCheck = TimeSpan.FromMinutes(2);
+
+        public static readonly TimeSpan RepeatIntervalForCallbackNotification = TimeSpan.FromMinutes(5);
 
         #endregion
     }

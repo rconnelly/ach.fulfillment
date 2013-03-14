@@ -1,6 +1,7 @@
 ﻿namespace Ach.Fulfillment.Data
 {
     using System;
+    using System.Globalization;
 
     public class AchTransactionEntity : BaseEntity
     {
@@ -16,8 +17,7 @@
 
         public virtual DateTime EntryDate { get; set; }
 
-        // todo: TransactionCode should be int not string
-        public virtual string TransactionCode { get; set; }
+        public virtual int TransactionCode { get; set; }
 
         public virtual string TransitRoutingNumber { get; set; }
 
@@ -25,9 +25,8 @@
 
         public virtual decimal Amount { get; set; }
 
-        public virtual string ServiceClassCode { get; set; }
+        public virtual int ServiceClassCode { get; set; }
 
-        // todo: EntryClassCode can be CCD or PPD
         public virtual string EntryClassCode { get; set; }
 
         public virtual string PaymentRelatedInfo { get; set; }
@@ -37,5 +36,15 @@
         public virtual AchTransactionStatus Status { get; set; }
 
         public virtual AchTransactionStatus NotifiedStatus { get; set; }
+
+        public override string ToString()
+        {
+            // do not use any other property than Id to not force proxy object loading
+            var result = string.Format(
+                CultureInfo.InvariantCulture,
+                "AchTransaction#{0}",
+                this.Id);
+            return result;
+        }
     }
 }

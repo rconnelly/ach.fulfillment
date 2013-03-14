@@ -5,6 +5,9 @@
 
     using Topshelf;
 
+    // todo: check msi
+    // todo: check prerequirements (service broker, filestream)
+    // todo: check unit tests
     public static class Program
     {
         public static void Main(string[] args)

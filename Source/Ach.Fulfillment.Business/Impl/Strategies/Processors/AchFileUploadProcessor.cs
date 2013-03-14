@@ -4,10 +4,13 @@
     using System.Diagnostics.Contracts;
     using System.IO;
 
+    using Ach.Fulfillment.Business.Impl.Configuration;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Data.Specifications.Notifications;
     using Ach.Fulfillment.Persistence;
+
+    using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
     using Renci.SshNet;
 
@@ -15,37 +18,41 @@
     {
         #region Fields
 
-        private const int DefaultFileUploadRepeatDelay = 60;
-
-        private readonly IAchFileManager manager;
+        private readonly IAchFileManager achFileManager;
 
         private readonly PasswordConnectionInfo connectionInfo;
+
+        private readonly IRemoteAccessManager remoteAccessManager;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public AchFileUploadProcessor(IQueue queue, IRepository repository, IAchFileManager manager, PasswordConnectionInfo connectionInfo)
-            : base(queue, repository, TimeSpan.FromSeconds(DefaultFileUploadRepeatDelay))
+        public AchFileUploadProcessor(IQueue queue, IRepository repository, IAchFileManager achFileManager, IRemoteAccessManager remoteAccessManager, PasswordConnectionInfo connectionInfo)
+            : base(queue, repository, MetadataInfo.RepeatIntervalForNachaFileUpload)
         {
-            Contract.Assert(manager != null);
+            Contract.Assert(achFileManager != null);
+            Contract.Assert(remoteAccessManager != null);
             Contract.Assert(connectionInfo != null);
-            this.manager = manager;
+            this.achFileManager = achFileManager;
             this.connectionInfo = connectionInfo;
+            this.remoteAccessManager = remoteAccessManager;
         }
 
         #endregion
 
         #region Methods
 
-        protected override void ProcessCore(RetryReferenceEntity reference, AchFileEntity achFile)
+        protected override bool ProcessCore(RetryReferenceEntity reference, AchFileEntity achFile)
         {
             using (var stream = this.Repository.Load(new AchFileContentById { AchFileId = achFile.Id }))
             {
                 this.Upload(achFile, stream);
             }
 
-            this.manager.UpdateStatus(achFile, AchFileStatus.Uploaded);
+            this.achFileManager.UpdateStatus(achFile, AchFileStatus.Uploaded);
+
+            return true;
         }
 
         private void Upload(AchFileEntity achFile, Stream stream)
@@ -53,31 +60,20 @@
             Contract.Assert(achFile != null);
             Contract.Assert(stream != null);
 
-            // todo: use ehab here to wrap necessary exceptions into BusinessException
-            // todo: refactor SftpClient dependency
-            this.Logger.Warn("------------------------- Upload is mock");
-
-            return;
-
-            using (var sftp = new SftpClient(connectionInfo))
+            try
             {
-                try
+                this.remoteAccessManager.Upload(this.connectionInfo, achFile.Name, stream);
+            }
+            catch (Exception ex)
+            {
+                var rethrow = ExceptionPolicy.HandleException(ex, BusinessContainerExtension.OperationUploadPolicy);
+                if (rethrow)
                 {
-                    sftp.Connect();
-
-                    var fileName = achFile.Name + ".ach";
-                    sftp.UploadFile(stream, fileName);
-                }
-                finally
-                {
-                    sftp.Disconnect();
+                    throw;
                 }
             }
         }
 
-
         #endregion
-
-        
     }
 }

@@ -115,7 +115,6 @@ namespace Ach.Fulfillment.Web.Areas.Manage.Controllers
 
         #endregion Edit
         
-        // todo (ng): implement change password for existing user
         /*
          public ActionResult ChangePassword()
                 {

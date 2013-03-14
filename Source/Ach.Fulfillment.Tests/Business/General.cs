@@ -5,6 +5,8 @@
     using System.Linq;
 
     using Ach.Fulfillment.Business;
+    using Ach.Fulfillment.Business.Impl.Strategies;
+    using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Common;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
@@ -82,24 +84,44 @@
         }
 
         [Test]
+        public void Validate()
+        {
+            var transaction = EntityHelper.CreateTestAchTransaction(null);
+            transaction.Partner = EntityHelper.CreateTestPartner(null);
+            var validator = new AchTransactionValidator();
+            var validationResult = validator.Validate(transaction);
+            Assert.That(validationResult.IsValid);
+
+            transaction.TransactionCode = 74;
+            validationResult = validator.Validate(transaction);
+            Assert.That(validationResult.IsValid, Is.False);
+            foreach (var failure in validationResult.Errors)
+            {
+                Trace.WriteLine(failure.ErrorMessage);
+            }
+        }
+
+        [Test]
         public void Default()
         {
             /*using (new UnitOfWork())
             {
-                using (var tr = new Transaction())
-                {
-                    var partner = EntityHelper.CreateTestPartner(null);
-                    this.Repository.Create(partner);
-                    var previous =
-                        this.Repository.Query(new AchFileForPartner(partner))
-                            .Where(m => m.Created.Date == DateTime.UtcNow.Date)
-                            .Max(m => m.FileIdModifier);
-                    Trace.WriteLine(previous);
-                }
+                var t = EntityHelper.CreateTestAchTransaction(null);
+                
+                var f = EntityHelper.CreateTestAchFile(null);
+                f.Partner = this.PartnerManager.Load(2);
+                f.Transactions.Add(t);
+                f.Transactions.Add(t);
+                f.Transactions.Add(t);
+                f.Transactions.Add(t);
+
+                var r = f.ToNacha(f.Transactions);
+
+                r = r;
             }
 
             return;*/
-
+            
             // - obtain ach transaction from client
             using (new UnitOfWork())
             {

@@ -1,7 +1,6 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
 
@@ -11,11 +10,7 @@
 
     using FluentNHibernate.Testing;
 
-    using Microsoft.Practices.Unity;
-
     using NUnit.Framework;
-
-    using Rhino.Mocks;
 
     [TestFixture]
     public class AchTransactionManagerTests : BusinessIntegrationTestBase
@@ -87,12 +82,12 @@
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("ServiceClassCode test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(serviceClassCode: "2211"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(serviceClassCode: 2211));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
             Trace.WriteLine("TransactionCode test");
-            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(transactionCode: "3333"));
+            ex = Assert.Throws<BusinessValidationException>(() => this.CreateAchTransaction(transactionCode: 3333));
             Trace.WriteLine(ex.Message);
             Assert.That(ex.Errors.Count(), Is.EqualTo(2));
 
@@ -296,8 +291,8 @@
             string individualIdNumber = null,
             string paymentRelatedInfo = null,
             string receiverName = null,
-            string serviceClassCode = null,
-            string transactionCode = null,
+            int serviceClassCode = 200,
+            int transactionCode = 22,
             string transitRoutingNumber = null)
         {
             var defaultPartner = new PersistenceSpecification<PartnerEntity>(Session)
@@ -307,14 +302,14 @@
             var transaction = new AchTransactionEntity
                                   {
                                       DfiAccountId = dfiAccountId ?? "12345678901234567",
-                                      CallbackUrl = callbackUrl ?? "http://test.com",
+                                      CallbackUrl = callbackUrl ?? "http://ya.ru",
                                       EntryDescription = entryDescription ?? "PAYROLL",
                                       IndividualIdNumber = individualIdNumber ?? "123456789012345",
                                       ReceiverName = receiverName ?? "SomeName",
                                       TransitRoutingNumber = transitRoutingNumber ?? "123456789",
                                       EntryClassCode = entryClassCode ?? "PPD",
-                                      ServiceClassCode = serviceClassCode ?? "200",
-                                      TransactionCode = transactionCode ?? "22",
+                                      ServiceClassCode = serviceClassCode,
+                                      TransactionCode = transactionCode,
                                       PaymentRelatedInfo = paymentRelatedInfo ?? "dsdfdsfsdf",
                                       Partner = defaultPartner,
                                       Amount = (decimal)123.00,

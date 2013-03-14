@@ -15,15 +15,15 @@
 
         public DateTime EntryDate { get; set; }
 
-        public string TransactionCode { get; set; }
+        public int TransactionCode { get; set; }
 
         public string TransitRoutingNumber { get; set; }
 
         public string DfiAccountId { get; set; }
 
         public decimal Amount { get; set; }
-        
-        public string ServiceClassCode { get; set; }
+
+        public int ServiceClassCode { get; set; }
 
         public string EntryClassCode { get; set; }
 

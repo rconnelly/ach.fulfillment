@@ -1,14 +1,14 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
+    using Ach.Fulfillment.Business;
     using Ach.Fulfillment.Scheduler.Common;
-
-    using Business;
 
     using Microsoft.Practices.Unity;
 
     using Quartz;
 
-    public class GenerateAchFilesJob : BaseJob
+    [DisallowConcurrentExecution]
+    public class GroupAchTransactionsJob : BaseJob
     {
         #region Public Properties
 
@@ -21,7 +21,7 @@
 
         protected override void ExecuteCore(IJobExecutionContext context)
         {
-            this.Manager.ProcessReadyToBeGeneratedAchFile();
+            this.Manager.ProcessReadyToBeGroupedAchTransactions();
         }
 
         #endregion

@@ -1,45 +1,28 @@
 ﻿namespace Ach.Fulfillment.Scheduler.Jobs
 {
-    using System;
-
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Common;
-
-    using global::Common.Logging;
+    using Ach.Fulfillment.Scheduler.Common;
 
     using Microsoft.Practices.Unity;
 
     using Quartz;
 
-    public class CallbackNotificationJob : IJob
+    public class CallbackNotificationJob : BaseJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(CheckStatusFilesJob));
-
         #region Public Properties
 
         [Dependency]
-        public ICallbackNotificationManager CallbackNotificationManager { get; set; }
+        public ICallbackNotificationManager Manager { get; set; }
 
         #endregion
 
-        public void Execute(IJobExecutionContext context)
+        #region Methods
+
+        protected override void ExecuteCore(IJobExecutionContext context)
         {
-            try
-            {
-                using (new UnitOfWork())
-                {
-                    Logger.Info("SendWebhookJob started...");
-
-                    this.CallbackNotificationManager.DeliverRemoteNotifications();
-
-                    Logger.Info("SendWebhookJob finished...");
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex);
-                throw new JobExecutionException(ex);
-            }
+            this.Manager.DeliverRemoteNotifications();
         }
+
+        #endregion
     }
 }
