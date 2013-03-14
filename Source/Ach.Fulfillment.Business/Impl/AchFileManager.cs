@@ -18,8 +18,6 @@
 
     using Microsoft.Practices.Unity;
 
-    using Renci.SshNet;
-
     internal class AchFileManager : ManagerBase<AchFileEntity>, IAchFileManager
     {
         #region Fields
@@ -39,7 +37,7 @@
         public IApplicationEventRaiseManager ApplicationEventRaiseManager { get; set; }
 
         [Dependency]
-        public IRemoteAccessManager RemoteAccessManager { get; set; }
+        public Func<string, IRemoteAccessManager> RemoteAccessManagerBuilder { get; set; }
 
         [Dependency]
         public IQueue Queue { get; set; }
@@ -118,15 +116,15 @@
             processor.Execute();
         }
 
-        public void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo)
+        public void ProcessReadyToBeUploadedAchFile()
         {
-            var processor = new AchFileUploadProcessor(this.Queue, this.Repository, this, this.RemoteAccessManager, connectionInfo);
+            var processor = new AchFileUploadProcessor(this.Queue, this.Repository, this, this.RemoteAccessManagerBuilder);
             processor.Execute();
         }
 
         public void ProcessReadyToBeAcceptedAchFile()
         {
-            var processor = new AchFileStatusCheckProcessor(this.Queue, this.Repository, this, this.RemoteAccessManager);
+            var processor = new AchFileStatusCheckProcessor(this.Queue, this.Repository, this, this.RemoteAccessManagerBuilder);
             processor.Execute();
         }
 

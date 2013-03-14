@@ -1,16 +1,10 @@
 ﻿namespace Ach.Fulfillment.Tests.Business
 {
-    using System;
     using System.Diagnostics;
-    using System.Linq;
 
     using Ach.Fulfillment.Business;
-    using Ach.Fulfillment.Business.Impl.Strategies;
     using Ach.Fulfillment.Business.Impl.Validation;
     using Ach.Fulfillment.Common;
-    using Ach.Fulfillment.Common.Transactions;
-    using Ach.Fulfillment.Data;
-    using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Persistence;
     using Ach.Fulfillment.Tests.Common;
 
@@ -19,8 +13,6 @@
     using NHibernate;
 
     using NUnit.Framework;
-
-    using Renci.SshNet;
 
     [TestFixture]
     public class General : TestBase
@@ -146,8 +138,7 @@
             // - send nacha file to remote ftp server
             using (new UnitOfWork())
             {
-                var connection = new PasswordConnectionInfo("localhost", 21, "username", "password");
-                this.AchFileManager.ProcessReadyToBeUploadedAchFile(connection);
+                this.AchFileManager.ProcessReadyToBeUploadedAchFile();
             }
 
             // - get nacha file status from remote ftp server

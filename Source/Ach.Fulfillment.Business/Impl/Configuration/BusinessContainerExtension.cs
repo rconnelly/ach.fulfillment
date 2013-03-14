@@ -3,6 +3,7 @@
     using System;
 
     using Ach.Fulfillment.Business.Exceptions;
+    using Ach.Fulfillment.Business.Impl.FileTransmission;
     using Ach.Fulfillment.Common.Security;
     using Ach.Fulfillment.Common.Unity;
 
@@ -32,6 +33,9 @@
         {
             this.WellKnownITypeNameAutoRegistration<ContainerControlledLifetimeManager>(WellKnownAppParts.Manager);
             this.Container.RegisterType<IApplicationPrincipal, ThreadApplicationPrincipal>(new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<IRemoteAccessManager, FileSystemRemoteAccessManager>("fs", new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<IRemoteAccessManager, SftpRemoteAccessManager>("sftp", new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<Func<string, IRemoteAccessManager>>(new ContainerControlledLifetimeManager(), new InjectionFactory(c => (Func<string, IRemoteAccessManager>)(s => this.Container.Resolve<IRemoteAccessManager>(s))));
 
             this.ConfigureCryptography();
             this.ConfigureExceptionHandling();

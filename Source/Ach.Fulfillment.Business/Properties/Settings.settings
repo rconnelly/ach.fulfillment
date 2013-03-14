@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Ach.Fulfillment.Business.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="RemoteAccessManagerType" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fs</Value>
+    </Setting>
+    <Setting Name="SFTPHost" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="SFTPPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">password</Value>
+    </Setting>
+    <Setting Name="SFTPLogin" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">user</Value>
+    </Setting>
+    <Setting Name="FsLocalPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\Nacha\</Value>
+    </Setting>
+    <Setting Name="SFTPWorkingDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -16,20 +16,20 @@
 
         private readonly IAchFileManager achFileManager;
 
-        private readonly IRemoteAccessManager remoteAccessManager;
+        private readonly Func<string, IRemoteAccessManager> remoteAccessManagerBuiler;
 
         #endregion
 
         #region Constructors and Destructors
 
         public AchFileStatusCheckProcessor(
-            IQueue queue, IRepository repository, IAchFileManager achFileManager, IRemoteAccessManager remoteAccessManager)
+            IQueue queue, IRepository repository, IAchFileManager achFileManager, Func<string, IRemoteAccessManager> remoteAccessManagerBuiler)
             : base(queue, repository, MetadataInfo.RepeatIntervalForResponseCheck)
         {
             Contract.Assert(achFileManager != null);
-            Contract.Assert(remoteAccessManager != null);
+            Contract.Assert(remoteAccessManagerBuiler != null);
             this.achFileManager = achFileManager;
-            this.remoteAccessManager = remoteAccessManager;
+            this.remoteAccessManagerBuiler = remoteAccessManagerBuiler;
         }
 
         #endregion
@@ -43,7 +43,7 @@
             var status = AchFileStatus.None;
             try
             {
-                status = this.remoteAccessManager.GetStatus(achFile.Name);
+                status = this.remoteAccessManagerBuiler.GetStatus(achFile);
                 Contract.Assert(status == AchFileStatus.None || status == AchFileStatus.Accepted || status == AchFileStatus.Rejected);
             }
             catch (Exception ex)

@@ -12,31 +12,25 @@
 
     using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
 
-    using Renci.SshNet;
-
     internal class AchFileUploadProcessor : BaseAchFileRetryingProcessor<ReadyToUploadAchFileReference>
     {
         #region Fields
 
         private readonly IAchFileManager achFileManager;
 
-        private readonly PasswordConnectionInfo connectionInfo;
-
-        private readonly IRemoteAccessManager remoteAccessManager;
+        private readonly Func<string, IRemoteAccessManager> remoteAccessManagerBuilder;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public AchFileUploadProcessor(IQueue queue, IRepository repository, IAchFileManager achFileManager, IRemoteAccessManager remoteAccessManager, PasswordConnectionInfo connectionInfo)
+        public AchFileUploadProcessor(IQueue queue, IRepository repository, IAchFileManager achFileManager, Func<string, IRemoteAccessManager> remoteAccessManagerBuilder)
             : base(queue, repository, MetadataInfo.RepeatIntervalForNachaFileUpload)
         {
             Contract.Assert(achFileManager != null);
-            Contract.Assert(remoteAccessManager != null);
-            Contract.Assert(connectionInfo != null);
+            Contract.Assert(remoteAccessManagerBuilder != null);
             this.achFileManager = achFileManager;
-            this.connectionInfo = connectionInfo;
-            this.remoteAccessManager = remoteAccessManager;
+            this.remoteAccessManagerBuilder = remoteAccessManagerBuilder;
         }
 
         #endregion
@@ -62,7 +56,7 @@
 
             try
             {
-                this.remoteAccessManager.Upload(this.connectionInfo, achFile.Name, stream);
+                this.remoteAccessManagerBuilder.Upload(achFile, stream);
             }
             catch (Exception ex)
             {

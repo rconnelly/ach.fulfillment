@@ -187,6 +187,8 @@
     <Compile Include="IAchFileManager.cs" />
     <Compile Include="ICallbackNotificationManager.cs" />
     <Compile Include="IManager.cs" />
+    <Compile Include="Impl\FileTransmission\FileSystemRemoteAccessManager.cs" />
+    <Compile Include="Impl\FileTransmission\SftpRemoteAccessManager.cs" />
     <Compile Include="Impl\Strategies\AchFileEntityExtension.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
     <Compile Include="Impl\Strategies\Processors\AchFileGenerateProcessor.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="Impl\Strategies\Processors\BaseRetryingProcessor.cs" />
     <Compile Include="Impl\RoleManager.cs" />
     <Compile Include="Impl\Strategies\Processors\AchFileStatusCheckProcessor.cs" />
+    <Compile Include="Impl\Strategies\Processors\RemoterAccessManagerExtension.cs" />
     <Compile Include="Impl\UserManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -223,6 +226,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Common\Dictionary.xml">
@@ -248,7 +256,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,7 +12,7 @@
 
         void ProcessReadyToBeGeneratedAchFile();
 
-        void ProcessReadyToBeUploadedAchFile(PasswordConnectionInfo connectionInfo);
+        void ProcessReadyToBeUploadedAchFile();
 
         void ProcessReadyToBeAcceptedAchFile();
 

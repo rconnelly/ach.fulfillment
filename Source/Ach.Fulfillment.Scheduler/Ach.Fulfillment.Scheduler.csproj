@@ -125,6 +125,7 @@
     <Compile Include="Jobs\GenerateAchFilesJob.cs" />
     <Compile Include="Common\JobFactory.cs" />
     <Compile Include="Jobs\CallbackNotificationJob.cs" />
+    <Compile Include="Jobs\GroupAchTransactionsJob.cs" />
     <Compile Include="Jobs\UploadAchFilesJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
