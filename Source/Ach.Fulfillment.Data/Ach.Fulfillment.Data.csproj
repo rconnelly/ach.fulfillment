@@ -129,9 +129,7 @@
       <DependentUpon>AccessRight.tt</DependentUpon>
     </Compile>
     <Compile Include="AchFileStatus.cs" />
-    <Compile Include="AchFileStatusExtension.cs" />
     <Compile Include="AchTransactionEntity.cs" />
-    <Compile Include="AchTransactionReferenceEntity.cs" />
     <Compile Include="AchTransactionStatus.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="AchFileEntity.cs" />
@@ -157,19 +155,19 @@
     <Compile Include="Specifications\AchFiles\AchFileContentById.cs" />
     <Compile Include="Specifications\AchFiles\AchFileForPartner.cs" />
     <Compile Include="Specifications\AchFiles\CreateAchFileContent.cs" />
+    <Compile Include="Specifications\AchTransactions\UngroupedAchTransactionByPartnerId.cs" />
     <Compile Include="Specifications\AchTransactions\UntrackingAchTransactionByAchFileId.cs" />
     <Compile Include="Specifications\AchTransactions\UntrackingUnnotifiedAchTransactionByAchFileId.cs" />
     <Compile Include="Specifications\AchTransactions\ActualizeAchTransactionNotificationStatus.cs" />
+    <Compile Include="Specifications\AchTransactions\GroupAchTransactionToAchFile.cs" />
     <Compile Include="Specifications\Notifications\ReadyToUploadAchFileReference.cs" />
     <Compile Include="Specifications\Notifications\ReadyToBeProcessedCallbackNotificationReference.cs" />
     <Compile Include="Specifications\Notifications\ReadyToGenerateAchFileReference.cs" />
-    <Compile Include="Specifications\Notifications\ReadyToBeGroupedAchTransactionReference.cs" />
     <Compile Include="Specifications\Notifications\ReadyToBeAcceptedAchFileReference.cs" />
     <Compile Include="Specifications\Notifications\EndConversation.cs" />
     <Compile Include="Specifications\Notifications\EnqueueAchFileStatusChangedNotification.cs" />
     <Compile Include="Specifications\Notifications\EnqueueCallbackNotification.cs" />
     <Compile Include="Specifications\Notifications\RescheduleConversation.cs" />
-    <Compile Include="Specifications\Notifications\EnqueueAchTransactionCreatedNotification.cs" />
     <Compile Include="Specifications\AchFiles\DeleteCompletedAchFiles.cs" />
     <Compile Include="Specifications\Notifications\CommonEnqueueData.cs" />
     <Compile Include="Specifications\AchTransactions\UpdateAchTransactionStatusByAchFileId.cs" />

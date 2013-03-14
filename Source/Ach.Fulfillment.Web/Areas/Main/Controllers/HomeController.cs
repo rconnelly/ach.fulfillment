@@ -1,7 +1,9 @@
 ﻿namespace Ach.Fulfillment.Web.Areas.Main.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
+    using Ach.Fulfillment.Web.Areas.Api.Models;
     using Ach.Fulfillment.Web.Areas.Main.Models;
     using Ach.Fulfillment.Web.Common.Controllers;
     using Ach.Fulfillment.Web.Common.Filters;
@@ -49,6 +51,31 @@
         public ActionResult Index()
         {
             return this.View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Transaction(bool test = false)
+        {
+            AchTransactionModel model = null;
+            if (test)
+            {
+                model = new AchTransactionModel
+                            {
+                                ReceiverName = "John Doe",
+                                TransitRoutingNumber = "123456789",
+                                DfiAccountId = "12345678901234567",
+                                Amount = (decimal)95.15,
+                                ServiceClassCode = 200,
+                                TransactionCode = 22,
+                                EntryClassCode = "PPD",
+                                EntryDate = DateTime.UtcNow.Date,
+                                EntryDescription = "PAYROLL",
+                                IndividualIdNumber = "abc456789012345",
+                                CallbackUrl = "http://ya.ru"
+                            };
+            }
+
+            return this.View(model);
         }
     }
 }

@@ -39,7 +39,6 @@
             var validTransactionCodes = new List<int> { 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39 };
             this.RuleFor(i => i.TransactionCode)
                 .Must(validTransactionCodes.Contains)
-                .GreaterThan(0)
                 .WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
 
             // TransitRoutingNumber

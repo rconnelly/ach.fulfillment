@@ -1,0 +1,27 @@
+﻿-- enable filestream support
+    -- EXEC sp_configure filestream_access_level, 3
+    -- GO
+    -- RECONFIGURE
+    -- GO
+
+-- create db with filestream
+    -- create database Ach on primary
+    --     (NAME = Ach_data, FILENAME = N'C:\Ach\ach.data.mdf'),
+    -- filegroup NachaFileGroup contains filestream
+    --     (NAME = NachaFiles, FILENAME = N'C:\Ach\fsdc\Nacha')
+    -- log on 
+    --     (NAME = Ach_log, FILENAME = N'C:\Ach\ach.log.ldf');
+    -- GO 
+	
+
+-- enable Service Broker
+    -- alter database Ach set ENABLE_BROKER with rollback immediate    
+    
+-- remove all data from service broker
+    -- alter database Ach set NEW_BROKER with rollback immediate
+
+-- select decoded message from queue
+    -- select convert(nvarchar(max), message_body), * from [ach].[CallbackNotificationQueue]
+
+-- select all conversations
+    -- select * from sys.Conversation_endpoints	

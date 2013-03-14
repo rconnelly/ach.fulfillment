@@ -1,0 +1,276 @@
+﻿@model Ach.Fulfillment.Web.Areas.Api.Models.AchTransactionModel
+
+@{
+    ViewBag.Title = "Ach Fulfillment Transaction creation";
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        function resetErrors(frm) {
+            $(frm).find('.control-group').removeClass('error');
+            $(frm).find('.help-inline')
+                .addClass('field-validation-valid')
+                .removeClass('field-validation-error')
+                .html('');
+            $('#errorAlert').hide();
+            $('#successAlert').hide();
+        }
+
+        function createTransaction(frm) {
+            $(frm).find(":submit").button('loading');
+            
+            var input = $(frm).serializeObject();
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    url: "/api/transaction",
+                    data: input,
+                    complete: function () {
+                        $(frm).find(":submit").button('reset');
+                    },
+                    success: function (data) {
+                        resetErrors(frm);
+                        $('#successAlert span').html('Ach Transaction #:' + data.transactionId);
+                        $('#successAlert').show();
+                        $('#errorAlert').hide();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        var err = $.parseJSON(xhr.responseText);
+
+                        for (var j = 0; j < err.Errors.length; j++) {
+                            var failure = err.Errors[j];
+                            var field = failure.FieldName;
+                            var message = failure.Message;
+
+                            var $c = $('#' + field)
+                                .parents('.control-group')
+                                .addClass('error');
+                            $c.find('.help-inline')
+                                .removeClass('field-validation-valid')
+                                .addClass('field-validation-error')
+                                .html('<span for="' + field + '" generated="true" class="" style="">' + message + '</span>');
+                        }
+
+                        var title = '<strong>' + err.ErrorCode + '!</strong> ' + err.Message;
+                        var contentTitle = '(' + xhr.status + ') ' + thrownError;
+                        var content = '<h3>' + err.ErrorCode + '</h2>';
+                        if (err.Errors.length > 0) {
+                            content += '<ul>';
+                            for (var i = 0; i < err.Errors.length; i++) {
+                                var e = err.Errors[i];
+                                content += '<li>' + e.Message + '</li>';
+                            }
+                            content += '</ul>';
+                        } else {
+                            content += '<p>' + err.Message + '</p>';
+                        }
+
+                        $('#errorAlert span').html(title);
+                        $('#errorModal h3').html(contentTitle);
+                        $('#errorModal .modal-body').html(content);
+
+                        $('#successAlert').hide();
+                        $('#errorAlert').show();
+                        $('#errorModal').modal();
+                    }
+                }
+            );
+        }
+
+        $(function () {
+            $('.alert .close').live("click", function() {
+                $(this).parent().hide();
+            });
+        });
+    </script>
+}
+
+<div class="alert alert-success" style="display:none;" id="successAlert">
+    <button type="button" class="close">&times;</button>
+    <strong>Complete!</strong> <span></span>
+</div>
+
+<div class="alert alert-error" style="display:none;" id="errorAlert">
+    <button type="button" class="close">&times;</button>
+    <span><strong>Error!</strong></span>
+</div>
+
+<div class="modal hide fade" id="errorModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Error occured while Ach Transaction creation</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+  </div>
+</div>    
+
+<form class="form-horizontal" onsubmit="createTransaction(this); return false;" onreset="resetErrors(this)">
+    <fieldset>
+        <legend>@ViewBag.Title (@Html.ActionLink("Test", "Transaction", "Home", new { area = "Main", test = true }, null))</legend>
+        
+        <div class="form-actions">
+            <input type="reset" value="Reset" class="btn btn-large"  />
+            <input type="submit" value="Create" class="btn btn-large btn-primary" data-loading-text="Creating..." />
+        </div>
+
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.ReceiverName, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.ReceiverName, new { maxlength = 22 })
+                @Html.ValidationMessageFor(model => model.ReceiverName)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.TransitRoutingNumber, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.TransitRoutingNumber, new { maxlength = 9 })
+                @Html.ValidationMessageFor(model => model.TransitRoutingNumber)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.DfiAccountId, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.DfiAccountId, new { maxlength = 17 })
+                @Html.ValidationMessageFor(model => model.DfiAccountId)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.Amount, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.Amount)
+                @Html.ValidationMessageFor(model => model.Amount)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.ServiceClassCode, new { @class = "control-label" })
+            <div class="controls">
+                @{
+                    var serviceClassCodes = new[]
+                                                {
+                                                    new SelectListItem { Selected = true }, 
+                                                    new SelectListItem { Text = "200" }, 
+                                                    new SelectListItem { Text = "220" }, 
+                                                    new SelectListItem { Text = "225" }
+                                                };
+                }
+                @Html.DropDownListFor(model => model.ServiceClassCode, serviceClassCodes)
+                @Html.ValidationMessageFor(model => model.ServiceClassCode)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.TransactionCode, new { @class = "control-label" })
+            <div class="controls">
+                @{
+                    var items = new[]
+                                    {
+                                        new SelectListItem { Selected = true }, 
+                                        new SelectListItem { Text = "22" }, 
+                                        new SelectListItem { Text = "23" }, 
+                                        new SelectListItem { Text = "24" }, 
+                                        new SelectListItem { Text = "27" }, 
+                                        new SelectListItem { Text = "28" }, 
+                                        new SelectListItem { Text = "29" }, 
+                                        new SelectListItem { Text = "32" }, 
+                                        new SelectListItem { Text = "34" }, 
+                                        new SelectListItem { Text = "37" }, 
+                                        new SelectListItem { Text = "38" }, 
+                                        new SelectListItem { Text = "39" } 
+                                    };
+                }
+                @Html.DropDownListFor(model => model.TransactionCode, items)
+                @Html.ValidationMessageFor(model => model.TransactionCode)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.EntryClassCode, new { @class = "control-label" })
+            <div class="controls">
+                @{
+                    var entryClassCodes = new[]
+                                              {
+                                                  new SelectListItem { Selected = true }, 
+                                                  new SelectListItem { Text = "CCD" }, 
+                                                  new SelectListItem { Text = "PPD" }
+                                              };
+                }
+                @Html.DropDownListFor(model => model.EntryClassCode, entryClassCodes)
+                @Html.ValidationMessageFor(model => model.EntryClassCode)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.EntryDate, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.EntryDate)
+                @Html.ValidationMessageFor(model => model.EntryDate)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.EntryDescription, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.EntryDescription, new { maxlength = 10 })
+                @Html.ValidationMessageFor(model => model.EntryDescription)
+            </div>
+        </div>
+
+        <div class="control-group">
+            @Html.LabelFor(model => model.IndividualIdNumber, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.IndividualIdNumber, new { maxlength = 15 })
+                @Html.ValidationMessageFor(model => model.IndividualIdNumber)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.PaymentRelatedInfo, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextAreaFor(model => model.PaymentRelatedInfo, new { maxlength = 80, @class = "input-xxlarge", rows = 2})
+                @Html.ValidationMessageFor(model => model.PaymentRelatedInfo)
+            </div>
+        </div>
+        
+        <div class="control-group">
+            @Html.LabelFor(model => model.CallbackUrl, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(model => model.CallbackUrl, new { maxlength = 2000, @class = "input-xxlarge" })
+                @Html.ValidationMessageFor(model => model.CallbackUrl)
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <input type="reset" value="Reset" class="btn btn-large"  />
+            <input type="submit" value="Create" class="btn btn-large btn-primary" data-loading-text="Creating..." />
+        </div>
+    </fieldset>
+    </form>

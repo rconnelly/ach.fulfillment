@@ -27,14 +27,17 @@
                             <ul class="nav">
                                 <li @Html.ActiveItem("Home", "Index")>@Html.ActionLink("Home", "Index", "Home", new { area = "Main" }, null)</li>
                                 <li @Html.ActiveController("User", "Partner")>@Html.ActionLink("Manage", "List", "User", new { area = "Manage" }, null)</li>
-                                <li @Html.ActiveItem("Home", "About")>@Html.ActionLink("About", "About", "Home", new { area = "Main" }, null)</li>
-                                <li @Html.ActiveItem("Home", "Contact")>@Html.ActionLink("Contact", "Contact", "Home", new { area = "Main" }, null)</li>
                             </ul>
                         </div><!--/.nav-collapse -->
                     }
                     else
                     {
                         <a class="brand" href="#">Ach.Fulfillment<sup>@Html.ApplicationVersion()</sup></a>
+                        <div class="nav-collapse">
+                            <ul class="nav">
+                                <li @Html.ActiveItem("Home", "Transaction")>@Html.ActionLink("Create transaction", "Transaction", "Home", new { area = "Main" }, null)</li>
+                            </ul>
+                        </div><!--/.nav-collapse -->
                     }
                 </div>
             </div>

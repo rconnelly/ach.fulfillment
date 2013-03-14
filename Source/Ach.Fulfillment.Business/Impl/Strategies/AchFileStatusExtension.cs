@@ -1,6 +1,8 @@
-﻿namespace Ach.Fulfillment.Data
+namespace Ach.Fulfillment.Business.Impl.Strategies
 {
-    public static class AchFileStatusExtension
+    using Ach.Fulfillment.Data;
+
+    internal static class AchFileStatusExtension
     {
         public static AchTransactionStatus? ToAchTransactionStatus(this AchFileStatus status)
         {

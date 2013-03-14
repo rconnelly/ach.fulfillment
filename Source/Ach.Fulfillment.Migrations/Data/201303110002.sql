@@ -35,13 +35,6 @@ create queue ach.DefaultSendQueue
         execute as SELF)
 GO
 
-create queue ach.CreatedAchTransactionQueue
-   with
-     STATUS = on,
-     RETENTION = off,
-     POISON_MESSAGE_HANDLING (STATUS = off)
-GO
-
 create queue ach.CreatedAchFileQueue
    with
      STATUS = on,
@@ -75,10 +68,6 @@ GO
 /*==============================================================*/
 create service DefaultSendService
     on queue ach.DefaultSendQueue
-GO
-
-create service FireAchTransactionCreated
-    on queue ach.CreatedAchTransactionQueue ([DEFAULT])
 GO
 
 create service FireAchFileCreated

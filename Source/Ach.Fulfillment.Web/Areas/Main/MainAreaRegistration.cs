@@ -15,6 +15,7 @@
         {
             context.MapRoute(RouteHelper.Root, string.Empty, new { controller = "Home", action = "Index" });
             context.MapRoute(RouteHelper.Logon, "Login", new { controller = "Home", action = "Login" });
+            context.MapRoute("CreateTransaction", "CreateTransaction", new { controller = "Home", action = "Transaction" });
 
             context.MapRoute(
                 "Main_default",

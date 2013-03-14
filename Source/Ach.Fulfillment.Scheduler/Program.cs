@@ -6,7 +6,6 @@
     using Topshelf;
 
     // todo: check msi installs windows service
-    // todo: create html page to send transaction
     // todo: check unit tests
     // todo: check big nacha file generation
     public static class Program

@@ -20,11 +20,6 @@
 
         #region Public Methods
 
-        public void RaiseAchTransactionCreatedNotification(AchTransactionEntity instance)
-        {
-            this.EnqueueLocalNotification(instance);
-        }
-
         public void RaiseAchFileStatusChangedNotification(AchFileEntity instance)
         {
             Contract.Assert(instance != null);
@@ -57,15 +52,6 @@
         #endregion
 
         #region Methods
-
-        private void EnqueueLocalNotification(AchTransactionEntity instance)
-        {
-            Contract.Assert(instance != null);
-            Contract.Assert(instance.Partner != null);
-            var referenceEntity = new AchTransactionReferenceEntity { Id = instance.Id, PartnerId = instance.Partner.Id };
-            var actionData = new EnqueueAchTransactionCreatedNotification { Instance = referenceEntity };
-            this.Queue.Enqueue(actionData);
-        }
 
         private void EnqueueLocalNotification(AchFileEntity instance)
         {

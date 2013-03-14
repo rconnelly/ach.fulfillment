@@ -455,8 +455,12 @@
     <Content Include="Areas\Manage\Views\Partner\Edit.cshtml" />
     <Content Include="Areas\Manage\Views\Partner\List.cshtml" />
     <Content Include="Areas\Manage\Views\Partner\_partnerDetails.cshtml" />
+    <Content Include="Areas\Main\Views\Home\Transaction.cshtml" />
     <None Include="Content\jquery.datatables-1.9.2\images\Sorting icons.psd" />
     <None Include="packages.config" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
+      <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ach.Fulfillment.Business\Ach.Fulfillment.Business.csproj">

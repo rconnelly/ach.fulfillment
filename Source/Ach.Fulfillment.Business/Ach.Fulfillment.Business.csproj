@@ -191,10 +191,10 @@
     <Compile Include="Impl\FileTransmission\SftpRemoteAccessManager.cs" />
     <Compile Include="Impl\Strategies\AchFileEntityExtension.cs" />
     <Compile Include="Impl\AchTransactionManager.cs" />
+    <Compile Include="Impl\Strategies\AchFileStatusExtension.cs" />
     <Compile Include="Impl\Strategies\Processors\AchFileGenerateProcessor.cs" />
     <Compile Include="Impl\Strategies\Processors\AchFileUploadProcessor.cs" />
     <Compile Include="Impl\Strategies\Processors\BaseAchFileRetryingProcessor.cs" />
-    <Compile Include="Impl\Strategies\Enumerators\BaseEnumerator.cs" />
     <Compile Include="Impl\Strategies\Processors\CallbackNotificationProcessor.cs" />
     <Compile Include="Impl\CallbackNotificationManager.cs" />
     <Compile Include="Impl\Configuration\BusinessContainerExtension.cs" />
@@ -202,7 +202,6 @@
     <Compile Include="Impl\ManagerBase.cs" />
     <Compile Include="Impl\ApplicationEventRaiseManager.cs" />
     <Compile Include="Impl\PartnerManager.cs" />
-    <Compile Include="Impl\Strategies\Enumerators\ReadyToBeGroupedAchTransactionReferenceEnumerator.cs" />
     <Compile Include="Impl\Strategies\Processors\BaseRetryingProcessor.cs" />
     <Compile Include="Impl\RoleManager.cs" />
     <Compile Include="Impl\Strategies\Processors\AchFileStatusCheckProcessor.cs" />

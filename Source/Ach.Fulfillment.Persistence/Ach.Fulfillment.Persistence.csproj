@@ -179,10 +179,8 @@
     <Compile Include="Impl\Commands\AchFile\DeleteCompletedAchFilesCommand.cs" />
     <Compile Include="Impl\Commands\AchFile\GetAchFileContentByIdCommand.cs" />
     <Compile Include="Impl\Commands\AchTransaction\GetAchTransactionByAchFileIdCommand.cs" />
+    <Compile Include="Impl\Commands\AchTransaction\GroupAchTransactionToAchFileCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetRetriableReadyToOperationAchFileReferenceCommand.cs" />
-    <Compile Include="Impl\Commands\Notifications\GetSimpleContentFromQueueCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Impl\Commands\Partner\GetDefaultPartnerCommand.cs" />
     <Compile Include="Impl\Commands\AchTransaction\ActualizeAchTransactionNotificationStatusCommand.cs" />
     <Compile Include="Impl\Commands\AchTransaction\GetUnnotifiedAchTransactionsCommand.cs" />
@@ -191,13 +189,11 @@
     <Compile Include="Impl\Commands\IActionCommand.Generic2.cs" />
     <Compile Include="Impl\Commands\Notifications\EndConversationCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\EnqueueAchFileStatusChangedNotificationCommand.cs" />
-    <Compile Include="Impl\Commands\Notifications\EnqueueAchTransactionCreatedNotificationCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\EnqueueCallbackNotificationCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetReadyToBeProcessedCallbackNotificationReferenceCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetReadyToCheckResponseAchFileReferenceCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetReadyToUploadAchFileReferenceCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetReadyToGenerateAchFileReferenceCommand.cs" />
-    <Compile Include="Impl\Commands\Notifications\GetReadyToBeGroupedAchTransactionReferenceCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\GetRetriableContentFromQueueCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\BaseEnqueueCommand.cs" />
     <Compile Include="Impl\Commands\Notifications\RescheduleConversationCommand.cs" />

@@ -6,12 +6,13 @@
     using System.Globalization;
     using System.Linq;
 
-    using Ach.Fulfillment.Business.Impl.Strategies.Enumerators;
+    using Ach.Fulfillment.Business.Impl.Strategies;
     using Ach.Fulfillment.Business.Impl.Strategies.Processors;
     using Ach.Fulfillment.Common.Transactions;
     using Ach.Fulfillment.Data;
     using Ach.Fulfillment.Data.Specifications.AchFiles;
     using Ach.Fulfillment.Data.Specifications.AchTransactions;
+    using Ach.Fulfillment.Data.Specifications.Partners;
     using Ach.Fulfillment.Persistence;
 
     using global::Common.Logging;
@@ -21,8 +22,6 @@
     internal class AchFileManager : ManagerBase<AchFileEntity>, IAchFileManager
     {
         #region Fields
-
-        private const int BulkCreationLimit = 100 * 1000;
 
         private static readonly ILog Logger = LogManager.GetCurrentClassLogger();
 
@@ -70,41 +69,29 @@
         public void ProcessReadyToBeGroupedAchTransactions()
         {
             Logger.Info("Started ach transaction grouping process.");
-            using (var tr = new Transaction())
+
+            var partners = this.Repository.FindAll(new PartnerAll());
+            foreach (var partner in partners)
             {
-                // todo: rewrite method to use transactionReferences one by one without loading all records
-
-                // get all available transactionReferences
-                using (var transactionReferences = new ReadyToBeGroupedAchTransactionReferenceEnumerator(this.Queue, BulkCreationLimit))
+                var count = this.Repository.Count(new UngroupedAchTransactionByPartnerId { PartnerId = partner.Id });
+                if (count > 0)
                 {
-                    // create ach file for each partner and group transactions
-                    var grouped = from r in transactionReferences
-                                  group r by r.PartnerId
-                                  into grps 
-                                  let partner = this.Repository.Get<PartnerEntity>(grps.Key)
-                                  where partner != null 
-                                  let file = this.Create(partner)
-                                  select new { File = file, References = grps };
-
-                    foreach (var g in grouped)
+                    using (var tr = new Transaction())
                     {
-                        var achFile = g.File;
+                        var achFile = this.Create(partner);
 
-                        // insert ach transactions into corresponding ach files
-                        // todo: is it good idea to fill all items into list?
-                        achFile.Transactions = new List<AchTransactionEntity>(
-                            from reference in g.References
-                            let id = reference.Id
-                            let achTransaction = this.Repository.LazyLoad<AchTransactionEntity>(id)
-                            select achTransaction);
+                        var actionData = new GroupAchTransactionToAchFile { AchFileId = achFile.Id };
+                        this.Repository.Execute(actionData);
 
-                        this.UpdateStatus(achFile, AchFileStatus.Created);
+                        if (actionData.AffectedAchTransactionsCount > 0)
+                        {
+                            this.UpdateStatus(achFile, AchFileStatus.Created);
+                            tr.Complete();
 
-                        Logger.InfoFormat(CultureInfo.InvariantCulture, "Creating '{0}'", achFile);
+                            Logger.InfoFormat(CultureInfo.InvariantCulture, "Created '{0}'", achFile);
+                        }
                     }
                 }
-
-                tr.Complete();
             }
 
             Logger.Info("Finished ach transaction grouping process.");

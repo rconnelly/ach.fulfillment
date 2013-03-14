@@ -43,7 +43,7 @@ namespace Ach.Fulfillment.Business.Impl.Validation
 
         public static IRuleBuilderOptions<T, string> AlphaNumeric<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
-            var result = ruleBuilder.Matches(@"^[a-zA-Z0-9]*$").WithMessage("{PropertyName} must have alphanumeric data");
+            var result = ruleBuilder.Matches(@"^[a-zA-Z0-9 ]*$").WithMessage("{PropertyName} must have alphanumeric data");
             return result;
         }
     }

@@ -4,8 +4,6 @@
 
     public interface IApplicationEventRaiseManager
     {
-        void RaiseAchTransactionCreatedNotification(AchTransactionEntity instance);
-
         void RaiseAchFileStatusChangedNotification(AchFileEntity instance);
     }
 }
