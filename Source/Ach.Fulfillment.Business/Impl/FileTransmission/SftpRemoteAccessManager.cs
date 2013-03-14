@@ -35,7 +35,8 @@
 
         public AchFileStatus GetStatus(string name)
         {
-            throw new System.NotImplementedException();
+            // todo: sftp GetStatus not implemented
+            throw new System.NotSupportedException();
         }
     }
 }

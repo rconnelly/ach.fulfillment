@@ -1,7 +1,4 @@
-﻿using System.Web.Http;
-using Newtonsoft.Json.Serialization;
-
-namespace Ach.Fulfillment.Web
+﻿namespace Ach.Fulfillment.Web
 {
     using System;
     using System.Diagnostics;
@@ -10,6 +7,7 @@ namespace Ach.Fulfillment.Web
     using System.Runtime.Caching;
     using System.Security.Principal;
     using System.Web;
+    using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
@@ -29,6 +27,8 @@ namespace Ach.Fulfillment.Web
     using Microsoft.Practices.ServiceLocation;
 
     using Mvc.JQuery.Datatables;
+
+    using Newtonsoft.Json.Serialization;
 
     public class MvcApplication : HttpApplication
     {
@@ -112,7 +112,6 @@ namespace Ach.Fulfillment.Web
                     var login = authTicket.Name;
                     var cache = ServiceLocator.Current.GetInstance<ObjectCache>();
 
-                    // warn: we are going to use login as cache key we should not allow to change login?!
                     var session = cache.Get(login) as PrincipalSession;
                     if (session == null)
                     {

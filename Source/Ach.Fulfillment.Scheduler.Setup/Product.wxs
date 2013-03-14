@@ -30,6 +30,10 @@
     <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable" />
     
     <Property Id="DATABASECONNECTION" Value="Data Source=(local);Initial Catalog=Ach;Integrated Security=SSPI" />
+    <Property Id="SFTPHOST" Value="localhost" />
+    <Property Id="SFTPPASSWORD" Value="password" />
+    <Property Id="SFTPLOGIN" Value="user" />
+    <Property Id="SFTPWORKINGDIRECTORY" Value="pps" />
     
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="$(var.PlatformProgramFilesFolder)">
@@ -71,6 +75,22 @@
             ElementPath="/configuration/connectionStrings/add[\[]@name='Default'[\]]"
             Name="connectionString"
             Value="[DATABASECONNECTION];Enlist=false;Application Name=Ach.Fulfillment.Scheduler" />
+        <util:XmlFile Id="SFTPHostEntry" Action="setValue" Permanent="yes"
+            File="[INSTALLLOCATION]Ach.Fulfillment.Scheduler.exe.config"
+            ElementPath="/configuration/applicationSettings/Ach.Fulfillment.Business.Properties.Settings/setting[\[]@name='SFTPHost'[\]]/value"
+            Value="[SFTPHOST]" />
+        <util:XmlFile Id="SFTPPasswordEntry" Action="setValue" Permanent="yes"
+            File="[INSTALLLOCATION]Ach.Fulfillment.Scheduler.exe.config"
+            ElementPath="/configuration/applicationSettings/Ach.Fulfillment.Business.Properties.Settings/setting[\[]@name='SFTPPassword'[\]]/value"
+            Value="[SFTPPASSWORD]" />
+        <util:XmlFile Id="SFTPLoginEntry" Action="setValue" Permanent="yes"
+            File="[INSTALLLOCATION]Ach.Fulfillment.Scheduler.exe.config"
+            ElementPath="/configuration/applicationSettings/Ach.Fulfillment.Business.Properties.Settings/setting[\[]@name='SFTPLogin'[\]]/value"
+            Value="[SFTPLOGIN]" />
+        <util:XmlFile Id="SFTPWorkingDirectoryEntry" Action="setValue" Permanent="yes"
+            File="[INSTALLLOCATION]Ach.Fulfillment.Scheduler.exe.config"
+            ElementPath="/configuration/applicationSettings/Ach.Fulfillment.Business.Properties.Settings/setting[\[]@name='SFTPWorkingDirectory'[\]]/value"
+            Value="[SFTPWORKINGDIRECTORY]" />
     </Component>
 
     <Feature Id="ProductFeature" Title="Pps.MerchantCrawler" Level="1">
