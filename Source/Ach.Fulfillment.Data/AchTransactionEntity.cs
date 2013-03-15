@@ -15,6 +15,7 @@
 
         public virtual string EntryDescription { get; set; }
 
+        // todo: not used in ach generation??
         public virtual DateTime EntryDate { get; set; }
 
         public virtual int TransactionCode { get; set; }
@@ -25,6 +26,7 @@
 
         public virtual decimal Amount { get; set; }
 
+        // todo: not used in ach generation??
         public virtual int ServiceClassCode { get; set; }
 
         public virtual string EntryClassCode { get; set; }

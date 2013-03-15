@@ -29,7 +29,8 @@
             bundles.Add(new StyleBundle("~/Content/css/general").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-responsive.css",
-                "~/Content/site.css"));
+                "~/Content/site.css",
+                "~/Content/datepicker.css"));
 
             bundles.Add(new StyleBundle("~/Content/css/jquery.ui").Include(
                 "~/Content/themes/base/jquery.ui.core.css",
@@ -61,6 +62,10 @@
             bundles.Add(new StyleBundle("~/Content/css/datatables").Include(
                  "~/Content/jquery.datatables-1.9.2/css/jquery.dataTables.css",
                  "~/Content/jquery.datatables-1.9.2/css/jquery.dataTables.bootstrapper.css"));
+
+            /* datepicker */
+            bundles.Add(new ScriptBundle("~/bundles/datepicker").Include(
+                "~/Scripts/bootstrap-datepicker.js"));
         }
     }
 }

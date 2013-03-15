@@ -317,6 +317,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\datepicker.css" />
     <Content Include="Content\jquery.datatables-1.9.2\css\jquery.dataTables.bootstrapper.css" />
     <Content Include="Content\jquery.datatables-1.9.2\css\demo_page.css" />
     <Content Include="Content\jquery.datatables-1.9.2\css\demo_table.css" />
@@ -396,6 +397,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\images\header_logo.png" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery.dataTables-1.9.2.paging.js" />

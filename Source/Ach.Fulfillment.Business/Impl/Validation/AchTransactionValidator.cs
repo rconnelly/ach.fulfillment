@@ -14,38 +14,19 @@
 
         public AchTransactionValidator()
         {
-            // IndividualIdNumber
-            this.RuleFor(i => i.IndividualIdNumber)
-                .Length(15)
-                .AlphaNumeric();
-
             // ReceiverName
             this.RuleFor(i => i.ReceiverName)
                 .NotEmpty()
                 .Length(1, 22)
-                .AlphaNumeric();
-
-            // EntryDescription
-            this.RuleFor(i => i.EntryDescription)
-                .NotEmpty()
-                .Length(1, 10)
-                .AlphaNumeric();
-
-            // EntryDate
-            this.RuleFor(i => i.EntryDate)
-                .NotEmpty();
-
-            // TransactionCode
-            var validTransactionCodes = new List<int> { 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39 };
-            this.RuleFor(i => i.TransactionCode)
-                .Must(validTransactionCodes.Contains)
-                .WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
+                .Matches(@"^[a-zA-Z0-9 \.-'""]*$")
+                .WithMessage("{PropertyName} must have valid name");
 
             // TransitRoutingNumber
             this.RuleFor(i => i.TransitRoutingNumber)
                 .NotEmpty()
                 .Length(9)
-                .Matches(@"^[0-9]+$").WithMessage("{PropertyName} must have numeric data");
+                .Matches(@"^[0-9]+$")
+                .WithMessage("{PropertyName} must have numeric data");
 
             // DfiAccountId
             this.RuleFor(i => i.DfiAccountId)
@@ -57,13 +38,13 @@
             this.RuleFor(i => i.Amount)
                 .NotEmpty()
                 .Must(v =>
-                    {
-                        v = Math.Abs(v);
-                        var decimalPart = v - Math.Floor(v); // 100.354 - 100 = 0.354
-                        var cents = decimalPart * 100; // 35.4
-                        var centDecimalPart = cents - Math.Floor(cents); // 35.4 - 35 = 0.4
-                        return centDecimalPart == 0; // 0.4 compare to 0
-                    }).WithMessage("{PropertyName} must be amount of dollars with two decimal places after ',' ");
+                {
+                    v = Math.Abs(v);
+                    var decimalPart = v - Math.Floor(v); // 100.354 - 100 = 0.354
+                    var cents = decimalPart * 100; // 35.4
+                    var centDecimalPart = cents - Math.Floor(cents); // 35.4 - 35 = 0.4
+                    return centDecimalPart == 0; // 0.4 compare to 0
+                }).WithMessage("{PropertyName} must be amount of dollars with two decimal places after '.' ");
 
             // ServiceClassCode
             var validServiceClassCodes = new List<int> { 200, 220, 225 };
@@ -71,10 +52,31 @@
                 .Must(validServiceClassCodes.Contains)
                 .WithMessage("Valid codes for {PropertyName} are 200, 220, 225");
 
+            // TransactionCode
+            var validTransactionCodes = new List<int> { 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39 };
+            this.RuleFor(i => i.TransactionCode)
+                .Must(validTransactionCodes.Contains)
+                .WithMessage("Valid codes for {PropertyName} are 22, 23, 24, 27, 28, 29, 32, 33, 34, 37, 38, 39");
+
             // EntryClassCode
             this.RuleFor(i => i.EntryClassCode)
                 .NotEmpty()
                 .Matches(@"^(CCD|PPD)$").WithMessage("Valid codes for {PropertyName} are CCD, PPD");
+
+            // EntryDate
+            this.RuleFor(i => i.EntryDate)
+                .NotEmpty();
+
+            // EntryDescription
+            this.RuleFor(i => i.EntryDescription)
+                .NotEmpty()
+                .Length(1, 10)
+                .AlphaNumeric();
+
+            // IndividualIdNumber
+            this.RuleFor(i => i.IndividualIdNumber)
+                .Length(0, 15)
+                .AlphaNumeric();
 
             // PaymentRelatedInfo
             this.RuleFor(i => i.PaymentRelatedInfo)
@@ -83,7 +85,7 @@
             // CallbackUrl
             this.RuleFor(i => i.CallbackUrl)
                 .NotEmpty()
-                .Length(1, 2000)
+                .Length(8, 2000)
                 .Matches(UrlRegex).WithMessage("{PropertyName} format is wrong");
 
             // Partner

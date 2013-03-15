@@ -171,6 +171,7 @@
             var payload = new CallbackNotificationPayload
             {
                 TransactionId = transactionEntity.Id,
+                IndividualIdNumber = transactionEntity.IndividualIdNumber,
                 Status = transactionEntity.Status,
             };
             var result = JsonSerializer.SerializeToString(payload);
@@ -213,9 +214,11 @@
         {
             #region Public Properties
 
-            public AchTransactionStatus Status { get; set; }
-
             public long TransactionId { get; set; }
+
+            public string IndividualIdNumber { get; set; }
+
+            public AchTransactionStatus Status { get; set; }
 
             #endregion
         }

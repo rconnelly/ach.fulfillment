@@ -6,6 +6,7 @@
 
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datepicker")
 
     <script type="text/javascript">
 
@@ -37,7 +38,7 @@
 
         function createTransaction(frm) {
             $(frm).find(":submit").button('loading');
-            
+
             var input = $(frm).serializeObject();
             $.ajax(
                 {
@@ -45,10 +46,10 @@
                     dataType: "json",
                     url: "/api/transaction",
                     data: input,
-                    complete: function () {
+                    complete: function() {
                         $(frm).find(":submit").button('reset');
                     },
-                    success: function (data) {
+                    success: function(data) {
                         resetErrors(frm);
                         $('#successAlert span').html('Ach Transaction #:' + data.transactionId);
                         $('#successAlert').show();
@@ -98,6 +99,7 @@
         }
 
         $(function () {
+            $('#EntryDate').datepicker({ format: "yyyy-mm-dd" });
             $('.alert .close').live("click", function() {
                 $(this).parent().hide();
             });
@@ -176,13 +178,12 @@
                 @{
                     var serviceClassCodes = new[]
                                                 {
-                                                    new SelectListItem { Selected = true }, 
                                                     new SelectListItem { Text = "200" }, 
                                                     new SelectListItem { Text = "220" }, 
                                                     new SelectListItem { Text = "225" }
                                                 };
                 }
-                @Html.DropDownListFor(model => model.ServiceClassCode, serviceClassCodes)
+                @Html.DropDownListFor(model => model.ServiceClassCode, serviceClassCodes, "")
                 @Html.ValidationMessageFor(model => model.ServiceClassCode)
             </div>
         </div>
@@ -193,21 +194,20 @@
                 @{
                     var items = new[]
                                     {
-                                        new SelectListItem { Selected = true }, 
-                                        new SelectListItem { Text = "22" }, 
-                                        new SelectListItem { Text = "23" }, 
-                                        new SelectListItem { Text = "24" }, 
-                                        new SelectListItem { Text = "27" }, 
-                                        new SelectListItem { Text = "28" }, 
-                                        new SelectListItem { Text = "29" }, 
-                                        new SelectListItem { Text = "32" }, 
-                                        new SelectListItem { Text = "34" }, 
-                                        new SelectListItem { Text = "37" }, 
-                                        new SelectListItem { Text = "38" }, 
-                                        new SelectListItem { Text = "39" } 
+                                        new SelectListItem { Value = "22", Text = "Checking automated deposit" }, 
+                                        new SelectListItem { Value = "23", Text = "Checking prenote credit" }, 
+                                        new SelectListItem { Value = "24", Text = "Checking zero dollar credit" }, 
+                                        new SelectListItem { Value = "27", Text = "Checking automated payment" }, 
+                                        new SelectListItem { Value = "28", Text = "Checking prenote debit" }, 
+                                        new SelectListItem { Value = "29", Text = "Checking zero dollar debit" }, 
+                                        new SelectListItem { Value = "32", Text = "Saving automated deposit" }, 
+                                        new SelectListItem { Value = "34", Text = "Saving zero dollar credit" }, 
+                                        new SelectListItem { Value = "37", Text = "Saving automated payment" }, 
+                                        new SelectListItem { Value = "38", Text = "Saving prenote debit" }, 
+                                        new SelectListItem { Value = "39", Text = "Saving zero dollar debit" } 
                                     };
                 }
-                @Html.DropDownListFor(model => model.TransactionCode, items)
+                @Html.DropDownListFor(model => model.TransactionCode, items, "")
                 @Html.ValidationMessageFor(model => model.TransactionCode)
             </div>
         </div>
@@ -218,12 +218,11 @@
                 @{
                     var entryClassCodes = new[]
                                               {
-                                                  new SelectListItem { Selected = true }, 
                                                   new SelectListItem { Text = "CCD" }, 
                                                   new SelectListItem { Text = "PPD" }
                                               };
                 }
-                @Html.DropDownListFor(model => model.EntryClassCode, entryClassCodes)
+                @Html.DropDownListFor(model => model.EntryClassCode, entryClassCodes, "")
                 @Html.ValidationMessageFor(model => model.EntryClassCode)
             </div>
         </div>
@@ -263,7 +262,7 @@
         <div class="control-group">
             @Html.LabelFor(model => model.CallbackUrl, new { @class = "control-label" })
             <div class="controls">
-                @Html.TextBoxFor(model => model.CallbackUrl, new { maxlength = 2000, @class = "input-xxlarge" })
+                @Html.TextBoxFor(model => model.CallbackUrl, new { maxlength = 2000, @class = "input-xxlarge", type = "url" })
                 @Html.ValidationMessageFor(model => model.CallbackUrl)
             </div>
         </div>
