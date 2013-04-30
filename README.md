@@ -6,6 +6,7 @@
 3. [.NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
 4. Your server must have IIS for hosting
 5. [Web-Deploy](http://www.iis.net/downloads/microsoft/web-deploy) this installs Web Deploy (and its underlying executable, MSDeploy.exe) on your server. Also it installs the Web Deploy Handler and integrates it with the Web Management Service. You can find how to configure and install it here [Installing and Configuring Web Deploy](http://www.iis.net/learn/install/installing-publishing-technologies/installing-and-configuring-web-deploy)
+6. Wix Toolset (http://wixtoolset.org/)
 
 ### Deployment
 1. Download sources from github repository.
