@@ -12,7 +12,8 @@
                 "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-1.*"));
+                "~/Scripts/jquery-1.*",
+                "~/Scripts/jquery-migrate-1.*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"));
@@ -24,7 +25,7 @@
                 "~/Scripts/jquery.unobtrusive*",
                 "~/Scripts/jquery.validate*",
                 "~/Scripts/site.bootstrap.validate.js",
-                "~/Scripts/mvcfoolproof.unobtrusive.min.js"));
+                "~/Scripts/mvcfoolproof.unobtrusive.js"));
 
             bundles.Add(new StyleBundle("~/Content/css/general").Include(
                 "~/Content/bootstrap.css",

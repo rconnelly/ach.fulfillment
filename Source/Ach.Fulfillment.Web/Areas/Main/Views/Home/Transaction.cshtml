@@ -44,7 +44,7 @@
                 {
                     type: "POST",
                     dataType: "json",
-                    url: "/api/transaction",
+                    url: "@Url.Content("~")api/transaction",
                     data: input,
                     complete: function() {
                         $(frm).find(":submit").button('reset');
@@ -100,7 +100,8 @@
 
         $(function() {
             $('#EntryDate').datepicker({ format: "yyyy-mm-dd" });
-            $('.alert .close').live("click", function() {
+            
+            $(document).on("click", '.alert .close', function () {
                 $(this).parent().hide();
             });
             $("#creater").submit(function() {
