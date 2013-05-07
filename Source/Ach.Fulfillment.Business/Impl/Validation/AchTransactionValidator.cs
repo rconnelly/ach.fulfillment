@@ -18,7 +18,7 @@
             this.RuleFor(i => i.ReceiverName)
                 .NotEmpty()
                 .Length(1, 22)
-                .Matches(@"^[a-zA-Z0-9 \.-'""]*$")
+                .Matches(@"^[a-zA-Z0-9 \.\-'""]*$")
                 .WithMessage("{PropertyName} must have valid name");
 
             // TransitRoutingNumber

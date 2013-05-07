@@ -98,10 +98,19 @@
             );
         }
 
-        $(function () {
+        $(function() {
             $('#EntryDate').datepicker({ format: "yyyy-mm-dd" });
             $('.alert .close').live("click", function() {
                 $(this).parent().hide();
+            });
+            $("#creater").submit(function() {
+                if ($("#creater").valid()) {
+                    createTransaction(this);
+                }
+                return false;
+            });
+            $("#creater").on('reset', function() {
+                resetErrors(this);
             });
         });
     </script>
@@ -130,7 +139,7 @@
   </div>
 </div>    
 
-<form class="form-horizontal" onsubmit="createTransaction(this); return false;" onreset="resetErrors(this)">
+<form id="creater" class="form-horizontal">
     <fieldset>
         <legend>@ViewBag.Title (@Html.ActionLink("Test", "Transaction", "Home", new { area = "Main", test = true }, null))</legend>
         
